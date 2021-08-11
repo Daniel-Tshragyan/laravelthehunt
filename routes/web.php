@@ -93,7 +93,7 @@ Route::get('/login', function () {
 })->name('login');
 Route::get('/reg', function () {
     return view('register');
-})->name('reg');
+})->name('register');
 Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');

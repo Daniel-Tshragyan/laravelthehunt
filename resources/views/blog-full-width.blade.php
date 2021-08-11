@@ -78,7 +78,7 @@
             <div class="blog-post">
               <!-- Post thumb -->
               <div class="post-thumb">
-                <a href="#"><img class="img-fulid" src="a{{sset('img/blog/blog3.jpg')}}" alt=""></a>
+                <a href="#"><img class="img-fulid" src="{{asset('img/blog/blog3.jpg')}}" alt=""></a>
                 <div class="hover-wrap">
                 </div>
               </div>
