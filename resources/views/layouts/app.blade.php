@@ -104,8 +104,12 @@
                                 Contact
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item dropdown">
                             <a class="nav-link" href="{{route('login')}}">Sign In</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('register') }}">Registen as Candidate</a></li>
+                                <li><a class="dropdown-item" href="{{route('reg1')}}">Registen as Company</a></li>
+                            </ul>
                         </li>
                         <li class="button-group">
                             <a href="{{route('post-job')}}" class="button btn btn-common">Post a Job</a>
