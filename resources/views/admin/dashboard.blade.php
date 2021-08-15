@@ -1,2 +1,5 @@
-@extends('adminlte::page');
+@extends('adminlte::page')
 
+@section('content')
+    admin panel
+@endsection

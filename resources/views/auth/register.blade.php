@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-user"></i>
-                                    <input type="text" class="form-control" name="name" placeholder="Company name">
+                                    <input type="text" class="form-control" name="name" placeholder="Name">
                                     @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -61,12 +61,6 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-unlock"></i>
-                                    <input type="password" class="form-control" name="password_confirmation" placeholder="Retype Password">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-icon">
-                                    <i class="lni-unlock"></i>
                                     <input type="number" class="form-control" name="age" placeholder="Age">
                                     @error('age')
                                     <span class="invalid-feedback" role="alert">
@@ -78,7 +72,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-unlock"></i>
-                                    <select name="city" id="">
+                                    <select name="city" id="" class="form-control">
                                         <option value="">Yerevan</option>
                                         <option value="">Yerevan</option>
                                         <option value="">Yerevan</option>

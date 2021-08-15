@@ -265,42 +265,23 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'multilevel',
+            'text'    => 'Cities',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'All Cities',
+                    'url'  => 'admin/city',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Add City',
+                    'url'  => 'admin/city/create',
                 ],
             ],
+        ],
+        [
+            'text' => 'Users',
+            'url'  => 'admin/user',
+            'icon' => 'fas fa-fw fa-user',
         ],
         ['header' => 'labels'],
         [
@@ -317,6 +298,12 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
+        ],
+        [
+            'text'        => 'Logout',
+            'url'         => 'admin/logout',
+            'icon'        => 'far fa-fw fa-file',
+            'label_color' => 'success',
         ],
     ],
 

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,12 +94,8 @@ Route::get('/single-post', function () {
 Route::get('/log', function () {
     return view('viewarchive.login');
 })->name('login1');
-Route::get('/reg', function () {
-    return view('viewarchive.register');
-})->name('reg');
-Route::get('/regcompany', function () {
-    return view('viewarchive.register1');
-})->name('reg1');
+Route::get('/reg', [UserController::class, 'candidatreg'])->name('reg');
+Route::get('/regcompany', [UserController::class, 'companyreg'])->name('reg1');
 Route::get('/pricing', function () {
     return view('viewarchive.pricing');
 })->name('pricing');

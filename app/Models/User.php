@@ -11,15 +11,16 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public $timestamps = false;
 
     public function company()
     {
-        return $this->hasOne('companies', 'user_id', 'id');
+        return $this->hasOne(Company::class, 'user_id', 'id');
     }
 
     public function candidat()
     {
-        return $this->hasOne('condidats', 'user_id', 'id');
+        return $this->hasOne(Condidat::class, 'user_id', 'id');
     }
 
     public function isAdmin()

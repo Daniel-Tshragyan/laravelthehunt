@@ -107,7 +107,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="{{route('login')}}">Sign In</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('register') }}">Registen as Candidate</a></li>
+                                <li><a class="dropdown-item" href="{{ route('reg') }}">Registen as Candidate</a></li>
                                 <li><a class="dropdown-item" href="{{route('reg1')}}">Registen as Company</a></li>
                             </ul>
                         </li>

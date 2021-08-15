@@ -52,7 +52,7 @@
                 <button type="submit" class="btn btn-common log-btn">Submit</button>
               </form>
               <ul class="form-links">
-                <li class="text-center"><a href="{{ route('register') }}">Don't have an account?</a></li>
+                <li class="text-center"><a href="{{ route('reg') }}">Don't have an account?</a></li>
               </ul>
             </div>
           </div>

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class AdminController extends Controller
+class AuthController extends Controller
 {
     public function index()
     {
@@ -31,6 +31,11 @@ class AdminController extends Controller
         } else {
             Session::flash('login', 'Invalid Email');
         }
+    }
+    public function logout(Request $req)
+    {
+        $req->session()->forget('admin');
+        return redirect('/');
     }
 
     public function dashboard()

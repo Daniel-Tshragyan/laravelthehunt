@@ -13,12 +13,12 @@ class Condidat extends Model
 
     public function city()
     {
-        return $this->belongsTo('cities', 'id', 'city_id');
+        return $this->belongsTo(City::class, 'id', 'city_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('users', 'id', 'user_id');
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
 
 }

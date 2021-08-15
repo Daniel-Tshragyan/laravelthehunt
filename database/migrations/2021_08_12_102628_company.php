@@ -17,6 +17,7 @@ class Company extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
+            $table->string('comapnyname');
             $table->string('tagline');
             $table->string('location');
             $table->string('image');
