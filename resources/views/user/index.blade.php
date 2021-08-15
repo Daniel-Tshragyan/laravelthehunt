@@ -1,16 +1,49 @@
 @extends('adminlte::page')
 
 @section('content')
+
+    Filter By :
+        @foreach($filters as $filter)
+            <a style="margin:10px" href=
+                @if(Request::get('order_by'))
+                     "{{ route('user.index',['order_by' => Request::get('order_by'),
+                       'how' => Request::get('how'), 'filter_by' => $filter]) }}"
+                @else
+                    "{{ route('user.index',['filter_by' => $filter]) }}"
+                @endif
+            >
+            {{ $filter }}</a>
+        @endforeach
+            <a style="margin:10px" href=
+            @if(Request::get('order_by'))
+                "{{ route('user.index',['order_by' => Request::get('order_by'),'how' => Request::get('how')]) }}"
+            @else
+                "{{ route('user.index') }}"
+            @endif
+            >
+    All</a>
+    <br>
+    Sort By :
     @foreach($sorts as $key => $val)
         <a style="margin:10px" href=
         @if (Request::get('how') &&  Request::get('how')=='asc' ||  !Request::get('how'))
-            "{{ route('user.index',['order_by' => $key, 'how' => 'desc'])  }}"
+            @if(Request::get('filter_by'))
+                "{{ route('user.index',['order_by' => $key, 'how' => 'desc','filter_by' => Request::get('filter_by')])  }}"
+            @else
+                "{{ route('user.index',['order_by' => $key, 'how' => 'desc'])  }}"
+            @endif
         @elseif (Request::get('how') &&  Request::get('how')=='desc')
-            "{{ route('user.index',['order_by' => $key, 'how' => 'asc'])  }}"
+            @if(Request::get('filter_by'))
+                "{{ route('user.index',['order_by' => $key, 'how' => 'asc','filter_by' => Request::get('filter_by')])  }}"
+            @else
+                "{{ route('user.index',['order_by' => $key, 'how' => 'asc'])  }}"
+            @endif
         @endif
         >{{$val}}
         </a>
     @endforeach()
+    <br>
+
     <table class="table table-bordered">
         <tr>
             <td>Id</td>

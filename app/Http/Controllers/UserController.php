@@ -21,20 +21,35 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $sorts = ['id' => 'id', 'name' => 'name', 'role' => 'role', 'email' => 'email'];
+        $filters = ['admin' => 'admin', 'candidat' => 'candidate', 'company' => 'company'];
+
         $order_by = 'id';
         $how = 'asc';
+        $where = [];
+
         if ($request->input("order_by")) {
             $order_by = $request->input('order_by');
         }
+
+        if ($request->input('filter_by')) {
+           $where = ['role' => $request->input('filter_by')];
+        }
+
 
         if ($request->input('how')) {
             $how = $request->input('how');
         }
 
-        $users = User::orderBy($order_by, $how)->paginate(3);
-        $users->withPath("user?order_by={$order_by}&&how={$how}");
+        if(!empty($where)){
+            $users = User::where($where)->orderBy($order_by, $how)->paginate(3);
+            $users->withPath("user?order_by={$order_by}&&how={$how}&&filter_by={$request->input('filter_by')}");
 
-        return view('user.index', ['users' => $users, 'sorts' => $sorts]);
+        }else{
+            $users = User::orderBy($order_by, $how)->paginate(3);
+            $users->withPath("user?order_by={$order_by}&&how={$how}");
+        }
+
+        return view('user.index', ['users' => $users, 'sorts' => $sorts,'filters' => $filters]);
     }
 
     /**
