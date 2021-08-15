@@ -29,7 +29,14 @@
                     <li><a class="active" href="{{route('manage-applications')}}">Manage Applications</a></li>
                     <li><a href="{{route('job-alerts')}}">Job Alerts</a></li>
                     <li><a href="{{route('change-password')}}">Change Password</a></li>
-                    <li><a href="{{route('home')}}">Sing Out</a></li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn" style="
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        color: #9a9a9a;">Sign Out
+                        </button>
+                    </form>
                 </ul>
             </div>
           </div>
