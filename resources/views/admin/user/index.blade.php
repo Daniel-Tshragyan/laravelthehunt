@@ -90,7 +90,10 @@
 
     </table>
     {{ $users->links() }}
+    <br>
     @if(Session::has('message'))
-        <p class="text-success">{{ Session::get('message') }}</p>
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
     @endif
 @endsection

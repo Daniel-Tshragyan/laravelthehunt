@@ -6,7 +6,7 @@
         <tr>
             @foreach($sorts as $key => $val)
                 <td>
-                    <a style="margin:10px" href="{{ route('user.index',['order_by' => $key, 'how' => $val]) }}">{{$key}}
+                    <a style="margin:10px" href="{{ route('city.index',['order_by' => $key, 'how' => $val]) }}">{{$key}}
                     </a>
                 </td>
             @endforeach()
@@ -60,6 +60,8 @@
 
     </table>
     @if(Session::has('message'))
-        <p class="text-success">{{ Session::get('message') }}</p>
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
     @endif
 @endsection

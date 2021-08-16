@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <h1>Add City</h1>
+    <h1>Update City</h1>
     <form action="{{route('city.update',['city' => $city])}}" class="w-50" method="post">
         @csrf
         @method('put')
@@ -13,6 +13,8 @@
         <button type="submit" class="btn btn-success">Update</button>
     </form>
     @if(Session::has('message'))
-        <p class="text-success">{{ Session::get('message') }}</p>
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
     @endif
 @endsection

@@ -222,8 +222,17 @@ class UserController extends Controller
             $city = City::find($candidat['city_id']);
             $newcandidat = $user->candidate->toArray();
             Session::flash('message', 'User Updated');
+            $allusers = User::all();
+            $filters = ['0' => 'admin', '1' => 'candidate', '2' => 'company'];
+            $searched = [
+                'name' => '',
+                'email' => '',
+                'id' => '',
+                'role' => '',
+            ];
+            $sorts = ['id' => 'asc', 'name' => 'asc', 'role' => 'asc', 'email' => 'asc'];
 
-            return view('admin.user.update', ['user' => $user, 'candidate' => $newcandidat, 'cities' => $cities, 'city' => $city]);
+            return view('admin.user.index', ['user' => $allusers, 'filters' => $filters, 'searched' => $searched, 'sorts' => $sorts]);
 
         }
 
@@ -244,6 +253,17 @@ class UserController extends Controller
             $city = City::find($company['city_id']);
             $newcompany = $user->company->toArray();
             Session::flash('message', 'User Updated');
+            $allusers = User::all();
+            $filters = ['0' => 'admin', '1' => 'candidate', '2' => 'company'];
+            $searched = [
+                'name' => '',
+                'email' => '',
+                'id' => '',
+                'role' => '',
+            ];
+            $sorts = ['id' => 'asc', 'name' => 'asc', 'role' => 'asc', 'email' => 'asc'];
+
+            return view('admin.user.index', ['user' => $allusers, 'filters' => $filters, 'searched' => $searched, 'sorts' => $sorts]);
             return view('admin.user.update', ['user' => $user, 'company' => $newcompany, 'cities' => $cities, 'city' => $city]);
         }
     }

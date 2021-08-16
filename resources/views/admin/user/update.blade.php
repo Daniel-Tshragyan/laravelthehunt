@@ -2,6 +2,7 @@
 
 
 @section('content')
+    <h1>Update User</h1>
     <form class="login-form" method="POST" action="{{ route('user.update',['user' => $user]) }}"
           enctype="multipart/form-data">
         @csrf
@@ -176,7 +177,9 @@
 
         <button type="submit" class="btn btn-success log-btn mt-3">Update</button>
         @if(Session::has('message'))
-            <p class="text-success">{{ Session::get('message') }}</p>
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('message') }}
+            </div>
         @endif
     </form>
 @endsection

@@ -136,7 +136,15 @@ class CityController extends Controller
         $city->fill(['name' => $request->input('name')]);
         $city->save();
         Session::flash('message', 'City Changed');
-        return view('admin.city.update', ['city' => $city]);
+        $cityAll = City::all();
+        $sorts = ['id' => 'asc', 'name' => 'asc'];
+        $searched = [
+            'name' => '',
+            'id' => '',
+        ];
+
+        return view('admin.city.index', ['cities' => $cityAll, 'sorts' => $sorts, 'searched' => $searched]);
+
     }
 
     /**
