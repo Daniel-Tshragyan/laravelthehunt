@@ -1,5 +1,7 @@
-@extends('adminlte::page')
+@extends('admin.layouts.app')
 
 @section('content')
-    admin panel
+    <h1>
+        admin panel
+    </h1>
 @endsection
