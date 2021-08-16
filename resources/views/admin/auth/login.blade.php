@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.login')
 @section('content')
 
     <!-- Page Header Start -->
@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="inner-header">
-                        <h3>Admin Login</h3>
+                        <h3 align="center">Admin Login</h3>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-common log-btn">Submit</button>
+                            <button type="submit" class="btn btn-success log-btn">Login</button>
                         </form>
                     </div>
                 </div>

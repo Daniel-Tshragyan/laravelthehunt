@@ -2,80 +2,85 @@
 
 
 @section('content')
-
-    Filter By :
-    @foreach($filters as $filter)
-        <a style="margin:10px" href=
-        @if(Request::get('order_by'))
-            "{{ route('user.index',['order_by' => Request::get('order_by'),
-                       'how' => Request::get('how'), 'filter_by' => $filter]) }}"
-        @else
-            "{{ route('user.index',['filter_by' => $filter]) }}"
-        @endif
-        >
-        {{ $filter }}</a>
-    @endforeach
-    <a style="margin:10px" href=
-    @if(Request::get('order_by'))
-        "{{ route('user.index',['order_by' => Request::get('order_by'),'how' => Request::get('how')]) }}"
-    @else
-        "{{ route('user.index') }}"
-    @endif
-    >
-    All</a>
-    <br>
-    Sort By :
-    @foreach($sorts as $key => $val)
-        <a style="margin:10px" href=
-        @if (Request::get('how') &&  Request::get('how')=='asc' ||  !Request::get('how'))
-        @if(Request::get('filter_by'))
-            "{{ route('user.index',['order_by' => $key, 'how' => 'desc','filter_by' => Request::get('filter_by')])  }}"
-        @else
-            "{{ route('user.index',['order_by' => $key, 'how' => 'desc'])  }}"
-        @endif
-        @elseif (Request::get('how') &&  Request::get('how')=='desc')
-            @if(Request::get('filter_by'))
-                "{{ route('user.index',['order_by' => $key, 'how' => 'asc','filter_by' => Request::get('filter_by')])  }}"
-            @else
-                "{{ route('user.index',['order_by' => $key, 'how' => 'asc'])  }}"
-            @endif
-        @endif
-        >{{$val}}
-        </a>
-    @endforeach()
-    <br>
-
     <table class="table table-bordered">
+        <thead>
         <tr>
-            <td>Id</td>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Role</td>
+            @foreach($sorts as $key => $val)
+                <td>
+                    <a style="margin:10px" href="{{ route('user.index',['order_by' => $key, 'how' => $val]) }}">{{$key}}
+                    </a>
+                </td>
+            @endforeach()
+            <td>
+                Actions
+            </td>
         </tr>
+        <tr>
+            <form
+                action="{{ route('user.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
+                @csrf
+                <td>
+                    <input class="form-control" type="number" name="id">
+                </td>
+                <td>
+                    <input class="form-control" type="text" name="name">
+                </td>
+                <td>
+                    <select name="role" id="" class="form-control">
+                        <option value="a">
+                            Select Role
+                        </option>
+                        @foreach($filters as $filter)
+                            <option value="{{ $filter }}">{{ $filter }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="form-control" name="email">
+                </td>
+                <td>
+                    <button class="btn btn-success" type="submit">Search</button>
+                </td>
+            </form>
+
+        </tr>
+        </thead>
+        <tbody>
         @foreach($users as $user)
             <tr>
                 <td>
                     {{ $user->id }}
                 </td>
                 <td>
-                    @if($user->role != 'admin')
-                        <a href="{{ route('user.show',['user' => $user]) }}">
-                            {{ $user->name }}
-                        </a>
-                    @else
-                        {{$user->name}}
-                    @endif
+                    {{$user->name}}
+                </td>
+
+                <td>
+                    {{ $user->role }}
                 </td>
 
                 <td>
                     {{ $user->email }}
                 </td>
-                <td>
-                    {{ $user->role }}
-                </td>
 
+                <td>
+                    <a title="Show" style="margin:5px" href="{{ route('user.show',['user' => $user]) }}">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <a title="Update" style="margin:5px" href="{{ route('user.edit',['user' => $user]) }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <form style="display:inline-block" action="{{ route('user.destroy',['user' => $user]) }}">
+                        <button title="Remove" style="border:none;background-color:transparent" type="submit">
+                            <i style="color: red" class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
         @endforeach
+        </tbody>
+
+
     </table>
     {{ $users->links() }}
     @if(Session::has('message'))

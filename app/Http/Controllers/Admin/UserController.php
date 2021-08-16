@@ -22,9 +22,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $sorts = ['id' => 'id', 'name' => 'name', 'role' => 'role', 'email' => 'email'];
         $filters = ['admin' => 'admin', 'candidat' => 'candidate', 'company' => 'company'];
-
+        $withPath ='';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
@@ -33,10 +32,26 @@ class UserController extends Controller
             $order_by = $request->input('order_by');
         }
 
-        if ($request->input('filter_by')) {
-            $where = ['role' => $request->input('filter_by')];
+        if ($request->input('name')) {
+            $where[] = ['name', 'like', "%{$request->input('name')}%"];
+            $withPath.="&&name={$request->input('name')}";
         }
 
+        if($request->input('email')){
+            $where[] = ['email', 'like', "%{$request->input('email')}%"];
+            $withPath.="&&email={$request->input('email')}";
+
+        }
+        if($request->input('role') && $request->input('role') != 'a'){
+            $where[] = ['role', '=', "%{$request->input('role')}%"];
+            $withPath.="&&role={$request->input('role')}";
+
+        }
+
+        if($request->input('id')){
+            $where[] = ['id', '=', "{$request->input('id')}"];
+            $withPath.="&&id={$request->input('id')}";
+        }
 
         if ($request->input('how')) {
             $how = $request->input('how');
@@ -44,12 +59,22 @@ class UserController extends Controller
 
         if (!empty($where)) {
             $users = User::where($where)->orderBy($order_by, $how)->paginate(3);
-            $users->withPath("user?order_by={$order_by}&&how={$how}&&filter_by={$request->input('filter_by')}");
+            $users->withPath("user?order_by={$order_by}&&how={$how}".$withPath);
 
         } else {
             $users = User::orderBy($order_by, $how)->paginate(3);
             $users->withPath("user?order_by={$order_by}&&how={$how}");
         }
+
+        if ($how == 'asc') {
+            $how = 'desc';
+        }
+        else {
+            $how = 'asc';
+        }
+
+        $sorts = ['id' => $how, 'name' => $how, 'role' => $how, 'email' => $how];
+
 
         return view('admin.user.index', ['users' => $users, 'sorts' => $sorts, 'filters' => $filters]);
     }

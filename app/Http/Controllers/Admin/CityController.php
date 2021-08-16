@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -14,10 +15,40 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $city = City::all();
-        return view('admin.city.index', ['cities' => $city]);
+        $order_by = 'id';
+        $how = 'asc';
+        $where = [];
+        $withPath = '';
+
+        if ($request->input("order_by")) {
+            $order_by = $request->input('order_by');
+        }
+
+        if ($request->input('name')) {
+            $where[] = ['name', 'like', "%{$request->input('name')}%"];
+            $withPath.="&&name={$request->input('name')}";
+        }
+
+        if (!empty($where)) {
+            $city = City::where($where)->orderBy($order_by, $how)->paginate(3);
+            $city->withPath("city?order_by={$order_by}&&how={$how}".$withPath);
+
+        } else {
+            $city = City::orderBy($order_by, $how)->paginate(3);
+            $city->withPath("city?order_by={$order_by}&&how={$how}");
+        }
+
+        if ($how == 'asc') {
+            $how = 'desc';
+        }
+        else {
+            $how = 'asc';
+        }
+
+        $sorts = ['id' => $how, 'name' => $how];
+        return view('admin.city.index', ['cities' => $city,'sorts' => $sorts]);
     }
 
     /**
