@@ -22,11 +22,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = ['admin' => 'admin', 'candidat' => 'candidate', 'company' => 'company'];
-        $withPath ='';
+        $filters = ['0' => 'admin', '1' => 'candidate', '2' => 'company'];
+        $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
+        $searched = [
+            'name' => '',
+            'email' => '',
+            'id' => '',
+            'role' => '',
+        ];
 
         if ($request->input("order_by")) {
             $order_by = $request->input('order_by');
@@ -34,23 +40,27 @@ class UserController extends Controller
 
         if ($request->input('name')) {
             $where[] = ['name', 'like', "%{$request->input('name')}%"];
-            $withPath.="&&name={$request->input('name')}";
+            $withPath .= "&name={$request->input('name')}";
+            $searched['name'] = $request->input('name');
         }
 
-        if($request->input('email')){
+        if ($request->input('email')) {
             $where[] = ['email', 'like', "%{$request->input('email')}%"];
-            $withPath.="&&email={$request->input('email')}";
+            $withPath .= "&email={$request->input('email')}";
+            $searched['email'] = $request->input('email');
+        }
+        if ($request->input('role') && $request->input('role') != 'a') {
+            $where[] = ['role', '=', "{$request->input('role')}"];
+            $withPath .= "&role={$request->input('role')}";
+            $searched['role'] = $request->input('role');
 
         }
-        if($request->input('role') && $request->input('role') != 'a'){
-            $where[] = ['role', '=', "%{$request->input('role')}%"];
-            $withPath.="&&role={$request->input('role')}";
 
-        }
-
-        if($request->input('id')){
+        if ($request->input('id')) {
             $where[] = ['id', '=', "{$request->input('id')}"];
-            $withPath.="&&id={$request->input('id')}";
+            $withPath .= "&id={$request->input('id')}";
+            $searched['id'] = $request->input('id');
+
         }
 
         if ($request->input('how')) {
@@ -59,24 +69,23 @@ class UserController extends Controller
 
         if (!empty($where)) {
             $users = User::where($where)->orderBy($order_by, $how)->paginate(3);
-            $users->withPath("user?order_by={$order_by}&&how={$how}".$withPath);
+            $users->withPath("user?order_by={$order_by}&how={$how}" . $withPath);
 
         } else {
             $users = User::orderBy($order_by, $how)->paginate(3);
-            $users->withPath("user?order_by={$order_by}&&how={$how}");
+            $users->withPath("user?order_by={$order_by}&how={$how}");
         }
 
         if ($how == 'asc') {
             $how = 'desc';
-        }
-        else {
+        } else {
             $how = 'asc';
         }
 
         $sorts = ['id' => $how, 'name' => $how, 'role' => $how, 'email' => $how];
 
 
-        return view('admin.user.index', ['users' => $users, 'sorts' => $sorts, 'filters' => $filters]);
+        return view('admin.user.index', ['searched' => $searched, 'users' => $users, 'sorts' => $sorts, 'filters' => $filters]);
     }
 
     /**
@@ -109,7 +118,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         if ($user->role == 'candidate') {
-            $candidate = $user->candidat->toArray();
+            $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.show', ['user' => $user, 'candidate' => $candidate, 'city' => $city]);
         }
@@ -131,7 +140,7 @@ class UserController extends Controller
         $cities = City::all();
 
         if ($user->role == 'candidate') {
-            $candidate = $user->candidat->toArray();
+            $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities, 'city' => $city]);
         }
@@ -200,7 +209,7 @@ class UserController extends Controller
             $fillInformation['age'] = $request->input('age');
             $fillInformation['profession'] = $request->input('profession');
 
-            $candidat = $user->candidat->toArray();
+            $candidat = $user->candidate->toArray();
             if ($request->file('image')) {
                 Storage::delete('/public/users_images/' . $candidat['image']);
                 $random = Str::random(60);
@@ -208,10 +217,10 @@ class UserController extends Controller
                 $request->file('image')->storeAs('public/users_images', $imageName);
                 $fillInformation['image'] = $imageName;
             }
-            $user->candidat->fill($fillInformation);
-            $user->candidat->save();
+            $user->candidate->fill($fillInformation);
+            $user->candidate->save();
             $city = City::find($candidat['city_id']);
-            $newcandidat = $user->candidat->toArray();
+            $newcandidat = $user->candidate->toArray();
             Session::flash('message', 'User Updated');
 
             return view('admin.user.update', ['user' => $user, 'candidate' => $newcandidat, 'cities' => $cities, 'city' => $city]);
@@ -248,7 +257,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($user->role == 'candidat') {
-            $candidat = $user->candidat->toArray();
+            $candidat = $user->candidate->toArray();
             Storage::delete('/public/users_images/' . $candidat['image']);
         }
         if ($user->role == 'company') {

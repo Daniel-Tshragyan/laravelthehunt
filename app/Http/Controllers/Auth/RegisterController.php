@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Condidate;
+use App\Models\Candidate;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'image' => ['required','image'],
-            'role' => ['required', 'string', 'in:candidate,company'],
+            'role' => ['required', 'string', 'in:1,2'],
         ];
         if ($data['role'] == 'candidate') {
             $validationArray['age'] = ['required', 'numeric'];
@@ -94,8 +94,8 @@ class RegisterController extends Controller
 
         $random = Str::random(60);
         $imageName = $random . '.' . $data['image']->extension();
-        if ($data['role'] == 'candidate') {
-            $candidat = new Condidate();
+        if ($data['role'] == '1') {
+            $candidat = new Candidate();
             $candidat->fill([
                 'user_id' => $id,
                 'age' => $data['age'],
@@ -107,7 +107,7 @@ class RegisterController extends Controller
             $data['image']->storeAs('public/users_images',$imageName);
             $candidat->save();
         }
-        if ($data['role'] == 'company') {
+        if ($data['role'] == '2') {
             $company = new Company();
             $company->fill([
                 'user_id' => $id,

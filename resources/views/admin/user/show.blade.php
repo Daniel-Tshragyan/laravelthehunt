@@ -21,7 +21,7 @@
             <td>
                 Location
             </td>
-            @if($user->role=='candidate')
+            @if($user->role=='1')
                 <td>
                     Age
                 </td>
@@ -62,7 +62,7 @@
             <td>
                 {{$city->name}}
             </td>
-            @if($user->role=='candidate')
+            @if($user->role=='1')
                 <td>
                     {{$candidate['location']}}
                 </td>

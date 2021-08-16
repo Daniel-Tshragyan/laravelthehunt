@@ -21,6 +21,10 @@ class CityController extends Controller
         $how = 'asc';
         $where = [];
         $withPath = '';
+        $searched = [
+            'name' => '',
+            'id' => '',
+        ];
 
         if ($request->input("order_by")) {
             $order_by = $request->input('order_by');
@@ -28,27 +32,35 @@ class CityController extends Controller
 
         if ($request->input('name')) {
             $where[] = ['name', 'like', "%{$request->input('name')}%"];
-            $withPath.="&&name={$request->input('name')}";
+            $withPath .= "&&name={$request->input('name')}";
+            $searched['name'] = $request->input('name');
+
+        }
+
+        if ($request->input('id')) {
+            $where[] = ['name', '=', "id"];
+            $withPath .= "&&name={$request->input('name')}";
+            $searched['id'] = $request->input('id');
+
         }
 
         if (!empty($where)) {
             $city = City::where($where)->orderBy($order_by, $how)->paginate(3);
-            $city->withPath("city?order_by={$order_by}&&how={$how}".$withPath);
+            $city->withPath("city?order_by={$order_by}&how={$how}" . $withPath);
 
         } else {
             $city = City::orderBy($order_by, $how)->paginate(3);
-            $city->withPath("city?order_by={$order_by}&&how={$how}");
+            $city->withPath("city?order_by={$order_by}&how={$how}");
         }
 
         if ($how == 'asc') {
             $how = 'desc';
-        }
-        else {
+        } else {
             $how = 'asc';
         }
 
-        $sorts = ['id' => $how, 'name' => $how];
-        return view('admin.city.index', ['cities' => $city,'sorts' => $sorts]);
+        $sorts = ['id' => 'asc', 'name' => 'asc'];
+        return view('admin.city.index', ['cities' => $city, 'sorts' => $sorts, 'searched' => $searched]);
     }
 
     /**
@@ -70,14 +82,20 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string','unique:App\Models\City,name']
+            'name' => ['required', 'string', 'unique:App\Models\City,name']
         ]);
         $city = new City();
         $city->fill(['name' => $request->input('name')]);
         $city->save();
         Session::flash('message', 'City Added');
         $cityAll = City::all();
-        return view('admin.city.index',['cities' =>  $cityAll]);
+        $sorts = ['id' => 'asc', 'name' => 'asc'];
+        $searched = [
+            'name' => '',
+            'id' => '',
+        ];
+
+        return view('admin.city.index', ['cities' => $cityAll, 'sorts' => $sorts, 'searched' => $searched]);
 
     }
 
@@ -132,6 +150,5 @@ class CityController extends Controller
         $city->delete();
         Session::flash('message', 'City Deleted');
         return redirect('admin/city');
-
     }
 }

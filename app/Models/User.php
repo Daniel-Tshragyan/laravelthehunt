@@ -18,9 +18,9 @@ class User extends Authenticatable
         return $this->hasOne(Company::class, 'user_id', 'id');
     }
 
-    public function candidat()
+    public function candidate()
     {
-        return $this->hasOne(Condidate::class, 'user_id', 'id');
+        return $this->hasOne(Candidate::class, 'user_id', 'id');
     }
 
     public function isAdmin()

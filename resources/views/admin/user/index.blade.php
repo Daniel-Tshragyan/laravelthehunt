@@ -20,23 +20,28 @@
                 action="{{ route('user.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td>
-                    <input class="form-control" type="number" name="id">
+                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" type="text" name="name">
+                    <input class="form-control" value="{{ $searched['name'] }}" type="text" name="name">
                 </td>
                 <td>
                     <select name="role" id="" class="form-control">
                         <option value="a">
                             Select Role
                         </option>
-                        @foreach($filters as $filter)
-                            <option value="{{ $filter }}">{{ $filter }}</option>
+                        @foreach($filters as $key => $value)
+
+                            <option value="{{ $key }}"
+                                @if($key == $searched['role'])
+                                      selected="selected"
+                                @endif
+                            >{{ $value }}</option>
                         @endforeach
                     </select>
                 </td>
                 <td>
-                    <input type="text" class="form-control" name="email">
+                    <input type="text" class="form-control"  value="{{$searched['email'] }}" name="email">
                 </td>
                 <td>
                     <button class="btn btn-success" type="submit">Search</button>
@@ -70,7 +75,9 @@
                     <a title="Update" style="margin:5px" href="{{ route('user.edit',['user' => $user]) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-                    <form style="display:inline-block" action="{{ route('user.destroy',['user' => $user]) }}">
+                    <form style="display:inline-block" action="{{ route('user.destroy',['user' => $user]) }}" method="post">
+                        @csrf
+                        @method('delete')
                         <button title="Remove" style="border:none;background-color:transparent" type="submit">
                             <i style="color: red" class="fas fa-trash"></i>
                         </button>

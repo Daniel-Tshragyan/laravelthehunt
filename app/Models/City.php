@@ -14,11 +14,11 @@ class City extends Model
 
     public function company()
     {
-        return $this->hasMany('companies','city_id','id');
+        return $this->hasMany(Company::class,'city_id','id');
     }
 
-    public function candidat()
+    public function candidate()
     {
-        return $this->hasMany('condidats','city_id','id');
+        return $this->hasMany(Candidate::class,'city_id','id');
     }
 }

@@ -26,7 +26,7 @@
                         </h3>
                         <form class="login-form" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="role" value="company">
+                            <input type="hidden" name="role" value="2">
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-user"></i>

@@ -66,7 +66,7 @@
                 @endif
             </div>
         </div>
-        @if($user->role == 'company')
+        @if($user->role == '2')
             <div class="form-group">
                 <div class="input-icon">
                     <i class="lni-unlock"></i>

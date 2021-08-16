@@ -17,10 +17,10 @@
                 action="{{ route('city.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td>
-                    <input class="form-control" type="number" name="id">
+                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" type="text" name="name">
+                    <input class="form-control" value="{{ $searched['name'] }}" type="text" name="name">
                 </td>
                 <td>
                     <button class="btn btn-success" type="submit">Search</button>
@@ -46,7 +46,9 @@
                     <a title="Update" style="margin:5px" href="{{ route('city.edit',['city' => $city]) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-                    <form style="display:inline-block" action="{{ route('city.destroy',['city' => $city]) }}">
+                    <form style="display:inline-block" action="{{ route('city.destroy',['city' => $city]) }}" method="post">
+                        @csrf
+                        @method('delete')
                         <button title="Remove" style="border:none;background-color:transparent" type="submit">
                             <i style="color: red" class="fas fa-trash"></i>
                         </button>
