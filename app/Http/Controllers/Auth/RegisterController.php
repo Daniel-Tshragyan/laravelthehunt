@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Condidat;
+use App\Models\Condidate;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -95,7 +95,7 @@ class RegisterController extends Controller
         $random = Str::random(60);
         $imageName = $random . '.' . $data['image']->extension();
         if ($data['role'] == 'candidate') {
-            $candidat = new Condidat();
+            $candidat = new Condidate();
             $candidat->fill([
                 'user_id' => $id,
                 'age' => $data['age'],

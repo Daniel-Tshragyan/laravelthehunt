@@ -32,7 +32,7 @@ class UserController extends Controller
         }
 
         if ($request->input('filter_by')) {
-           $where = ['role' => $request->input('filter_by')];
+            $where = ['role' => $request->input('filter_by')];
         }
 
 
@@ -40,16 +40,16 @@ class UserController extends Controller
             $how = $request->input('how');
         }
 
-        if(!empty($where)){
+        if (!empty($where)) {
             $users = User::where($where)->orderBy($order_by, $how)->paginate(3);
             $users->withPath("user?order_by={$order_by}&&how={$how}&&filter_by={$request->input('filter_by')}");
 
-        }else{
+        } else {
             $users = User::orderBy($order_by, $how)->paginate(3);
             $users->withPath("user?order_by={$order_by}&&how={$how}");
         }
 
-        return view('user.index', ['users' => $users, 'sorts' => $sorts,'filters' => $filters]);
+        return view('user.index', ['users' => $users, 'sorts' => $sorts, 'filters' => $filters]);
     }
 
     /**
@@ -84,7 +84,7 @@ class UserController extends Controller
         if ($user->role == 'candidate') {
             $candidate = $user->candidat->toArray();
             $city = City::find($candidate['city_id']);
-            return view('user.show', ['user' => $user, 'candidat' => $candidate, 'city' => $city]);
+            return view('user.show', ['user' => $user, 'candidate' => $candidate, 'city' => $city]);
         }
         if ($user->role == 'company') {
             $company = $user->company->toArray();
@@ -106,7 +106,7 @@ class UserController extends Controller
         if ($user->role == 'candidate') {
             $candidate = $user->candidat->toArray();
             $city = City::find($candidate['city_id']);
-            return view('user.update', ['user' => $user, 'candidat' => $candidate, 'cities' => $cities, 'city' => $city]);
+            return view('user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities, 'city' => $city]);
         }
         if ($user->role == 'company') {
             $company = $user->company->toArray();
@@ -139,15 +139,15 @@ class UserController extends Controller
             'location' => ['required', 'string'],
         ];
 
-        if ($request->input('email') != $user->email){
+        if ($request->input('email') != $user->email) {
             $validationArray['email'] = ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email'];
         }
-        if ($request->input('password')){
+        if ($request->input('password')) {
             $validationArray['password'] = ['required', 'string', 'min:8', 'confirmed'];
             $userInformation['password'] = Hash::make($request->input('password'));
         }
-        if ($request->file('image')){
-            $validationArray['image'] = ['required','image'];
+        if ($request->file('image')) {
+            $validationArray['image'] = ['required', 'image'];
         }
 
         if ($user->role == 'candidate') {
@@ -174,11 +174,11 @@ class UserController extends Controller
             $fillInformation['profession'] = $request->input('profession');
 
             $candidat = $user->candidat->toArray();
-            if ($request->file('image')){
-                Storage::delete('/public/users_images/'.$candidat['image']);
+            if ($request->file('image')) {
+                Storage::delete('/public/users_images/' . $candidat['image']);
                 $random = Str::random(60);
                 $imageName = $random . '.' . $request->file('image')->extension();
-                $request->file('image')->storeAs('public/users_images',$imageName);
+                $request->file('image')->storeAs('public/users_images', $imageName);
                 $fillInformation['image'] = $imageName;
             }
             $user->candidat->fill($fillInformation);
@@ -187,7 +187,7 @@ class UserController extends Controller
             $newcandidat = $user->candidat->toArray();
             Session::flash('message', 'User Updated');
 
-            return view('user.update', ['user' => $user, 'candidat' => $newcandidat, 'cities' => $cities, 'city' => $city]);
+            return view('user.update', ['user' => $user, 'candidate' => $newcandidat, 'cities' => $cities, 'city' => $city]);
 
         }
 
@@ -196,11 +196,11 @@ class UserController extends Controller
             $fillInformation['comapnyname'] = $request->input('comapnyname');
 
             $company = $user->company->toArray();
-            if ($request->file('image')){
-                Storage::delete('/public/users_images/'.$company['image']);
+            if ($request->file('image')) {
+                Storage::delete('/public/users_images/' . $company['image']);
                 $random = Str::random(60);
                 $imageName = $random . '.' . $request->file('image')->extension();
-                $request->file('image')->storeAs('public/users_images',$imageName);
+                $request->file('image')->storeAs('public/users_images', $imageName);
                 $fillInformation['image'] = $imageName;
             }
             $user->company->fill($fillInformation);
@@ -220,13 +220,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if($user->role == 'candidat'){
+        if ($user->role == 'candidat') {
             $candidat = $user->candidat->toArray();
-            Storage::delete('/public/users_images/'.$candidat['image']);
+            Storage::delete('/public/users_images/' . $candidat['image']);
         }
-        if($user->role == 'company'){
+        if ($user->role == 'company') {
             $company = $user->company->toArray();
-            Storage::delete('/public/users_images/'.$company['image']);
+            Storage::delete('/public/users_images/' . $company['image']);
         }
         $user->delete();
         Session::flash('message', 'User Deleted');

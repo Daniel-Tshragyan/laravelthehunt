@@ -13,7 +13,7 @@ class Candidat extends Migration
      */
     public function up()
     {
-        Schema::create('condidats', function (Blueprint $table) {
+        Schema::create('condidates', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();

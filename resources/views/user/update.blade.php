@@ -1,7 +1,8 @@
 @extends('adminlte::page')
 
 @section('content')
-    <form class="login-form" method="POST" action="{{ route('user.update',['user' => $user]) }}" enctype="multipart/form-data">
+    <form class="login-form" method="POST" action="{{ route('user.update',['user' => $user]) }}"
+          enctype="multipart/form-data">
         @csrf
         @method('put')
         <input type="hidden" name="role" value="company">
@@ -124,7 +125,7 @@
                     <label for="">
                         Location
                     </label>
-                    <input type="text" class="form-control" value="{{ $candidat['location'] }}" name="location"
+                    <input type="text" class="form-control" value="{{ $candidate['location'] }}" name="location"
                            placeholder="Location">
                     @if ($errors->has('location'))
                         <p class="text-danger">{{ $errors->first('location') }}</p>
@@ -137,7 +138,8 @@
                     <label for="">
                         Age
                     </label>
-                    <input type="number" class="form-control" value="{{ $candidat['age'] }}" name="age" placeholder="Age">
+                    <input type="number" class="form-control" value="{{ $candidate['age'] }}" name="age"
+                           placeholder="Age">
                     @if ($errors->has('age'))
                         <p class="text-danger">{{ $errors->first('age') }}</p>
                     @endif
@@ -149,7 +151,7 @@
                     <label for="">
                         Profession
                     </label>
-                    <input type="text" class="form-control" value="{{ $candidat['profession'] }}" name="profession"
+                    <input type="text" class="form-control" value="{{ $candidate['profession'] }}" name="profession"
                            placeholder="Profession">
                     @if ($errors->has('profession'))
                         <p class="text-danger">{{ $errors->first('profession') }}</p>
@@ -162,7 +164,7 @@
                     <label for="">
                         Image
                     </label>
-                    <input type="file" value="{{asset($candidat['image']) }}" class="form-control" name="image"
+                    <input type="file" value="{{asset($candidate['image']) }}" class="form-control" name="image"
                            placeholder="Image">
                     @if ($errors->has('image'))
                         <p class="text-danger">{{ $errors->first('image') }}</p>

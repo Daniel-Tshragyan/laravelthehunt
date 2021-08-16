@@ -1,111 +1,111 @@
 @extends('adminlte::page')
 
- @section('content')
-     <table class="table table-bordered">
+@section('content')
+    <table class="table table-bordered">
 
-         <tr>
-             <td>
-                 ID
-             </td>
+        <tr>
+            <td>
+                ID
+            </td>
 
-             <td>
-                 Name
-             </td>
-             <td>
-                 Email
-             </td>
-             <td>
-                 City
-             </td>
-             <td>
-                 Location
-             </td>
-             @if($user->role=='candidate')
-                 <td>
-                     Age
-                 </td>
-                 <td>
-                     Profession
-                 </td>
-             @else
-                 <td>
-                     Company Name
-                 </td>
-                 <td>
-                     Tagline
-                 </td>
-             @endif
-
-
-             <td>
-                 Image
-             </td>
-             <td>
-                 Edit
-             </td>
-             <td>
-                 Delete
-             </td>
-         </tr>
-            <tr>
+            <td>
+                Name
+            </td>
+            <td>
+                Email
+            </td>
+            <td>
+                City
+            </td>
+            <td>
+                Location
+            </td>
+            @if($user->role=='candidate')
                 <td>
-                    {{ $user->id }}
-                </td>
-
-                <td>
-                    {{$user->name}}
+                    Age
                 </td>
                 <td>
-                    {{$user->email}}
+                    Profession
+                </td>
+            @else
+                <td>
+                    Company Name
                 </td>
                 <td>
-                    {{$city->name}}
+                    Tagline
                 </td>
-                @if($user->role=='candidate')
-                    <td>
-                        {{$candidat['location']}}
-                    </td>
-                    <td>
-                        {{ $candidat['age'] }}
-                    </td>
-                    <td>
-                        {{ $candidat['profession'] }}
-                    </td>
-                    <td>
-                        <img src="{{ asset('storage/users_images/'.$candidat['image']) }}" alt="" width="58%">
-                    </td>
-                @else
-                    <td>
-                        {{$company['location']}}
-                    </td>
-                    <td>
-                        {{ $company['comapnyname'] }}
-                    </td>
-                    <td>
-                        {{ $company['tagline'] }}
-                    </td>
-                    <td>
-                        <img src="{{ asset('storage/users_images/'.$company['image']) }}" alt="" width="58%">
-                    </td>
-                @endif
+            @endif
 
+
+            <td>
+                Image
+            </td>
+            <td>
+                Edit
+            </td>
+            <td>
+                Delete
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ $user->id }}
+            </td>
+
+            <td>
+                {{$user->name}}
+            </td>
+            <td>
+                {{$user->email}}
+            </td>
+            <td>
+                {{$city->name}}
+            </td>
+            @if($user->role=='candidate')
                 <td>
-                    <button class="btn btn-success">
-                        <a style="color:white!important" href="{{route('user.edit',['user' => $user])}}">Change</a>
+                    {{$candidate['location']}}
+                </td>
+                <td>
+                    {{ $candidate['age'] }}
+                </td>
+                <td>
+                    {{ $candidate['profession'] }}
+                </td>
+                <td>
+                    <img src="{{ asset('storage/users_images/'.$candidate['image']) }}" alt="" width="58%">
+                </td>
+            @else
+                <td>
+                    {{$company['location']}}
+                </td>
+                <td>
+                    {{ $company['comapnyname'] }}
+                </td>
+                <td>
+                    {{ $company['tagline'] }}
+                </td>
+                <td>
+                    <img src="{{ asset('storage/users_images/'.$company['image']) }}" alt="" width="58%">
+                </td>
+            @endif
+
+            <td>
+                <button class="btn btn-success">
+                    <a style="color:white!important" href="{{route('user.edit',['user' => $user])}}">Change</a>
+                </button>
+            </td>
+            <td>
+                <form action="{{route('user.destroy',['user' => $user])}}" method="post">
+                    @csrf
+                    @method('delete')
+                    <button class="btn btn-danger" type="submit">
+                        Delete
                     </button>
-                </td>
-                <td>
-                    <form action="{{route('user.destroy',['user' => $user])}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button class="btn btn-danger" type="submit">
-                            Delete
-                        </button>
-                    </form>
+                </form>
 
-                </td>
-            </tr>
-     </table>
+            </td>
+        </tr>
+    </table>
 
- @endsection
+@endsection
 

@@ -104,6 +104,7 @@
                                 Contact
                             </a>
                         </li>
+                        @guest
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="{{route('login')}}">Sign In</a>
                             <ul class="dropdown-menu">
@@ -111,6 +112,19 @@
                                 <li><a class="dropdown-item" href="{{route('reg1')}}">Registen as Company</a></li>
                             </ul>
                         </li>
+                        @else
+                            <li class="nav-item dropdown">
+                                <form style="margin-top:10px" id="logout-form" action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn" style="
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        color: #9a9a9a;">Sign Out
+                                    </button>
+                                </form>
+                            </li>
+
+                        @endguest
                         <li class="button-group">
                             <a href="{{route('post-job')}}" class="button btn btn-common">Post a Job</a>
                         </li>

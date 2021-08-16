@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     public function candidat()
     {
-        return $this->hasOne(Condidat::class, 'user_id', 'id');
+        return $this->hasOne(Condidate::class, 'user_id', 'id');
     }
 
     public function isAdmin()
