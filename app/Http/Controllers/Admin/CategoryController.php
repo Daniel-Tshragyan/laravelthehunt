@@ -37,10 +37,9 @@ class CategoryController extends Controller
         if ($request->input("how")) {
             $how = $request->input('how');
         }
-
         foreach ($searched as $key => $value) {
 
-            if ($request->input($key)) {
+            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
                 if ($key == 'title') {
                     $where[] = [$key, 'like', "%{$request->input($key)}%"];
                     $withPath .= "&{$key}={$request->input($key)}";
@@ -68,7 +67,6 @@ class CategoryController extends Controller
             $how = 'asc';
         }
         $sorts = ['id' => $how, 'title' => $how, 'jobs_cont' => $how, 'sort' => $how];
-
         return view('admin.category.index', ['searched' => $searched, 'categories' => $categories, 'sorts' => $sorts]);
     }
 
