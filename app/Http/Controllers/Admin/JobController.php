@@ -47,7 +47,7 @@ class JobController extends Controller
         }
 
         foreach ($searched as $key => $value) {
-            if ($request->input($key)) {
+            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
                 if($key == 'company_id' || $key == 'category_id' )
                 {
                     if($request->input($key) != 'a'){
