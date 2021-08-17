@@ -174,7 +174,7 @@
       </div>
 
       <!-- Sidebar Menu -->
-      <nav class="mt-2" style="min-height:100vh">
+      <nav class="mt-2" style="min-height:100vh;height:100%">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -206,6 +206,53 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>Users</p>
                 </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Categories
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('category.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>All Categories</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('category.create') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Add Category</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Jobs
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('job.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>All Jobs</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('job.create') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Add Job</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
         </ul>

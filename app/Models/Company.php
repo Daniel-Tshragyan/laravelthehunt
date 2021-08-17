@@ -16,6 +16,8 @@ class Company extends Model
         return $this->belongsTo(City::class, 'id', 'city_id');
     }
 
+
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

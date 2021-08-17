@@ -23,6 +23,14 @@ class User extends Authenticatable
         return $this->hasOne(Candidate::class, 'user_id', 'id');
     }
 
+
+    public function job()
+    {
+        return $this->hasMany(Job::class,'company_id','id');
+    }
+
+
+
     public function isAdmin()
     {
         return $this->role == 'admin';
