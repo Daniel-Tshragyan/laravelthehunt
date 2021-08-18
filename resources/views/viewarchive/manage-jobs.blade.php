@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="inner-header">
-              <h3>Manage Jobs</h3>
+              <h3>@yield('title')</h3>
             </div>
           </div>
         </div>
@@ -42,40 +42,9 @@
           </div>
           <div class="col-lg-8 col-md-8 col-xs-12">
             <div class="job-alerts-item candidates">
-              <h3 class="alerts-title">Manage Jobs</h3>
-              <div class="alerts-list">
-                <div class="row">
-                  <div class="col-lg-3 col-md-3 col-xs-12">
-                    <p>Name</p>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-12">
-                    <p>Keywords</p>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-12">
-                    <p>Candidates</p>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-12">
-                    <p>Featured</p>
-                  </div>
-                </div>
-              </div>
-              <div class="alerts-content">
-                <div class="row">
-                  <div class="col-lg-3 col-md-5 col-xs-12">
-                    <h3>Web Designer</h3>
-                    <span class="location"><i class="lni-map-marker"></i> Manhattan, NYC</span>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-12">
-                    <p><span class="full-time">Full-Time</span></p>
-                  </div>
-                  <div class="col-lg-3 col-md-2 col-xs-12">
-                    <div class="can-img"><a href="#"><img src="{{asset('img/jobs/candidates.png')}}" alt=""></a></div>
-                  </div>
-                  <div class="col-lg-3 col-md-2 col-xs-12">
-                    <p><i class="lni-star"></i></p>
-                  </div>
-                </div>
-              </div>
+              <h3 class="alerts-title">@yield('title')</h3>
+                @yield('content1')
+
               <div class="alerts-content">
                 <div class="row">
                   <div class="col-lg-3 col-md-5 col-xs-12">

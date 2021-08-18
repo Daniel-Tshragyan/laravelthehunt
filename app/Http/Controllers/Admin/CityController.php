@@ -16,9 +16,8 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, CityService $cityService)
     {
-        $cityService = new CityService();
         $paginationArguments = $cityService->paginationArguments($request);
         $order_by = $paginationArguments['order_by'];
         $how = $paginationArguments['how'];
@@ -72,7 +71,7 @@ class CityController extends Controller
         Session::flash('message', 'City Added');
 
 
-        return redirect('admin/city');
+        return redirect()->route('city.index');
 
     }
 
@@ -115,7 +114,7 @@ class CityController extends Controller
         Session::flash('message', 'City Changed');
 
 
-        return redirect('admin/city');
+        return redirect()->route('city.index');
 
     }
 
@@ -129,6 +128,6 @@ class CityController extends Controller
     {
         $city->delete();
         Session::flash('message', 'City Deleted');
-        return redirect('admin/city');
+        return redirect()->route('city.index');
     }
 }

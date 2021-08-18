@@ -86,7 +86,7 @@ class CategoryController extends Controller
         $category->save();
         $request->file('image')->storeAs('public/categories_images', $imageName);
         Session::flash('message', 'Category Added');
-        return redirect('admin/category');
+        return redirect()->route('category.index');
     }
 
     /**
@@ -144,7 +144,7 @@ class CategoryController extends Controller
         $category->fill($categoryInformation);
         $category->save();
         Session::flash('message', 'Categoey Updated');
-        return redirect('admin/category');
+        return redirect()->route('category.index');
     }
 
     /**
@@ -158,6 +158,6 @@ class CategoryController extends Controller
         Storage::delete('/public/categories_images/' . $category->image);
         $category->delete();
         Session::flash('message', 'Categoey Deleted');
-        return redirect('admin/category');
+        return redirect()->route('category.index');
     }
 }

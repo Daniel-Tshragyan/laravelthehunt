@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\FrontEnd;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
-use App\Service\JobService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\JobValidation;
+use App\Service\JobService;
 use Illuminate\Support\Facades\Session;
-use App\Http\Requests\AdminJobValidator;
 
 class JobController extends Controller
 {
-    const companyRole = 2;
+//    auth()->id()
     /**
      * Display a listing of the resource.
      *
@@ -22,22 +21,20 @@ class JobController extends Controller
      */
     public function index(Request $request,JobService $jobService)
     {
-        $user = new User();
-        $companies = $user->where(['role' => self::companyRole])->get();
         $categories = Category::all();
         $paginationArguments = $jobService->paginationArguments($request);
         $withPath = $paginationArguments['withPath'];
         $order_by = $paginationArguments['order_by'];
         $how = $paginationArguments['how'];
         $where = $paginationArguments['where'];
+        $where['company_id'] = auth()->id();
         $searched = $paginationArguments['searched'];
         if (!empty($where)) {
             $jobs = Job::where($where)->orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("job?order_by={$order_by}&how={$how}" . $withPath);
-
+            $jobs->withPath("frontjob?order_by={$order_by}&how={$how}" . $withPath);
         } else {
             $jobs = Job::orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("job?order_by={$order_by}&how={$how}");
+            $jobs->withPath("frontjob?order_by={$order_by}&how={$how}");
         }
         if ($how == 'asc') {
             $how = 'desc';
@@ -47,7 +44,8 @@ class JobController extends Controller
         $sorts = ['id' => $how, 'title' => $how, 'location' => $how, 'job_tags' => $how, 'description' => $how,
             'closing_date' => $how, 'price' => $how, 'url' => $how, 'company_id' => $how, 'category_id' => $how,
         ];
-        return view('admin.job.index', ['companies' => $companies, 'categories' => $categories, 'searched' => $searched, 'jobs' => $jobs, 'sorts' => $sorts]);
+        return view('frontend.company.job.index', ['categories' => $categories, 'searched' => $searched, 'jobs' => $jobs, 'sorts' => $sorts]);
+
     }
 
     /**
@@ -57,91 +55,82 @@ class JobController extends Controller
      */
     public function create()
     {
-        $companies = User::where(['role' => self::companyRole])->get();
-        $categories = Category::all();
-        return view('admin.job.create', ['categories' => $categories, 'companies' => $companies]);
+        $category = Category::all();
+        return view('frontend.company.job.create',['categories' => $category]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdminJobValidator $request,JobService $jobService)
+    public function store(JobValidation $request,JobService $jobService)
     {
-        $jobService->jobFill($request);
+        $jobService->jobFrontFill($request);
         $category = Category::find($request->input('category_id'));
         $jobService->addCategoryCount($category);
-
-
-        Session::flash('message', 'Job Added');
-        return redirect()->route('job.index');
+        Session::flash('message', 'Job Updated');
+        return redirect()->route('frontjob.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Job $job
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job)
+    public function show(Job $frontjob)
     {
-        return view('admin.job.show', ['job' => $job]);
+        return view('frontend.company.job.show',['job' => $frontjob]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Job $job
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $job)
+    public function edit(Job $frontjob)
     {
-        $user = new User();
-        $companies = $user->where(['role' => '2'])->get();
-        $price = (int)$job->price;
-        $categories = Category::all();
-        return view('admin.job.update', ['price' => $price, 'job' => $job,'companies' => $companies, 'categories' => $categories]);
+        $category = Category::all();
+        $price = (int)$frontjob->price;
+        return view('frontend.company.job.update',['job' => $frontjob, 'categories' => $category,'price' =>$price]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Job $job
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminJobValidator $request, Job $job,JobService $jobService)
+    public function update(JobValidation $request, Job $frontjob, JobService $jobService)
     {
-        if ($request->input('category_id') != $job->category_id) {
-            $category = Category::find($job->category_id);
+        if ($request->input('category_id') != $frontjob->category_id) {
+            $category = Category::find($frontjob->category_id);
             $jobService->downCategoryCount($category);
             $category1 = Category::find($request->input('category_id'));
             $jobService->addCategoryCount($category1);
         }
-        $jobService->jobUpdate($request,$job);
+        $jobService->frontJobUpdate($request, $frontjob);
         Session::flash('message', 'Job Updated');
-        return redirect()->route('job.index');
+        return redirect()->route('frontjob.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Job $job
+     * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function destroy(Job $frontjob, JobService $jobService)
     {
-        $category = Category::find($job->category_id);
-        $job->delete();
-        $count = $category->jobs_count;
-        $count -= 1;
-        $category->fill([
-            'jobs_count' => $count
-        ]);
-        $category->save();
+        $category = Category::find($frontjob->category_id);
+        $jobService->downCategoryCount( $category);
+        $frontjob->delete();
         Session::flash('message', 'Job Deleted');
-        return redirect()->route('job.index');
+        return redirect()->route('frontjob.index');
+
     }
 }

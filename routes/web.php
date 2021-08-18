@@ -70,18 +70,14 @@ Route::get('/job-page', function () {
 Route::get('/manage-applications', function () {
     return view('viewarchive.manage-applications');
 })->name('manage-applications');
-Route::get('/manage-jobs', function () {
-    return view('viewarchive.manage-jobs');
-})->name('manage-jobs');
+
 Route::get('/manage-resumes', function () {
     return view('viewarchive.manage-resumes');
 })->name('manage-resumes');
 Route::get('/notifications', function () {
     return view('viewarchive.notifications');
 })->name('notifications');
-Route::get('/post-job', function () {
-    return view('viewarchive.post-job');
-})->name('post-job');
+
 Route::get('/privacy-policy', function () {
     return view('viewarchive.privacy-policy');
 })->name('privacy-policy');
@@ -99,6 +95,8 @@ Route::get('/regcompany', [UserController::class, 'companyreg'])->name('reg1');
 Route::get('/pricing', function () {
     return view('viewarchive.pricing');
 })->name('pricing');
+
+Route::resource('/frontjob','App\Http\Controllers\FrontEnd\JobController');
 
 
 

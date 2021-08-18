@@ -19,6 +19,12 @@
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
     <link rel="stylesheet" href="{{asset('css/responsive.css')}}">
 
+    <style>
+        .alerts-content .row .col-lg-1{
+            margin: 0 0 0 10px
+        }
+    </style>
+
 </head>
 
 <body>
@@ -65,29 +71,60 @@
                                 <li><a class="dropdown-item" href="{{route('contact')}}">Contact</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Candidates
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('browse-jobs')}}">Browse Jobs</a></li>
-                                <li><a class="dropdown-item" href="{{route('browse-categories')}}">Browse Categories</a></li>
-                                <li><a class="dropdown-item" href="{{route('add-resume')}}">Add Resume</a></li>
-                                <li><a class="dropdown-item" href="{{route('manage-resumes')}}">Manage Resumes</a></li>
-                                <li><a class="dropdown-item" href="{{route('job-alerts')}}">Job Alerts</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Employers
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('post-job')}}">Add Job</a></li>
-                                <li><a class="dropdown-item" href="{{route('manage-jobs')}}">Manage Jobs</a></li>
-                                <li><a class="dropdown-item" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                                <li><a class="dropdown-item" href="{{route('browse-resumes')}}">Browse Resumes</a></li>
-                            </ul>
-                        </li>
+                        @guest
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Candidates
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{route('browse-jobs')}}">Browse Jobs</a></li>
+                                    <li><a class="dropdown-item" href="{{route('browse-categories')}}">Browse Categories</a></li>
+                                    <li><a class="dropdown-item" href="{{route('add-resume')}}">Add Resume</a></li>
+                                    <li><a class="dropdown-item" href="{{route('manage-resumes')}}">Manage Resumes</a></li>
+                                    <li><a class="dropdown-item" href="{{route('job-alerts')}}">Job Alerts</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Employers
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{route('frontjob.create')}}">Add Job</a></li>
+                                    <li><a class="dropdown-item" href="{{route('frontjob.index')}}">Manage Jobs</a></li>
+                                    <li><a class="dropdown-item" href="{{route('manage-applications')}}">Manage Applications</a></li>
+                                    <li><a class="dropdown-item" href="{{route('browse-resumes')}}">Browse Resumes</a></li>
+                                </ul>
+                            </li>
+
+                        @else
+                            @if(auth()->user()->role == '2')
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Employers
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{route('frontjob.create')}}">Add Job</a></li>
+                                        <li><a class="dropdown-item" href="{{route('frontjob.index')}}">Manage Jobs</a></li>
+                                        <li><a class="dropdown-item" href="{{route('manage-applications')}}">Manage Applications</a></li>
+                                        <li><a class="dropdown-item" href="{{route('browse-resumes')}}">Browse Resumes</a></li>
+                                    </ul>
+                                </li>
+                            @elseif(auth()->user()->role == '1')
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Candidates
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{route('browse-jobs')}}">Browse Jobs</a></li>
+                                        <li><a class="dropdown-item" href="{{route('browse-categories')}}">Browse Categories</a></li>
+                                        <li><a class="dropdown-item" href="{{route('add-resume')}}">Add Resume</a></li>
+                                        <li><a class="dropdown-item" href="{{route('manage-resumes')}}">Manage Resumes</a></li>
+                                        <li><a class="dropdown-item" href="{{route('job-alerts')}}">Job Alerts</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+                        @endguest
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Blog
@@ -108,8 +145,8 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="{{route('login')}}">Sign In</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('reg') }}">Registen as Candidate</a></li>
-                                <li><a class="dropdown-item" href="{{route('reg1')}}">Registen as Company</a></li>
+                                <li><a class="dropdown-item" href="{{ route('reg') }}">Register as Candidate</a></li>
+                                <li><a class="dropdown-item" href="{{route('reg1')}}">Register as Company</a></li>
                             </ul>
                         </li>
                         @else
@@ -123,11 +160,13 @@
                                     </button>
                                 </form>
                             </li>
-
+                            @if(auth()->user()->role == "2")
+                                <li class="button-group">
+                                    <a href="{{route('frontjob.create')}}" class="button btn btn-common">Post a Job</a>
+                                </li>
+                            @endif
                         @endguest
-                        <li class="button-group">
-                            <a href="{{route('post-job')}}" class="button btn btn-common">Post a Job</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

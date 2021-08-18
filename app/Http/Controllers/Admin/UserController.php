@@ -16,6 +16,11 @@ use App\Service\UserService;
 
 class UserController extends Controller
 {
+    const userCategories = [
+        'admin' => 0,
+        'candidate' => 1,
+        'company' => 2,
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -78,17 +83,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if ($user->role == '1') {
+        if ($user->role == self::userCategories['candidate']) {
             $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.show', ['user' => $user, 'candidate' => $candidate, 'city' => $city]);
         }
-        if ($user->role == '2') {
+        if ($user->role == self::userCategories['company']) {
             $company = $user->company->toArray();
             $city = City::find($company['city_id']);
             return view('admin.user.show', ['user' => $user, 'company' => $company, 'city' => $city]);
         }
-        if ($user->role == 0) {
+        if ($user->role == self::userCategories['admin']) {
             return view('admin.user.show', ['user' => $user]);
         }
     }
@@ -102,13 +107,13 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $cities = City::all();
-        if ($user->role == 1) {
+        if ($user->role == self::userCategories['candidate']) {
             $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities,
                 'city' => $city]);
         }
-        if ($user->role == 2) {
+        if ($user->role == self::userCategories['comapny']) {
             $company = $user->company->toArray();
             $city = City::find($company['city_id']);
             return view('admin.user.update', ['user' => $user, 'company' => $company, 'cities' => $cities,
@@ -127,17 +132,17 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $userService = new UserService();
-        if ($user->role == 1) {
+        if ($user->role == self::userCategories['candidate']) {
             $userService->candidateValidate($request, $user);
             $userService->updateCandidate($request, $user);
         }
-        if ($user->role == 2) {
+        if ($user->role == self::userCategories['comapny']) {
             $userService->companyValidate($request, $user);
             Session::flash('message', 'User Updated');
             $userService->updateCompany($request, $user);
         }
         Session::flash('message', 'User Updated');
-        return redirect('admin/user');
+        return redirect()->route('user.index');
     }
 
     /**
@@ -148,17 +153,17 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->role == 'candidat') {
+        if ($user->role == self::userCategories['candidate']) {
             $candidat = $user->candidate->toArray();
             Storage::delete('/public/users_images/' . $candidat['image']);
         }
-        if ($user->role == 'company') {
+        if ($user->role == self::userCategories['comapny']) {
             $company = $user->company->toArray();
             Storage::delete('/public/users_images/' . $company['image']);
         }
         $user->delete();
         Session::flash('message', 'User Deleted');
-        return redirect('admin/user');
+        return redirect()->route('user.index');
     }
 
     public function candidatreg()

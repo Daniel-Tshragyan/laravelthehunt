@@ -3,8 +3,11 @@
 namespace App\Service;
 
 
+use App\Models\Category;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use App\Http\Requests\JobValidation;
+use App\Http\Requests\AdminJobValidator;
 
 class JobService
 {
@@ -42,24 +45,9 @@ class JobService
             'where' => $where,'how' => $how ];
     }
 
-    public function jobValidate(Request $request)
-    {
-        $request->validate(
-            [
-                'title' => ['required', 'string'],
-                'location' => ['required', 'string'],
-                'job_tags' => ['required', 'string'],
-                'description' => ['required', 'string'],
-                'closing_date' => ['required', 'date'],
-                'price' => ['required', 'numeric'],
-                'url' => ['required', 'string'],
-                'company_id' => ['required', 'exists:App\Models\Company,user_id'],
-                'category_id' => ['required', 'exists:App\Models\Category,id'],
-            ]
-        );
-    }
 
-    public function jobFill(Request $request)
+
+    public function jobFill(AdminJobValidator $request)
     {
         $job = new Job();
         $job->fill([
@@ -73,8 +61,76 @@ class JobService
             'company_id' => $request->input('company_id'),
             'category_id' => $request->input('category_id'),
         ]);
-        $job->save();
+        return $job->save();
+    }
+
+    public function frontJobUpdate(JobValidation $request, Job $job)
+    {
+        $job->fill([
+            'title' => $request->input('title'),
+            'location' => $request->input('location'),
+            'job_tags' => $request->input('job_tags'),
+            'description' => $request->input('description'),
+            'closing_date' => $request->input('closing_date'),
+            'price' => $request->input('price'),
+            'url' => $request->input('url'),
+            'category_id' => $request->input('category_id'),
+        ]);
+        return $job->save();
+    }
+
+    public function JobUpdate(AdminJobValidator $request, Job $job)
+    {
+        $job->fill([
+            'title' => $request->input('title'),
+            'location' => $request->input('location'),
+            'job_tags' => $request->input('job_tags'),
+            'description' => $request->input('description'),
+            'closing_date' => $request->input('closing_date'),
+            'price' => $request->input('price'),
+            'url' => $request->input('url'),
+            'company_id' => $request->input('company_id'),
+            'category_id' => $request->input('category_id'),
+        ]);
+        return $job->save();
+    }
+
+    public function jobFrontFill(JobValidation $request)
+    {
+        $job = new Job();
+        $job->fill([
+            'title' => $request->input('title'),
+            'location' => $request->input('location'),
+            'job_tags' => $request->input('job_tags'),
+            'description' => $request->input('description'),
+            'closing_date' => $request->input('closing_date'),
+            'price' => $request->input('price'),
+            'url' => $request->input('url'),
+            'company_id' =>auth()->id(),
+            'category_id' => $request->input('category_id'),
+        ]);
+        return $job->save();
     }
 
 
+    public function addCategoryCount(Category $category)
+    {
+        $count = $category->jobs_count;
+        $count += 1;
+        $category->fill([
+            'jobs_count' => $count
+        ]);
+        return $category->save();
+    }
+
+    public function downCategoryCount(Category $category)
+    {
+        $count = $category->jobs_count;
+        $count -= 1;
+        $category->fill([
+            'jobs_count' => $count
+        ]);
+        return $category->save();
+    }
 }
+

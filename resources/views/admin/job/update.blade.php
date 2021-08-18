@@ -3,7 +3,6 @@
     Update Job
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('jobUpdate') }}
     <h1>Update Job</h1>
     <form action="{{route('job.update',['job' => $job])}}" class="w-50" method="post">
         @csrf
@@ -63,7 +62,7 @@
         <label for="">
             Price
         </label>
-        <input type="number" name="price" value="{{ $job->price }}" placeholder="Price" class="form-control">
+        <input type="number" name="price" value="{{ $price }}" placeholder="Price" class="form-control">
         <br>
 
         @if ($errors->has('price'))
