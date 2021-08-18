@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Add Category
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('categoryCreate') }}
+
     <h1>Add Category</h1>
     <form action="{{route('category.store')}}" class="w-50" method="post" enctype="multipart/form-data">
         @csrf

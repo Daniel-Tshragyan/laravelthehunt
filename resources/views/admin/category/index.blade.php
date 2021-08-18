@@ -1,6 +1,16 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    All Categories
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('category') }}
+    <h1>All Categories</h1>
+
+    @if(Session::has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
+    @endif
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -73,9 +83,13 @@
         @endforeach
         </tbody>
     </table>
-    @if(Session::has('message'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('message') }}
-        </div>
-    @endif
+
+    {{ $categories->links() }}
+    <br>
+    <a href="{{ route('category.create') }}">
+        <button class="btn btn-success">
+            Create New
+        </button>
+    </a>
+
 @endsection

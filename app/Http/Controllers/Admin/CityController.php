@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\User;
+use App\Service\CityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -17,32 +18,13 @@ class CityController extends Controller
      */
     public function index(Request $request)
     {
-        $order_by = 'id';
-        $how = 'asc';
-        $where = [];
-        $withPath = '';
-        $searched = [
-            'name' => '',
-            'id' => '',
-        ];
-
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
-        }
-
-        if ($request->input('name')) {
-            $where[] = ['name', 'like', "%{$request->input('name')}%"];
-            $withPath .= "&&name={$request->input('name')}";
-            $searched['name'] = $request->input('name');
-
-        }
-
-        if ($request->input('id')) {
-            $where[] = ['name', '=', "id"];
-            $withPath .= "&&name={$request->input('name')}";
-            $searched['id'] = $request->input('id');
-
-        }
+        $cityService = new CityService();
+        $paginationArguments = $cityService->paginationArguments($request);
+        $order_by = $paginationArguments['order_by'];
+        $how = $paginationArguments['how'];
+        $where = $paginationArguments['where'];
+        $withPath = $paginationArguments['withPath'];
+        $searched = $paginationArguments['searched'];
 
         if (!empty($where)) {
             $city = City::where($where)->orderBy($order_by, $how)->paginate(3);
@@ -88,14 +70,9 @@ class CityController extends Controller
         $city->fill(['name' => $request->input('name')]);
         $city->save();
         Session::flash('message', 'City Added');
-        $cityAll = City::all();
-        $sorts = ['id' => 'asc', 'name' => 'asc'];
-        $searched = [
-            'name' => '',
-            'id' => '',
-        ];
 
-        return view('admin.city.index', ['cities' => $cityAll, 'sorts' => $sorts, 'searched' => $searched]);
+
+        return redirect('admin/city');
 
     }
 
@@ -136,14 +113,9 @@ class CityController extends Controller
         $city->fill(['name' => $request->input('name')]);
         $city->save();
         Session::flash('message', 'City Changed');
-        $cityAll = City::all();
-        $sorts = ['id' => 'asc', 'name' => 'asc'];
-        $searched = [
-            'name' => '',
-            'id' => '',
-        ];
 
-        return view('admin.city.index', ['cities' => $cityAll, 'sorts' => $sorts, 'searched' => $searched]);
+
+        return redirect('admin/city');
 
     }
 

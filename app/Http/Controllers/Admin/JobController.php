@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
+use App\Service\JobService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -22,58 +23,13 @@ class JobController extends Controller
         $user = new User();
         $companies = $user->where(['role' => '2'])->get();
         $categories = Category::all();
-        $withPath = '';
-        $order_by = 'id';
-        $how = 'asc';
-        $where = [];
-        $searched = [
-            'title' => '',
-            'location' => '',
-            'id' => '',
-            'job_tags' => '',
-            'description' => '',
-            'closing_date' => '',
-            'price' => '',
-            'url' => '',
-            'company_id' => '',
-            'category_id' => '',
-        ];
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
-        }
-
-        if ($request->input("how")) {
-            $how = $request->input('how');
-        }
-
-        foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
-                if($key == 'company_id' || $key == 'category_id' )
-                {
-                    if($request->input($key) != 'a'){
-                        $where[] = [$key, '=', "{$request->input($key)}"];
-                        $withPath .= "&{$key}={$request->input($key)}";
-                        $searched[$key] = $request->input($key);
-                    }
-                }
-                else{
-                    if ($key == 'title' || $key == 'location' ||
-                        $key == 'job_tags' || $key == 'description'
-                        || $key == 'url') {
-                        $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                        $withPath .= "&{$key}={$request->input($key)}";
-                        $searched[$key] = $request->input($key);
-                    } else {
-
-                        $where[] = [$key, '=', "{$request->input($key)}"];
-                        $withPath .= "&{$key}={$request->input($key)}";
-                        $searched[$key] = $request->input($key);
-                    }
-                }
-
-            }
-        }
-
+        $jobService = new JobService();
+        $paginationArguments = $jobService->paginationArguments($request);
+        $withPath = $paginationArguments['withPath'];
+        $order_by = $paginationArguments['order_by'];
+        $how = $paginationArguments['how'];
+        $where = $paginationArguments['where'];
+        $searched = $paginationArguments['searched'];
         if (!empty($where)) {
             $jobs = Job::where($where)->orderBy($order_by, $how)->paginate(3);
             $jobs->withPath("user?order_by={$order_by}&how={$how}" . $withPath);
@@ -82,26 +38,14 @@ class JobController extends Controller
             $jobs = Job::orderBy($order_by, $how)->paginate(3);
             $jobs->withPath("user?order_by={$order_by}&how={$how}");
         }
-
         if ($how == 'asc') {
             $how = 'desc';
         } else {
             $how = 'asc';
         }
-        $sorts = ['id' => $how,
-            'title' => $how,
-            'location' => $how,
-            'job_tags' => $how,
-            'description' => $how,
-            'closing_date' => $how,
-            'price' => $how,
-            'url' => $how,
-            'company_id' => $how,
-            'category_id' => $how,
+        $sorts = ['id' => $how, 'title' => $how, 'location' => $how, 'job_tags' => $how, 'description' => $how,
+            'closing_date' => $how, 'price' => $how, 'url' => $how, 'company_id' => $how, 'category_id' => $how,
         ];
-
-//        dd($sorts);
-
         return view('admin.job.index', ['companies' => $companies, 'categories' => $categories, 'searched' => $searched, 'jobs' => $jobs, 'sorts' => $sorts]);
     }
 
@@ -126,33 +70,9 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'title' => ['required', 'string'],
-                'location' => ['required', 'string'],
-                'job_tags' => ['required', 'string'],
-                'description' => ['required', 'string'],
-                'closing_date' => ['required', 'date'],
-                'price' => ['required', 'numeric'],
-                'url' => ['required', 'string'],
-                'company_id' => ['required', 'exists:App\Models\Company,user_id'],
-                'category_id' => ['required', 'exists:App\Models\Category,id'],
-            ]
-        );
-
-        $job = new Job();
-        $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
-            'company_id' => $request->input('company_id'),
-            'category_id' => $request->input('category_id'),
-        ]);
-        $job->save();
+        $jobService = new JobService();
+        $jobService->jobValidate($request);
+        $jobService->jobFill($request);
         $category = Category::find($request->input('category_id'));
         $count = $category->jobs_count;
         $count += 1;
@@ -162,7 +82,6 @@ class JobController extends Controller
         $category->save();
         Session::flash('message', 'Job Added');
         return redirect('admin/job');
-
     }
 
     /**
@@ -199,19 +118,8 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
-        $request->validate(
-            [
-                'title' => ['required', 'string'],
-                'location' => ['required', 'string'],
-                'job_tags' => ['required', 'string'],
-                'description' => ['required', 'string'],
-                'closing_date' => ['required', 'date'],
-                'price' => ['required', 'numeric'],
-                'url' => ['required', 'string'],
-                'company_id' => ['required', 'exists:App\Models\User,id'],
-                'category_id' => ['required', 'exists:App\Models\Category,id'],
-            ]
-        );
+        $jobService = new JobService();
+        $jobService->jobValidate($request);
         if ($request->input('category_id') != $job->category_id) {
             $category = Category::find($job->category_id);
             $count = $category->jobs_count;
@@ -228,19 +136,7 @@ class JobController extends Controller
             ]);
             $category1->save();
         }
-        $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
-            'company_id' => $request->input('company_id'),
-            'category_id' => $request->input('category_id'),
-        ]);
-        $job->save();
-
+        $jobService->jobFill($request);
         Session::flash('message', 'Job Updated');
         return redirect('admin/job');
     }
@@ -253,8 +149,8 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
+        $category = Category::find($job->category_id);
         $job->delete();
-        $category = Category::find($job->id);
         $count = $category->jobs_count;
         $count -= 1;
         $category->fill([

@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    City
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('cityShow') }}
+    <h1>City</h1>
     <table class="table table-bordered">
         <thead>
             <tr>

@@ -1,7 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Add Job
+@endsection
 @section('content')
-    <h1>Add Category</h1>
+    {{ Breadcrumbs::render('jobCreate') }}
+    <h1>Add Job</h1>
     <form action="{{route('job.store')}}" class="w-50" method="post">
         @csrf
         <input type="text" name="title" placeholder="Title" class="form-control">

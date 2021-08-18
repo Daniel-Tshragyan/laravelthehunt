@@ -1,6 +1,11 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Category
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('categoryShow') }}
+    <h1> Category</h1>
+
     <table class="table table-bordered">
         <thead>
         <tr>

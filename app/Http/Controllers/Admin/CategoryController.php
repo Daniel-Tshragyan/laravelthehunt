@@ -6,8 +6,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\User;
+use App\Service\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -19,43 +21,20 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $withPath = '';
-        $order_by = 'id';
-        $how = 'asc';
-        $where = [];
-        $searched = [
-            'title' => '',
-            'jobs_count' => '',
-            'id' => '',
-            'sort' => '',
-        ];
+        $categoryService = new CategoryService();
+        $paginationArguments = $categoryService->paginationArguments($request);
+        $withPath = $paginationArguments['withPath'];
+        $order_by = $paginationArguments['order_by'];
+        $how = $paginationArguments['how'];
+        $where = $paginationArguments['where'];
+        $searched = $paginationArguments['searched'];
 
         if ($request->input("order_by")) {
             $order_by = $request->input('order_by');
         }
-
-        if ($request->input("how")) {
-            $how = $request->input('how');
-        }
-        foreach ($searched as $key => $value) {
-
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
-                if ($key == 'title') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
-                } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
-                }
-            }
-        }
-
         if (!empty($where)) {
             $categories = Category::where($where)->orderBy($order_by, $how)->paginate(3);
             $categories->withPath("user?order_by={$order_by}&how={$how}" . $withPath);
-
         } else {
             $categories = Category::orderBy($order_by, $how)->paginate(3);
             $categories->withPath("user?order_by={$order_by}&how={$how}");
@@ -67,7 +46,8 @@ class CategoryController extends Controller
             $how = 'asc';
         }
         $sorts = ['id' => $how, 'title' => $how, 'jobs_cont' => $how, 'sort' => $how];
-        return view('admin.category.index', ['searched' => $searched, 'categories' => $categories, 'sorts' => $sorts]);
+        return view('admin.category.index', ['searched' => $searched, 'categories' => $categories,
+            'sorts' => $sorts]);
     }
 
     /**
@@ -146,9 +126,12 @@ class CategoryController extends Controller
         ];
 
         $validationArray = [
-            'title' => ['required', 'string', 'unique:App\Models\Category,title'],
             'sort' => ['required', 'numeric'],
         ];
+
+        if ($request->input('title') != $category->title) {
+            $validationArray['title'] = ['required', 'string', 'unique:App\Models\Category,title'];
+         }
 
         if ($request->input('image')) {
             $validationArray['image'] = ['required', 'image'];
@@ -172,6 +155,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        Storage::delete('/public/categories_images/' . $category->image);
         $category->delete();
         Session::flash('message', 'Categoey Deleted');
         return redirect('admin/category');

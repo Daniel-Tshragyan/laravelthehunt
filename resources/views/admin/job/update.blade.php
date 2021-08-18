@@ -1,7 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Update Job
+@endsection
 @section('content')
-    <h1>Add Category</h1>
+    {{ Breadcrumbs::render('jobUpdate') }}
+    <h1>Update Job</h1>
     <form action="{{route('job.update',['job' => $job])}}" class="w-50" method="post">
         @csrf
         @method('put')

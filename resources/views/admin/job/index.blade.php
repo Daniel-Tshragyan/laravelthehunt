@@ -1,7 +1,17 @@
 @extends('admin.layouts.app')
 
-
+@section('title')
+    All Jobs
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('job') }}
+
+    @if(Session::has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    <h1> All Jobs</h1>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -52,7 +62,7 @@
                 </td>
                 <td>
                     <select name="company_id" id="" class="form-control">
-                        <option value="a">
+                        <option value="">
                             Select Company
                         </option>
                         @foreach($companies as $key => $value)
@@ -67,7 +77,7 @@
                 </td>
                 <td>
                     <select name="category_id" id="" class="form-control">
-                        <option value="a">
+                        <option value="">
                             Select Category
                         </option>
                         @foreach($categories as $key => $value)
@@ -144,10 +154,12 @@
 
     </table>
     {{ $jobs->links() }}
+
+    <a href="{{ route('job.create') }}">
+        <button class="btn btn-success">
+            Create New
+        </button>
+    </a>
     <br>
-    @if(Session::has('message'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('message') }}
-        </div>
-    @endif
+
 @endsection

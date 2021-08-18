@@ -1,7 +1,17 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    All Users
+@endsection
 
 @section('content')
+    {{ Breadcrumbs::render('user') }}
+
+    @if(Session::has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    <h1>All Users</h1>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -27,7 +37,7 @@
                 </td>
                 <td>
                     <select name="role" id="" class="form-control">
-                        <option value="a">
+                        <option value="">
                             Select Role
                         </option>
                         @foreach($filters as $key => $value)
@@ -90,10 +100,5 @@
 
     </table>
     {{ $users->links() }}
-    <br>
-    @if(Session::has('message'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('message') }}
-        </div>
-    @endif
+
 @endsection

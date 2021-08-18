@@ -1,7 +1,10 @@
 @extends('admin.layouts.app')
-
-
+@section('title')
+    Update User
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('userUpdate') }}
+
     <h1>Update User</h1>
     <form class="login-form" method="POST" action="{{ route('user.update',['user' => $user]) }}"
           enctype="multipart/form-data">

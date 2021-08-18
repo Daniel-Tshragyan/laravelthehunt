@@ -1,9 +1,12 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    User
+@endsection
 
 @section('content')
+    {{ Breadcrumbs::render('userShow') }}
+    <h1>User</h1>
     <table class="table table-bordered">
-
         <tr>
             <td>
                 ID
@@ -15,6 +18,7 @@
             <td>
                 Email
             </td>
+            @if($user->role != 0)
             <td>
                 City
             </td>
@@ -36,17 +40,11 @@
                     Tagline
                 </td>
             @endif
+                <td>
+                    Image
+                </td>
+            @endif
 
-
-            <td>
-                Image
-            </td>
-            <td>
-                Edit
-            </td>
-            <td>
-                Delete
-            </td>
         </tr>
         <tr>
             <td>
@@ -59,6 +57,7 @@
             <td>
                 {{$user->email}}
             </td>
+            @if($user->role != 0)
             <td>
                 {{$city->name}}
             </td>
@@ -89,22 +88,8 @@
                     <img src="{{ asset('storage/users_images/'.$company['image']) }}" alt="" width="58%">
                 </td>
             @endif
+            @endif
 
-            <td>
-                <button class="btn btn-success">
-                    <a style="color:white!important" href="{{route('user.edit',['user' => $user])}}">Change</a>
-                </button>
-            </td>
-            <td>
-                <form action="{{route('user.destroy',['user' => $user])}}" method="post">
-                    @csrf
-                    @method('delete')
-                    <button class="btn btn-danger" type="submit">
-                        Delete
-                    </button>
-                </form>
-
-            </td>
         </tr>
     </table>
 

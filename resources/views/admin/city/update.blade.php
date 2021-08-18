@@ -1,7 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+   Update City
+@endsection
 @section('content')
-    <h1>Add City</h1>
+    {{ Breadcrumbs::render('cityUpdate') }}
+    <h1>Update City</h1>
     <form action="{{route('city.update',['city' => $city])}}" class="w-50" method="post">
         @csrf
         @method('put')

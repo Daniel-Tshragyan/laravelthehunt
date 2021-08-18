@@ -1,6 +1,9 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Update Category
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('categoryUpdate') }}
     <h1>Update Category</h1>
     <form action="{{route('category.update',['category' => $category])}}" class="w-50" method="post" enctype="multipart/form-data">
         @csrf

@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Job
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('jobShow') }}
+    <h1>Job</h1>
     <table class="table table-bordered">
         <thead>
         <tr>

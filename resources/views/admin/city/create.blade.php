@@ -1,6 +1,9 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    Add City
+@endsection
 @section('content')
+    {{ Breadcrumbs::render('cityCreate') }}
     <h1>Add City</h1>
     <form action="{{route('city.store')}}" class="w-50" method="post">
         @csrf

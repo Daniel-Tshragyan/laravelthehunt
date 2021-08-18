@@ -1,7 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    {{ Breadcrumbs::render('admin') }}
     <h1>
-        admin panel
+        Admin Dashboard
     </h1>
 @endsection

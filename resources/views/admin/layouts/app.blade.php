@@ -8,7 +8,7 @@
     </style>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Calendar</title>
+  <title>@yield('title')</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -179,27 +179,11 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Cities
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('city.index') }}" class="nav-link">
+              <a href="{{ route('city.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All Cities</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('city.create') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add City</p>
-                </a>
-              </li>
-            </ul>
+                  <p>Cities</p>
+              </a>
+
           </li>
             <li class="nav-item">
                 <a href="{{ route('user.index') }}" class="nav-link">
@@ -208,58 +192,20 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                        Categories
-                        <i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('category.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>All Categories</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('category.create') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Add Category</p>
-                        </a>
-                    </li>
-                </ul>
+                    <a href="{{ route('category.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Categories</p>
+                    </a>
             </li>
-
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                        Jobs
-                        <i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{{ route('job.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>All Jobs</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('job.create') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Add Job</p>
-                        </a>
-                    </li>
-                </ul>
+                    <a href="{{ route('job.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Jobs</p>
+                    </a>
             </li>
-
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
   </aside>
 
 

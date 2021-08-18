@@ -1,6 +1,16 @@
 @extends('admin.layouts.app')
-
+@section('title')
+    All Cities
+@endsection
 @section('content')
+
+    {{ Breadcrumbs::render('city') }}
+    @if(Session::has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    <h1>All Cities</h1>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -59,9 +69,14 @@
         </tbody>
 
     </table>
-    @if(Session::has('message'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('message') }}
-        </div>
-    @endif
+
+    {{ $cities->links() }}
+    <br>
+
+    <a href="{{ route('city.create') }}">
+        <button class="btn btn-success">
+            Create New
+        </button>
+    </a>
+
 @endsection
