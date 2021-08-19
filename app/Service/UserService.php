@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Http\Requests\UserValidator;
 
 class UserService
 {
@@ -40,70 +41,22 @@ class UserService
             'where' => $where,'how' => $how ];
     }
 
-    public function candidateValidate(Request $request, User $user)
-    {
-        $validationArray = [
-            'name' => ['required', 'string'],
-            'city' => ['required', 'numeric', 'exists:App\Models\City,id'],
-            'location' => ['required', 'string'],
-        ];
 
+
+    public function updateUser(UserValidator $request, User $user)
+    {
         $userInformation = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
         ];
-
-        if ($request->input('email') != $user->email) {
-            $validationArray['email'] = ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email'];
-        }
         if ($request->input('password')) {
-            $validationArray['password'] = ['required', 'string', 'min:8', 'confirmed'];
             $userInformation['password'] = Hash::make($request->input('password'));
         }
-        if ($request->file('image')) {
-            $validationArray['image'] = ['required', 'image'];
-        }
-        if ($user->role == 'candidate') {
-            $validationArray['age'] = ['required', 'numeric'];
-            $validationArray['profession'] = ['required', 'string', 'max:255'];
-        }
-        $request->validate($validationArray);
         $user->fill($userInformation);
         return $user->save();
     }
 
-    public function companyValidate(Request $request, User $user)
-    {
-        $validationArray = [
-            'name' => ['required', 'string'],
-            'city' => ['required', 'numeric', 'exists:App\Models\City,id'],
-            'location' => ['required', 'string'],
-        ];
-        $userInformation = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-        ];
-
-        if ($request->input('email') != $user->email) {
-            $validationArray['email'] = ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email'];
-        }
-        if ($request->input('password')) {
-            $validationArray['password'] = ['required', 'string', 'min:8', 'confirmed'];
-            $userInformation['password'] = Hash::make($request->input('password'));
-        }
-        if ($request->file('image')) {
-            $validationArray['image'] = ['required', 'image'];
-        }
-        if ($user->role == 'company') {
-            $validationArray['comapnyname'] = ['required', 'string', 'max:255'];
-            $validationArray['tagline'] = ['required', 'string'];
-        }
-        $request->validate($validationArray);
-        $user->fill($userInformation);
-        return $user->save();
-    }
-
-    public function updateCandidate(Request $request, User $user)
+    public function updateCandidate(UserValidator $request, User $user)
     {
         $fillInformation = [
             'city_id' => $request->input('city'),
@@ -121,10 +74,10 @@ class UserService
             $fillInformation['image'] = $imageName;
         }
         $user->candidate->fill($fillInformation);
-        $user->candidate->save();
+        return $user->candidate->save();
     }
 
-    public function updateCompany(Request $request, User $user)
+    public function updateCompany(UserValidator $request, User $user)
     {
         $fillInformation = [
             'city_id' => $request->input('city'),
@@ -141,7 +94,20 @@ class UserService
             $fillInformation['image'] = $imageName;
         }
         $user->company->fill($fillInformation);
-        $user->company->save();
+        return $user->company->save();
+    }
+
+    public function deleteCompany(User $user)
+    {
+        $company = $user->company->toArray();
+        Storage::delete('/public/users_images/' . $company['image']);
+        return $user->delete();
+    }
+    public function deleteCandidate(User $user)
+    {
+        $candidat = $user->candidate->toArray();
+        Storage::delete('/public/users_images/' . $candidat['image']);
+        return $user->delete();
     }
 
 }

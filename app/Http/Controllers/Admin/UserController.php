@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Service\UserService;
+use App\Http\Requests\UserValidator;
+
 
 
 class UserController extends Controller
@@ -113,7 +115,7 @@ class UserController extends Controller
             return view('admin.user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities,
                 'city' => $city]);
         }
-        if ($user->role == self::userCategories['comapny']) {
+        if ($user->role == self::userCategories['company']) {
             $company = $user->company->toArray();
             $city = City::find($company['city_id']);
             return view('admin.user.update', ['user' => $user, 'company' => $company, 'cities' => $cities,
@@ -129,18 +131,19 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserValidator $request, User $user)
     {
         $userService = new UserService();
+
         if ($user->role == self::userCategories['candidate']) {
-            $userService->candidateValidate($request, $user);
             $userService->updateCandidate($request, $user);
         }
-        if ($user->role == self::userCategories['comapny']) {
-            $userService->companyValidate($request, $user);
+        if ($user->role == self::userCategories['company']) {
             Session::flash('message', 'User Updated');
             $userService->updateCompany($request, $user);
         }
+        $userService->updateUser($request, $user);
+
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }
@@ -151,17 +154,14 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user,UserService $userService)
     {
         if ($user->role == self::userCategories['candidate']) {
-            $candidat = $user->candidate->toArray();
-            Storage::delete('/public/users_images/' . $candidat['image']);
+            $userService->deleteCandidate($user);
         }
-        if ($user->role == self::userCategories['comapny']) {
-            $company = $user->company->toArray();
-            Storage::delete('/public/users_images/' . $company['image']);
+        if ($user->role == self::userCategories['company']) {
+            $userService->deleteCompany($user);
         }
-        $user->delete();
         Session::flash('message', 'User Deleted');
         return redirect()->route('user.index');
     }
