@@ -101,7 +101,6 @@ class UserController extends Controller
             return view('admin.user.update', ['user' => $user, 'company' => $company, 'cities' => $cities,
                 'city' => $city]);
         }
-
     }
 
     /**
@@ -123,7 +122,6 @@ class UserController extends Controller
             $userService->updateCompany($request, $user);
         }
         $userService->updateUser($request, $user);
-
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }
@@ -142,6 +140,7 @@ class UserController extends Controller
         if ($user->role == self::userCategories['company']) {
             $userService->deleteCompany($user);
         }
+        $userService->deleteUser($user);
         Session::flash('message', 'User Deleted');
         return redirect()->route('user.index');
     }

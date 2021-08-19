@@ -130,13 +130,16 @@ class UserService
     public function deleteCompany(User $user)
     {
         $company = $user->company->toArray();
-        Storage::delete('/public/users_images/' . $company['image']);
-        return $user->delete();
+        return Storage::delete('/public/users_images/' . $company['image']);
     }
     public function deleteCandidate(User $user)
     {
         $candidat = $user->candidate->toArray();
-        Storage::delete('/public/users_images/' . $candidat['image']);
+        return Storage::delete('/public/users_images/' . $candidat['image']);
+    }
+
+    public function deleteUser(User $user)
+    {
         return $user->delete();
     }
 
