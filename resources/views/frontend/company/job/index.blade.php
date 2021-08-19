@@ -32,8 +32,57 @@
                     Actions
                 </div>
         </div>
+
+            <form
+                action="{{ route('frontjob.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
+    <div class="alerts-list d-flex justify-content-around">
+
+        @csrf
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+        </div>
+        <div  style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['location'] }}" type="text" name="location">
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['job_tags'] }}" type="text" name="job_tags">
+        </div>
+       <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['description'] }}" type="text" name="description">
+       </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['closing_date'] }}" type="date" name="closing_date">
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['price'] }}" type="number" name="price">
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <input class="form-control" value="{{ $searched['url'] }}" type="text" name="url">
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <select name="category_id" id="" class="form-control">
+                <option value="">
+                    Select Category
+                </option>
+                @foreach($categories as $key => $value)
+
+                    <option value="{{ $value->id }}"
+                            @if($value->id == $searched['category_id'])
+                            selected="selected"
+                        @endif
+                    >{{ $value->title }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
+            <button class="btn btn-success" type="submit">Search</button>
+        </div>
     </div>
-    @foreach($jobs as $job)
+            </form>
+        @foreach($jobs as $job)
         <div class="alerts-content">
             <div class="row justify-content-around" style="text-align:right">
 

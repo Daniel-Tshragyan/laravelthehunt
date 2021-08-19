@@ -72,30 +72,6 @@
                             </ul>
                         </li>
                         @guest
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Candidates
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{route('browse-jobs')}}">Browse Jobs</a></li>
-                                    <li><a class="dropdown-item" href="{{route('browse-categories')}}">Browse Categories</a></li>
-                                    <li><a class="dropdown-item" href="{{route('add-resume')}}">Add Resume</a></li>
-                                    <li><a class="dropdown-item" href="{{route('manage-resumes')}}">Manage Resumes</a></li>
-                                    <li><a class="dropdown-item" href="{{route('job-alerts')}}">Job Alerts</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Employers
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{route('frontjob.create')}}">Add Job</a></li>
-                                    <li><a class="dropdown-item" href="{{route('frontjob.index')}}">Manage Jobs</a></li>
-                                    <li><a class="dropdown-item" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                                    <li><a class="dropdown-item" href="{{route('browse-resumes')}}">Browse Resumes</a></li>
-                                </ul>
-                            </li>
-
                         @else
                             @if(auth()->user()->role == '2')
                                 <li class="nav-item dropdown">

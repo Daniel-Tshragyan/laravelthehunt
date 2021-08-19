@@ -19,9 +19,8 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, CategoryService $categoryService)
     {
-        $categoryService = new CategoryService();
         $paginationArguments = $categoryService->paginationArguments($request);
         $withPath = $paginationArguments['withPath'];
         $order_by = $paginationArguments['order_by'];
