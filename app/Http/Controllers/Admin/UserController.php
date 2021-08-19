@@ -23,37 +23,17 @@ class UserController extends Controller
         'candidate' => 1,
         'company' => 2,
     ];
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, UserService $userService)
     {
-        $searched = ['name' => '', 'email' => '', 'id' => '', 'role' => '',];
-        $userService = new UserService();
-        $paginationArguments = $userService->paginationArguments($request, $searched);
-        $filters = ['0' => 'admin', '1' => 'candidate', '2' => 'company'];
-        $withPath = $paginationArguments['withPath'];
-        $order_by = $paginationArguments['order_by'];
-        $how = $paginationArguments['how'];
-        $where = $paginationArguments['where'];
-        $searched = $paginationArguments['searched'];
-
-
-        if (!empty($where)) {
-            $users = User::where($where)->orderBy($order_by, $how)->paginate(3);
-            $users->withPath("user?order_by={$order_by}&how={$how}" . $withPath);
-
-        } else {
-            $users = User::orderBy($order_by, $how)->paginate(3);
-            $users->withPath("user?order_by={$order_by}&how={$how}");
-        }
-
-        $how = ($how == 'asc') ? 'desc' : 'asc';
-        $sorts = ['id' => $how, 'name' => $how, 'role' => $how, 'email' => $how];
-
-        return view('admin.user.index', ['searched' => $searched, 'users' => $users, 'sorts' => $sorts, 'filters' => $filters]);
+        $paginationArguments = $userService->paginationArguments($request);
+        return view('admin.user.index', $paginationArguments);
     }
 
     /**

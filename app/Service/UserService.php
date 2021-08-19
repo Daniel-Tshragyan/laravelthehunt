@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,8 +13,15 @@ use App\Http\Requests\UserValidator;
 class UserService
 {
 
-    public function paginationArguments(Request $request,$searched)
+    const filters = [
+        '0' => 'admin',
+        '1' => 'candidate',
+        '2' => 'company'
+    ];
+
+    public function paginationArguments(Request $request)
     {
+        $searched = ['name' => '', 'email' => '', 'id' => '', 'role' => '',];
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
@@ -37,8 +45,30 @@ class UserService
                 }
             }
         }
-        return $returnObject = [ 'withPath' => $withPath,'order_by' => $order_by,'searched' =>$searched,
-            'where' => $where,'how' => $how ];
+        return $this->getPaginationArguments( [ 'withPath' => $withPath,'order_by' => $order_by,'searched' =>$searched,
+            'where' => $where,'how' => $how ]);
+    }
+
+    public function getPaginationArguments($array)
+    {
+        if (!empty($array['where'])) {
+            $users = User::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
+            $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+
+        } else {
+            $users = User::orderBy($array['order_by'], $array['how'])->paginate(3);
+            $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}");
+        }
+        if ($array['how'] == 'asc') {
+            $array['how'] = 'desc';
+        } else {
+            $array['how'] = 'asc';
+        }
+        $array['sorts'] = ['id' => $array['how'], 'name' => $array['how'], 'role' => $array['how'], 'email' => $array['how']];
+
+        $newarray = ['filters' => self::filters, 'users' => $users, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+
+        return $newarray;
     }
 
 
