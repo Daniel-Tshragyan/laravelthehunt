@@ -30,13 +30,10 @@
                                 <div class="input-icon">
                                     <i class="lni-user"></i>
                                     <input type="text" id="sender-email" class="form-control" name="email" placeholder="Username">
-                                    @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
                                     @if (Session::has('login'))
-                                        <p class="text-danger">{{ Session::get('login') }}</p>
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ Session::get('login') }}
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -45,7 +42,9 @@
                                     <i class="lni-lock"></i>
                                     <input type="password" name="password" class="form-control" placeholder="Password">
                                     @if (Session::has('password'))
-                                        <p class="text-danger">{{ Session::get('password') }}</p>
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ Session::get('password') }}
+                                        </div>
                                     @endif
                                 </div>
                             </div>

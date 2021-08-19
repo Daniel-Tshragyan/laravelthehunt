@@ -203,6 +203,12 @@
                         <p>Jobs</p>
                     </a>
             </li>
+            <li class="nav-item">
+                <form style="margin:20px" action="{{ route('adminlogout') }}" method="post">
+                    @csrf
+                    <button class="btn btn-danger">Logout</button>
+                </form>
+            </li>
         </ul>
       </nav>
     </div>

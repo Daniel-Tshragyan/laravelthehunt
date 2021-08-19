@@ -28,9 +28,11 @@ class AuthController extends Controller
                 return redirect()->route('adminDashboard');
             } else {
                 Session::flash('password', 'Invalid Password');
+                return redirect()->route('adminloginpage');
             }
         } else {
-            Session::flash('login', 'Invalid Email');
+            Session::flash('login', 'Invalid Login');
+            return redirect()->route('adminloginpage');
         }
     }
 

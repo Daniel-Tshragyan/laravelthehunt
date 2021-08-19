@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\UserController;
 
 
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AuthController::class, 'index']);
+    Route::get('/', [AuthController::class, 'index'])->middleware('notAdmin')->name('adminloginpage');
     Route::post('/login', [AuthController::class, 'login'])->name('adminlogin');
     Route::post('/logout', [AuthController::class, 'logout'])->name('adminlogout');
     Route::resource('/city',CityController::class)->middleware(['isadmin','trim']);
