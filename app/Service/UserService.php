@@ -45,8 +45,8 @@ class UserService
                 }
             }
         }
-        return $this->getPaginationArguments( [ 'withPath' => $withPath,'order_by' => $order_by,'searched' =>$searched,
-            'where' => $where,'how' => $how ]);
+        return $this->getPaginationArguments(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
+            'where' => $where, 'how' => $how]);
     }
 
     public function getPaginationArguments($array)
@@ -70,7 +70,6 @@ class UserService
 
         return $newarray;
     }
-
 
 
     public function updateUser(UserValidator $request, User $user)
@@ -103,12 +102,17 @@ class UserService
             $request->file('image')->storeAs('public/users_images', $imageName);
             $fillInformation['image'] = $imageName;
         }
+        if ($request->input('password')) {
+            $fillInformation['password'] = $request->input('password');
+        }
         $user->candidate->fill($fillInformation);
         return $user->candidate->save();
     }
 
     public function updateCompany(UserValidator $request, User $user)
     {
+        $data = $request->validated();
+
         $fillInformation = [
             'city_id' => $request->input('city'),
             'location' => $request->input('location'),
@@ -116,6 +120,9 @@ class UserService
             'comapnyname' => $request->input('comapnyname'),
         ];
         $company = $user->company->toArray();
+        if ($request->input('password')) {
+            $fillInformation['password'] = $request->input('password');
+        }
         if ($request->file('image')) {
             Storage::delete('/public/users_images/' . $company['image']);
             $random = Str::random(60);
@@ -132,6 +139,7 @@ class UserService
         $company = $user->company->toArray();
         return Storage::delete('/public/users_images/' . $company['image']);
     }
+
     public function deleteCandidate(User $user)
     {
         $candidat = $user->candidate->toArray();

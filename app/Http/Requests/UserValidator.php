@@ -18,7 +18,7 @@ class UserValidator extends FormRequest
      */
     public function authorize()
     {
-        $this->user = User::find($this->route('user'));
+        $this->user = $this->route('user');
         return true;
     }
 
@@ -29,45 +29,28 @@ class UserValidator extends FormRequest
      */
     public function rules()
     {
-        if ($this->user[1]->role == self::userRole['candidate']) {
-            $validationArray = [
-                'name' => ['required', 'string'],
-                'city' => ['required', 'numeric', 'exists:App\Models\City,id'],
-                'location' => ['required', 'string'],
-                'age' => ['required', 'numeric'],
-                'profession' => ['required', 'string', 'max:255'],
-            ];
+        $validationArray = [
+            'name' => ['required', 'string'],
+            'city' => ['required', 'numeric', 'exists:App\Models\City,id'],
+            'location' => ['required', 'string'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email,' . $this->user->id]
+        ];
 
+        if ($this->input('password')) {
+            $validationArray['password'] = ['string', 'min:8', 'confirmed'];
+        }
+        if ($this->file('image')) {
+            $validationArray['image'] = ['image'];
+        }
 
-            if ($this->input('email') != $this->user[1]->email) {
-                $validationArray['email'] = ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email'];
-            }
-            if ($this->input('password')) {
-                $validationArray['password'] = ['required', 'string', 'min:8', 'confirmed'];
-            }
-            if ($this->file('image')) {
-                $validationArray['image'] = ['required', 'image'];
-            }
-            return $validationArray;
+        if ($this->user->role == self::userRole['candidate']) {
+            $validationArray['age'] = ['required', 'numeric'];
+            $validationArray['profession'] = ['required', 'string', 'max:255'];
+        } else {
+            $validationArray['comapnyname'] = ['required', 'string', 'max:255'];
+            $validationArray['tagline'] = ['required', 'string'];
         }
-        else {
-            $validationArray = [
-                'name' => ['required', 'string'],
-                'city' => ['required', 'numeric', 'exists:App\Models\City,id'],
-                'location' => ['required', 'string'],
-                'comapnyname' => ['required', 'string', 'max:255'],
-                'tagline' => ['required', 'string'],
-            ];
-            if ($this->input('email') != $this->user[1]->email) {
-                $validationArray['email'] = ['required', 'string', 'email', 'max:255', 'unique:App\Models\User,email'];
-            }
-            if ($this->input('password')) {
-                $validationArray['password'] = ['required', 'string', 'min:8', 'confirmed'];
-            }
-            if ($this->file('image')) {
-                $validationArray['image'] = ['required', 'image'];
-            }
-            return $validationArray;
-        }
+
+        return $validationArray;
     }
 }
