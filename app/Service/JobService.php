@@ -12,7 +12,7 @@ use App\Http\Requests\AdminJobValidator;
 class JobService
 {
 
-    public function paginationArguments(Request $request)
+    public function paginationArguments(Request $request, $from = null)
     {
         $withPath = '';
         $order_by = 'id';
@@ -41,10 +41,66 @@ class JobService
                 }
             }
         }
-        return [ 'withPath' => $withPath,'order_by' => $order_by,'searched' =>$searched,
-            'where' => $where,'how' => $how ];
+        if ($from == 'front') {
+            return $this->frontJobGetPagination(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
+                'where' => $where, 'how' => $how]);
+        }else{
+            return $this->getPagination(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
+                'where' => $where, 'how' => $how]);
+        }
+
     }
 
+    public function getPagination($array)
+    {
+        if (!empty($array['where'])) {
+            $jobs = Job::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+
+        } else {
+            $jobs = Job::orderBy($array['order_by'], $array['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$array['order_by']}&how={$array['how']}");
+        }
+        if ($array['how'] == 'asc') {
+            $array['how'] = 'desc';
+        } else {
+            $array['how'] = 'asc';
+        }
+        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'location' => $array['how'], 'job_tags' => $array['how'], 'description' => $array['how'],
+            'closing_date' => $array['how'], 'price' => $array['how'], 'url' => $array['how'], 'company_id' => $array['how'], 'category_id' => $array['how'],
+        ];
+        $newarray = ['jobs' => $jobs, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+
+        return $newarray;
+    }
+
+    public function frontJobGetPagination($array)
+    {
+        if (!empty($array['where'])) {
+            $jobs = Job::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+
+        } else {
+            $jobs = Job::orderBy($array['order_by'], $array['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$array['order_by']}&how={$array['how']}");
+        }
+        if ($array['how'] == 'asc') {
+            $array['how'] = 'desc';
+        } else {
+            $array['how'] = 'asc';
+        }
+        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'location' => $array['how'], 'job_tags' => $array['how'], 'description' => $array['how'],
+            'closing_date' => $array['how'], 'price' => $array['how'], 'url' => $array['how'], 'company_id' => $array['how'], 'category_id' => $array['how'],
+        ];
+        $newarray = ['jobs' => $jobs, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+
+        return $newarray;
+    }
+
+    public function deleteJob(Job $job)
+    {
+        return $job->delete();
+    }
 
 
     public function jobFill(AdminJobValidator $request)
@@ -106,7 +162,7 @@ class JobService
             'closing_date' => $request->input('closing_date'),
             'price' => $request->input('price'),
             'url' => $request->input('url'),
-            'company_id' =>auth()->id(),
+            'company_id' => auth()->id(),
             'category_id' => $request->input('category_id'),
         ]);
         return $job->save();

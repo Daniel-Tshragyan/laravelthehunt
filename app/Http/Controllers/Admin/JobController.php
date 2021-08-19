@@ -23,31 +23,10 @@ class JobController extends Controller
     public function index(Request $request,JobService $jobService)
     {
         $user = new User();
-        $companies = $user->where(['role' => self::companyRole])->get();
-        $categories = Category::all();
         $paginationArguments = $jobService->paginationArguments($request);
-        $withPath = $paginationArguments['withPath'];
-        $order_by = $paginationArguments['order_by'];
-        $how = $paginationArguments['how'];
-        $where = $paginationArguments['where'];
-        $searched = $paginationArguments['searched'];
-        if (!empty($where)) {
-            $jobs = Job::where($where)->orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("job?order_by={$order_by}&how={$how}" . $withPath);
-
-        } else {
-            $jobs = Job::orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("job?order_by={$order_by}&how={$how}");
-        }
-        if ($how == 'asc') {
-            $how = 'desc';
-        } else {
-            $how = 'asc';
-        }
-        $sorts = ['id' => $how, 'title' => $how, 'location' => $how, 'job_tags' => $how, 'description' => $how,
-            'closing_date' => $how, 'price' => $how, 'url' => $how, 'company_id' => $how, 'category_id' => $how,
-        ];
-        return view('admin.job.index', ['companies' => $companies, 'categories' => $categories, 'searched' => $searched, 'jobs' => $jobs, 'sorts' => $sorts]);
+        $paginationArguments['categories'] = Category::all();
+        $paginationArguments['companies'] = $user->where(['role' => self::companyRole])->get();
+        return view('admin.job.index', $paginationArguments);
     }
 
     /**
@@ -131,16 +110,11 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function destroy(Job $job, JobService $jobService)
     {
         $category = Category::find($job->category_id);
-        $job->delete();
-        $count = $category->jobs_count;
-        $count -= 1;
-        $category->fill([
-            'jobs_count' => $count
-        ]);
-        $category->save();
+        $jobService->downCategoryCount($category);
+        $jobService->deleteJob($job);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('job.index');
     }

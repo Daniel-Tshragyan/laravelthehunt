@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\FrontEnd;
+namespace App\Http\Controllers\FrontEnd\Company;
 
 use App\Models\Category;
 use App\Models\Job;
@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Session;
 
 class JobController extends Controller
 {
-//    auth()->id()
     /**
      * Display a listing of the resource.
      *
@@ -21,30 +20,10 @@ class JobController extends Controller
      */
     public function index(Request $request,JobService $jobService)
     {
-        $categories = Category::all();
-        $paginationArguments = $jobService->paginationArguments($request);
-        $withPath = $paginationArguments['withPath'];
-        $order_by = $paginationArguments['order_by'];
-        $how = $paginationArguments['how'];
-        $where = $paginationArguments['where'];
-        $where['company_id'] = auth()->id();
-        $searched = $paginationArguments['searched'];
-        if (!empty($where)) {
-            $jobs = Job::where($where)->orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("frontjob?order_by={$order_by}&how={$how}" . $withPath);
-        } else {
-            $jobs = Job::orderBy($order_by, $how)->paginate(3);
-            $jobs->withPath("frontjob?order_by={$order_by}&how={$how}");
-        }
-        if ($how == 'asc') {
-            $how = 'desc';
-        } else {
-            $how = 'asc';
-        }
-        $sorts = ['id' => $how, 'title' => $how, 'location' => $how, 'job_tags' => $how, 'description' => $how,
-            'closing_date' => $how, 'price' => $how, 'url' => $how, 'company_id' => $how, 'category_id' => $how,
-        ];
-        return view('frontend.company.job.index', ['categories' => $categories, 'searched' => $searched, 'jobs' => $jobs, 'sorts' => $sorts]);
+        $user = new User();
+        $paginationArguments = $jobService->paginationArguments($request,$from = 'front');
+        $paginationArguments['categories'] = Category::all();
+        return view('frontend.company.job.index', $paginationArguments);
 
     }
 

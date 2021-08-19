@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\FrontEnd\Company\JobController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -96,7 +97,7 @@ Route::get('/pricing', function () {
     return view('viewarchive.pricing');
 })->name('pricing');
 
-Route::resource('/frontjob','App\Http\Controllers\FrontEnd\JobController');
+Route::resource('/frontjob',JobController::class);
 
 
 

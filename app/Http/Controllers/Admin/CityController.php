@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Service\CityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\CityValidator;
 
 class CityController extends Controller
 {
@@ -19,29 +20,7 @@ class CityController extends Controller
     public function index(Request $request, CityService $cityService)
     {
         $paginationArguments = $cityService->paginationArguments($request);
-        $order_by = $paginationArguments['order_by'];
-        $how = $paginationArguments['how'];
-        $where = $paginationArguments['where'];
-        $withPath = $paginationArguments['withPath'];
-        $searched = $paginationArguments['searched'];
-
-        if (!empty($where)) {
-            $city = City::where($where)->orderBy($order_by, $how)->paginate(3);
-            $city->withPath("city?order_by={$order_by}&how={$how}" . $withPath);
-
-        } else {
-            $city = City::orderBy($order_by, $how)->paginate(3);
-            $city->withPath("city?order_by={$order_by}&how={$how}");
-        }
-
-        if ($how == 'asc') {
-            $how = 'desc';
-        } else {
-            $how = 'asc';
-        }
-
-        $sorts = ['id' => 'asc', 'name' => 'asc'];
-        return view('admin.city.index', ['cities' => $city, 'sorts' => $sorts, 'searched' => $searched]);
+        return view('admin.city.index', $paginationArguments);
     }
 
     /**
@@ -60,17 +39,12 @@ class CityController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CityValidator $request, CityService $cityService)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'unique:App\Models\City,name']
-        ]);
+
         $city = new City();
-        $city->fill(['name' => $request->input('name')]);
-        $city->save();
+        $cityService->fillCity($request,$city);
         Session::flash('message', 'City Added');
-
-
         return redirect()->route('city.index');
 
     }
@@ -104,16 +78,10 @@ class CityController extends Controller
      * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, City $city)
+    public function update(CityValidator $request, City $city, CityService $cityService)
     {
-        $request->validate([
-            'name' => ['required', 'string']
-        ]);
-        $city->fill(['name' => $request->input('name')]);
-        $city->save();
+        $cityService->fillCity($request,$city);
         Session::flash('message', 'City Changed');
-
-
         return redirect()->route('city.index');
 
     }
@@ -124,9 +92,9 @@ class CityController extends Controller
      * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function destroy(City $city)
+    public function destroy(City $city, CityService $cityService)
     {
-        $city->delete();
+        $cityService->deleteCity($city);
         Session::flash('message', 'City Deleted');
         return redirect()->route('city.index');
     }
