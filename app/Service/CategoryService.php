@@ -19,7 +19,6 @@ class CategoryService
         $how = 'asc';
         $where = [];
         $searched = ['title' => '', 'jobs_count' => '', 'id' => '', 'sort' => '',];
-
         if ($request->input("order_by")) {
             $order_by = $request->input('order_by');
         }
@@ -39,17 +38,18 @@ class CategoryService
                 }
             }
         }
-        return $this->getPagination([ 'withPath' => $withPath,'order_by' => $order_by,'searched' =>$searched,
-            'where' => $where,'how' => $how ]);
+        return $this->getPagination(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
+            'where' => $where, 'how' => $how]);
     }
+
     public function getPagination($array)
     {
         if (!empty($array['where'])) {
-            $category = City::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
+            $category = Category::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
             $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
 
         } else {
-            $category = City::orderBy($array['order_by'], $array['how'])->paginate(3);
+            $category = Category::orderBy($array['order_by'], $array['how'])->paginate(3);
             $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}");
         }
         if ($array['how'] == 'asc') {
@@ -79,7 +79,8 @@ class CategoryService
         $category->save();
         return $request->file('image')->storeAs('public/categories_images', $imageName);
     }
-    public function categoryUpdate(CategoryValidator $request,Category $category)
+
+    public function categoryUpdate(CategoryValidator $request, Category $category)
     {
         $categoryInformation = [
             'title' => $request->input('title'),

@@ -47,15 +47,15 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail) {
     $trail->push('All Categories', route('category.index'));
 });
 Breadcrumbs::for('categoryCreate', function (BreadcrumbTrail $trail) {
-    $trail->parent('job');
+    $trail->parent('category');
     $trail->push('Create Category', route('category.create'));
 });
 Breadcrumbs::for('categoryUpdate', function (BreadcrumbTrail $trail) {
-    $trail->parent('job');
+    $trail->parent('category');
     $trail->push('Update Category');
 });
 Breadcrumbs::for('categoryShow', function (BreadcrumbTrail $trail) {
-    $trail->parent('job');
+    $trail->parent('category');
     $trail->push('Category');
 });
 Breadcrumbs::for('user', function (BreadcrumbTrail $trail) {

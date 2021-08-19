@@ -29,7 +29,7 @@ class CityService
         }
         foreach ($searched as $key => $value) {
             if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
-                if ($key == 'title') {
+                if ($key == 'name') {
                     $where[] = [$key, 'like', "%{$request->input($key)}%"];
                     $withPath .= "&{$key}={$request->input($key)}";
                     $searched[$key] = $request->input($key);

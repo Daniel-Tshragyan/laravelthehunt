@@ -28,12 +28,12 @@ class CategoryValidator extends FormRequest
     public function rules()
     {
         $validationArray = [
-            'title' => ['required', 'string','unique:App\Models\City,title'],
-            'sort' =>  ['required', 'numeric','unique:App\Models\City,title']
+            'title' => ['required', 'string','unique:App\Models\Category,title'],
+            'sort' =>  ['required', 'numeric']
         ];
 
         if($this->routeMethod[0] == 'PUT'){
-           $validationArray['title'] = ['required', 'string','unique:App\Models\City,title,'.$this->category->id];
+           $validationArray['title'] = ['required', 'string','unique:App\Models\Category,title,'.$this->category->id];
            if($this->file('image')){
                $validationArray['image'] = ['image'];
            }
