@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CityValidator extends FormRequest
 {
+    private $routeMethod;
+    private $city;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,6 +15,8 @@ class CityValidator extends FormRequest
      */
     public function authorize()
     {
+        $this->routeMethod = $this->route()->methods;
+        $this->city = $this->route('city');
         return true;
     }
 
@@ -23,6 +27,11 @@ class CityValidator extends FormRequest
      */
     public function rules()
     {
+        if($this->routeMethod[0] == 'PUT'){
+            return [
+                'name' => ['required', 'string','unique:App\Models\City,name,'.$this->city->id]
+            ];
+        }
         return [
             'name' => ['required', 'string']
         ];
