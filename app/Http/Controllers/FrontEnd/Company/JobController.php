@@ -21,7 +21,7 @@ class JobController extends Controller
     public function index(Request $request,JobService $jobService)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request,$from = 'front');
+        $paginationArguments = $jobService->paginationArguments($request->all(),$from = 'front');
         $paginationArguments['categories'] = Category::all();
         return view('frontend.company.job.index', $paginationArguments);
 
@@ -46,7 +46,7 @@ class JobController extends Controller
      */
     public function store(JobValidation $request,JobService $jobService)
     {
-        $jobService->jobFrontFill($request);
+        $jobService->jobFrontFill($request->all());
         $category = Category::find($request->input('category_id'));
         $jobService->addCategoryCount($category);
         Session::flash('message', 'Job Updated');
@@ -92,7 +92,7 @@ class JobController extends Controller
             $category1 = Category::find($request->input('category_id'));
             $jobService->addCategoryCount($category1);
         }
-        $jobService->frontJobUpdate($request, $frontjob);
+        $jobService->frontJobUpdate($request->all(), $frontjob);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }

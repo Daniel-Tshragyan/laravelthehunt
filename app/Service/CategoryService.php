@@ -12,29 +12,29 @@ use Illuminate\Support\Str;
 
 class CategoryService
 {
-    public function paginationArguments(Request $request)
+    public function paginationArguments($arr)
     {
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
         $searched = ['title' => '', 'jobs_count' => '', 'id' => '', 'sort' => '',];
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($arr["order_by"])) {
+            $order_by = $arr["order_by"];
         }
-        if ($request->input("how")) {
-            $how = $request->input('how');
+        if (isset($arr["how"])) {
+            $how = $arr["how"];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
                 if ($key == 'title') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$arr[$key]}"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 }
             }
         }
@@ -64,35 +64,35 @@ class CategoryService
         return $newarray;
     }
 
-    public function categoryCreate(CategoryValidator $request)
+    public function categoryCreate($arr)
     {
         $random = Str::random(60);
-        $imageName = $random . '.' . $request->file('image')->extension();
+        $imageName = $random . '.' . $arr['image']->extension();
         $category = new Category();
         $category->fill(
             [
-                'title' => $request->input('title'),
-                'sort' => $request->input('sort'),
+                'title' => $arr['title'],
+                'sort' => $arr['sort'],
                 'image' => $imageName,
             ]
         );
         $category->save();
-        return $request->file('image')->storeAs('public/categories_images', $imageName);
+        return $arr['image']->storeAs('public/categories_images', $imageName);
     }
 
-    public function categoryUpdate(CategoryValidator $request, Category $category)
+    public function categoryUpdate($arr, Category $category)
     {
         $categoryInformation = [
-            'title' => $request->input('title'),
-            'sort' => $request->input('sort'),
+            'title' => $arr['title'],
+            'sort' => $arr['sort'],
         ];
 
-        if ($request->input('image')) {
+        if ($arr['image']) {
             $random = Str::random(60);
             Storage::delete('/public/users_images/' . $category->image);
-            $imageName = $random . '.' . $request->file('image')->extension();
+            $imageName = $random . '.' . $arr['image']->extension();
             $categoryInformation['image'] = $imageName;
-            $request->file('image')->storeAs('public/categories_images', $imageName);
+            $arr['image']->storeAs('public/categories_images', $imageName);
         }
         $category->fill($categoryInformation);
         $category->save();

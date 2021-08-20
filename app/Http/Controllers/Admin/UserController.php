@@ -18,11 +18,10 @@ use App\Http\Requests\UserValidator;
 
 class UserController extends Controller
 {
-    const userCategories = [
-        'admin' => 0,
-        'candidate' => 1,
-        'company' => 2,
-    ];
+    const Admin_Number = 0;
+    const Company_Number = 2;
+    const Candidate_Number = 1;
+
 
 
     /**
@@ -32,7 +31,7 @@ class UserController extends Controller
      */
     public function index(Request $request, UserService $userService)
     {
-        $paginationArguments = $userService->paginationArguments($request);
+        $paginationArguments = $userService->paginationArguments($request->all());
         return view('admin.user.index', $paginationArguments);
     }
 
@@ -65,17 +64,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if ($user->role == self::userCategories['candidate']) {
+        if ($user->role == self::Candidate_Number) {
             $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.show', ['user' => $user, 'candidate' => $candidate, 'city' => $city]);
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == self::Company_Number) {
             $company = $user->company->toArray();
             $city = City::find($company['city_id']);
             return view('admin.user.show', ['user' => $user, 'company' => $company, 'city' => $city]);
         }
-        if ($user->role == self::userCategories['admin']) {
+        if ($user->role == self::Admin_Number) {
             return view('admin.user.show', ['user' => $user]);
         }
     }
@@ -88,18 +87,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $cities = City::all();
-        if ($user->role == self::userCategories['candidate']) {
+        $cities = City::all()->pluck('id', 'name')->toArray();
+        if ($user->role == self::Candidate_Number) {
             $candidate = $user->candidate->toArray();
-            $city = City::find($candidate['city_id']);
-            return view('admin.user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities,
-                'city' => $city]);
+            return view('admin.user.update', compact('user','candidate','cities'));
         }
-        if ($user->role == self::userCategories['company']) {
-            $company = $user->company->toArray();
-            $city = City::find($company['city_id']);
-            return view('admin.user.update', ['user' => $user, 'company' => $company, 'cities' => $cities,
-                'city' => $city]);
+        if ($user->role == self::Company_Number) {
+            $companies = $user->company->toArray();
+            return view('admin.user.update', compact('user','companies','cities'));
         }
     }
 
@@ -114,14 +109,14 @@ class UserController extends Controller
     {
         $userService = new UserService();
 
-        if ($user->role == self::userCategories['candidate']) {
-            $userService->updateCandidate($request, $user);
+        if ($user->role == self::Candidate_Number) {
+            $userService->updateCandidate($request->all(), $user);
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == self::Company_Number) {
             Session::flash('message', 'User Updated');
-            $userService->updateCompany($request, $user);
+            $userService->updateCompany($request->all(), $user);
         }
-        $userService->updateUser($request, $user);
+        $userService->updateUser($request->all(), $user);
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }
@@ -134,10 +129,10 @@ class UserController extends Controller
      */
     public function destroy(User $user,UserService $userService)
     {
-        if ($user->role == self::userCategories['candidate']) {
+        if ($user->role == self::Candidate_Number) {
             $userService->deleteCandidate($user);
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == self::Company_Number) {
             $userService->deleteCompany($user);
         }
         $userService->deleteUser($user);

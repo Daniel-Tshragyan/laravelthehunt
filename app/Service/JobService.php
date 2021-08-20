@@ -12,7 +12,7 @@ use App\Http\Requests\AdminJobValidator;
 class JobService
 {
 
-    public function paginationArguments(Request $request, $from = null)
+    public function paginationArguments($arr, $from = null)
     {
         $withPath = '';
         $order_by = 'id';
@@ -21,23 +21,23 @@ class JobService
         $searched = ['title' => '', 'location' => '', 'id' => '', 'job_tags' => '', 'description' => '',
             'closing_date' => '', 'price' => '', 'url' => '', 'company_id' => '', 'category_id' => '',];
 
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($arr["order_by"])) {
+            $order_by = $arr["order_by"];
         }
 
-        if ($request->input("how")) {
-            $how = $request->input('how');
+        if (isset($arr["how"])) {
+            $how = $arr['how'];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($arr[$key]) ||isset($arr[$key]) && (!is_null($arr[$key]) &&  $arr[$key] == 0)) {
                 if ($key == 'title' || $key == 'location' || $key == 'job_tags' || $key == 'description' || $key == 'url') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$arr[$key]}"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 }
             }
         }
@@ -103,71 +103,70 @@ class JobService
     }
 
 
-    public function jobFill(AdminJobValidator $request)
+    public function jobFill($arr)
     {
         $job = new Job();
         $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
-            'company_id' => $request->input('company_id'),
-            'category_id' => $request->input('category_id'),
+            'title' => $arr['title'],
+            'location' => $arr['location'],
+            'job_tags' => $arr['job_tags'],
+            'description' => $arr['description'],
+            'closing_date' => $arr['closing_date'],
+            'price' => $arr['price'],
+            'url' => $arr['url'],
+            'company_id' => $arr['company_id'],
+            'category_id' => $arr['category_id'],
         ]);
         return $job->save();
     }
 
-    public function frontJobUpdate(JobValidation $request, Job $job)
+    public function frontJobUpdate($arr, Job $job)
     {
         $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
-            'category_id' => $request->input('category_id'),
+            'title' => $arr['title'],
+            'location' => $arr['location'],
+            'job_tags' => $arr['job_tags'],
+            'description' => $arr['description'],
+            'closing_date' => $arr['closing_date'],
+            'price' => $arr['price'],
+            'url' => $arr['url'],
+            'category_id' => $arr['category_id'],
         ]);
         return $job->save();
     }
 
-    public function JobUpdate(AdminJobValidator $request, Job $job)
+    public function JobUpdate($arr, Job $job)
     {
         $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
-            'company_id' => $request->input('company_id'),
-            'category_id' => $request->input('category_id'),
+            'title' => $arr['title'],
+            'location' => $arr['location'],
+            'job_tags' => $arr['job_tags'],
+            'description' => $arr['description'],
+            'closing_date' => $arr['closing_date'],
+            'price' => $arr['price'],
+            'url' => $arr['url'],
+            'company_id' => $arr['company_id'],
+            'category_id' => $arr['category_id'],
         ]);
         return $job->save();
     }
 
-    public function jobFrontFill(JobValidation $request)
+    public function jobFrontFill($arr)
     {
         $job = new Job();
         $job->fill([
-            'title' => $request->input('title'),
-            'location' => $request->input('location'),
-            'job_tags' => $request->input('job_tags'),
-            'description' => $request->input('description'),
-            'closing_date' => $request->input('closing_date'),
-            'price' => $request->input('price'),
-            'url' => $request->input('url'),
+            'title' => $arr['title'],
+            'location' => $arr['location'],
+            'job_tags' => $arr['job_tags'],
+            'description' => $arr['description'],
+            'closing_date' => $arr['closing_date'],
+            'price' => $arr['price'],
+            'url' => $arr['url'],
             'company_id' => auth()->id(),
-            'category_id' => $request->input('category_id'),
+            'category_id' => $arr['category_id'],
         ]);
         return $job->save();
     }
-
 
     public function addCategoryCount(Category $category)
     {
@@ -189,4 +188,3 @@ class JobService
         return $category->save();
     }
 }
-

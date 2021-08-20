@@ -22,7 +22,7 @@
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">
                             <div class="form-group">
                                 <label class="control-label" >Job Title</label>
-                                <input type="text" class="form-control" name="title" placeholder="Write job title" >
+                                <input type="text" value="{{ old('title') }}" class="form-control" name="title" placeholder="Write job title" >
                             </div>
                             @if ($errors->has('title'))
                                 <div class="alert alert-danger" role="alert">
@@ -32,7 +32,7 @@
 
                             <div class="form-group">
                                 <label class="control-label">Location </label>
-                                <input type="text" class="form-control" name="location" placeholder="e.g.London">
+                                <input type="text" class="form-control" value="{{ old('location') }}" name="location" placeholder="e.g.London">
                             </div>
                             @if ($errors->has('location'))
                                 <div class="alert alert-danger" role="alert">
@@ -59,7 +59,7 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Job Tags</label>
-                                <input type="text" name="job_tags" class="form-control" placeholder="e.g.PHP,Social Media,Management">
+                                <input type="text" name="job_tags" value="{{ old('job_tags') }}" class="form-control" placeholder="e.g.PHP,Social Media,Management">
                                 <p class="note">Comma separate tags, such as required skills or technologies, for this job.</p>
                             </div>
                             @if ($errors->has('job_tags'))
@@ -69,7 +69,7 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Description</label>
-                                <textarea name="description" id="" cols="30" rows="10" class="form-control"></textarea>
+                                <textarea name="description" id="" cols="30" rows="10" class="form-control"> {{ old('description') }}</textarea>
                             </div>
                             @if ($errors->has('description'))
                                 <div class="alert alert-danger" role="alert">
@@ -79,7 +79,7 @@
 
                             <div class="form-group">
                                 <label class="control-label">Application email / URL</label>
-                                <input name="url" type="text" class="form-control" placeholder="Enter an email address or website URL">
+                                <input name="url" value="{{ old('url') }}" type="text" class="form-control" placeholder="Enter an email address or website URL">
                             </div>
                             @if ($errors->has('url'))
                                 <div class="alert alert-danger" role="alert">
@@ -88,7 +88,7 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Closing Date</label>
-                                <input type="date" class="form-control" name="closing_date">
+                                <input type="date" value="{{ old('closing_date') }}" class="form-control" name="closing_date">
                             </div>
                             @if ($errors->has('closing_date'))
                                 <div class="alert alert-danger" role="alert">
@@ -97,7 +97,7 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Price</label>
-                                <input type="number" class="form-control" name="price">
+                                <input type="number" value="{{ old('price') }}" class="form-control" name="price">
                             </div>
                             @if ($errors->has('price'))
                                 <div class="alert alert-danger" role="alert">

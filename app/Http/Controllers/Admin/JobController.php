@@ -23,7 +23,7 @@ class JobController extends Controller
     public function index(Request $request,JobService $jobService)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request);
+        $paginationArguments = $jobService->paginationArguments($request->all());
         $paginationArguments['categories'] = Category::all();
         $paginationArguments['companies'] = $user->where(['role' => self::companyRole])->get();
         return view('admin.job.index', $paginationArguments);
@@ -49,7 +49,7 @@ class JobController extends Controller
      */
     public function store(AdminJobValidator $request,JobService $jobService)
     {
-        $jobService->jobFill($request);
+        $jobService->jobFill($request->all());
         $category = Category::find($request->input('category_id'));
         $jobService->addCategoryCount($category);
 
@@ -81,7 +81,7 @@ class JobController extends Controller
         $companies = $user->where(['role' => '2'])->get();
         $price = (int)$job->price;
         $categories = Category::all();
-        return view('admin.job.update', ['price' => $price, 'job' => $job,'companies' => $companies, 'categories' => $categories]);
+        return view('admin.job.update', compact('companies','price','categories','job'));
     }
 
     /**
@@ -99,7 +99,7 @@ class JobController extends Controller
             $category1 = Category::find($request->input('category_id'));
             $jobService->addCategoryCount($category1);
         }
-        $jobService->jobUpdate($request,$job);
+        $jobService->jobUpdate($request->all(),$job);
         Session::flash('message', 'Job Updated');
         return redirect()->route('job.index');
     }

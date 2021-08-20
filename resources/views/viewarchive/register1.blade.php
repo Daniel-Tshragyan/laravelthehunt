@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-user"></i>
-                                    <input type="text" class="form-control" name="name" placeholder="Name">
+                                    <input type="text" class="form-control" value="{{ old('name') }}" name="name" placeholder="Name">
                                     @if ($errors->has('name'))
                                         <p class="text-danger">{{ $errors->first('name') }}</p>
                                     @endif
@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-user"></i>
-                                    <input type="text" class="form-control" name="companyname" placeholder="Company name">
+                                    <input type="text" class="form-control" value="{{ old('companyname') }}" name="companyname" placeholder="Company name">
                                     @if ($errors->has('companyname'))
                                         <p class="text-danger">{{ $errors->first('companyname') }}</p>
                                     @endif
@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-envelope"></i>
-                                    <input type="text" class="form-control" name="email" placeholder="Email Address">
+                                    <input type="text" class="form-control" value="{{ old('email') }}" name="email" placeholder="Email Address">
                                     @if ($errors->has('email'))
                                         <p class="text-danger">{{ $errors->first('email') }}</p>
                                     @endif
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-lock"></i>
-                                    <input type="password" class="form-control" placeholder="Password" name="password">
+                                    <input type="password" class="form-control" value="{{ old('password') }}" placeholder="Password" name="password">
                                     @if ($errors->has('password'))
                                         <p class="text-danger">{{ $errors->first('password') }}</p>
                                     @endif
@@ -66,16 +66,16 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-lock"></i>
-                                    <input type="password" name="password_confirmation" class="form-control" placeholder="Password Confirm">
-                                    @if ($errors->has('password'))
-                                        <p class="text-danger">{{ $errors->first('password') }}</p>
+                                    <input type="password" value="{{ old('password_confirmation') }}" name="password_confirmation" class="form-control" placeholder="Password Confirm">
+                                    @if ($errors->has('password_confirmation'))
+                                        <p class="text-danger">{{ $errors->first('password_confirmation') }}</p>
                                     @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-unlock"></i>
-                                    <input type="text" class="form-control" name="tagline" placeholder="Tagline">
+                                    <input type="text" value="{{ old('tagline') }}" class="form-control" name="tagline" placeholder="Tagline">
                                     @if ($errors->has('tagline'))
                                         <p class="text-danger">{{ $errors->first('tagline') }}</p>
                                     @endif
@@ -97,7 +97,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-unlock"></i>
-                                    <input type="text" class="form-control" name="location" placeholder="Location">
+                                    <input type="text" value="{{ old('location') }}" class="form-control" name="location" placeholder="Location">
                                     @if ($errors->has('location'))
                                         <p class="text-danger">{{ $errors->first('location') }}</p>
                                     @endif

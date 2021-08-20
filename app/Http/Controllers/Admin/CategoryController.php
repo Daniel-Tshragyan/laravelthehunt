@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request, CategoryService $categoryService)
     {
-        $paginationArguments = $categoryService->paginationArguments($request);
+        $paginationArguments = $categoryService->paginationArguments($request->all());
         return view('admin.category.index', $paginationArguments);
     }
 
@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryValidator $request, CategoryService $categoryService)
     {
-        $categoryService->categoryCreate($request);
+        $categoryService->categoryCreate($request->all());
         Session::flash('message', 'Category Added');
         return redirect()->route('category.index');
     }
@@ -80,7 +80,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryValidator $request, Category $category, CategoryService $categoryService)
     {
-        $categoryService->categoryUpdate($request,$category);
+        $categoryService->categoryUpdate($request->all(),$category);
         Session::flash('message', 'Categoey Updated');
         return redirect()->route('category.index');
     }

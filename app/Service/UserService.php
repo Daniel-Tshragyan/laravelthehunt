@@ -19,29 +19,29 @@ class UserService
         '2' => 'company'
     ];
 
-    public function paginationArguments(Request $request)
+    public function paginationArguments($arr)
     {
         $searched = ['name' => '', 'email' => '', 'id' => '', 'role' => '',];
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($arr["order_by"])) {
+            $order_by = $arr["order_by"];
         }
-        if ($request->input('how')) {
-            $how = $request->input('how');
+        if (isset($arr["how"])) {
+            $how = $arr["how"];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
                 if ($key == 'name' || $key == 'email') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$arr[$key]}"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 }
             }
         }
@@ -72,62 +72,63 @@ class UserService
     }
 
 
-    public function updateUser(UserValidator $request, User $user)
+    public function updateUser($arr, User $user)
     {
         $userInformation = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
+            'name' => $arr['name'],
+            'email' => $arr['email'],
         ];
-        if ($request->input('password')) {
-            $userInformation['password'] = Hash::make($request->input('password'));
+        if (isset($arr['password'])) {
+            $userInformation['password'] = Hash::make($arr['password']);
         }
         $user->fill($userInformation);
         return $user->save();
     }
 
-    public function updateCandidate(UserValidator $request, User $user)
+    public function updateCandidate($arr, User $user)
     {
         $fillInformation = [
-            'city_id' => $request->input('city'),
-            'location' => $request->input('location'),
-            'age' => $request->input('age'),
-            'profession' => $request->input('profession'),
+            'city_id' => $arr['city'] ,
+            'location' => $arr['location'],
+            'age' => $arr['age'],
+            'profession' => $arr['profession'],
         ];
 
         $candidat = $user->candidate->toArray();
-        if ($request->file('image')) {
+        if (isset($arr['image'])) {
             Storage::delete('/public/users_images/' . $candidat['image']);
             $random = Str::random(60);
-            $imageName = $random . '.' . $request->file('image')->extension();
-            $request->file('image')->storeAs('public/users_images', $imageName);
+            $imageName = $random . '.' . $arr['image']->extension();
+            $arr['image']->storeAs('public/users_images', $imageName);
             $fillInformation['image'] = $imageName;
         }
-        if ($request->input('password')) {
-            $fillInformation['password'] = $request->input('password');
+        if (isset($arr['password'])) {
+            $fillInformation['password'] = $arr['password'];
         }
         $user->candidate->fill($fillInformation);
         return $user->candidate->save();
     }
 
-    public function updateCompany(UserValidator $request, User $user)
+    public function updateCompany($arr, User $user)
     {
         $data = $request->validated();
 
+
         $fillInformation = [
-            'city_id' => $request->input('city'),
-            'location' => $request->input('location'),
-            'tagline' => $request->input('tagline'),
-            'comapnyname' => $request->input('comapnyname'),
+            'city_id' => $arr['city'] ,
+            'location' => $arr['location'],
+            'age' => $arr['tagline'],
+            'profession' => $arr['comapnyname'],
         ];
         $company = $user->company->toArray();
-        if ($request->input('password')) {
-            $fillInformation['password'] = $request->input('password');
+        if (isset($arr['password'])) {
+            $fillInformation['password'] = $arr['password'];
         }
-        if ($request->file('image')) {
+        if (isset($arr['image'])) {
             Storage::delete('/public/users_images/' . $company['image']);
             $random = Str::random(60);
-            $imageName = $random . '.' . $request->file('image')->extension();
-            $request->file('image')->storeAs('public/users_images', $imageName);
+            $imageName = $random . '.' . $arr['image']->extension();
+            $arr['image']->storeAs('public/users_images', $imageName);
             $fillInformation['image'] = $imageName;
         }
         $user->company->fill($fillInformation);

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CityService
 {
-    public function paginationArguments(Request $request)
+    public function paginationArguments($arr)
     {
         $order_by = 'id';
         $how = 'asc';
@@ -20,23 +20,23 @@ class CityService
             'id' => '',
         ];
 
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($arr['order_by'])) {
+            $order_by = $arr['order_by'];
         }
 
-        if ($request->input("how")) {
-            $how = $request->input('how');
+        if (isset($arr['how'])) {
+            $how = $arr['how'];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
                 if ($key == 'name') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$arr[$key]}"];
+                    $withPath .= "&{$key}={$arr[$key]}";
+                    $searched[$key] = $arr[$key];
                 }
             }
         }
@@ -65,9 +65,9 @@ class CityService
         return $newarray;
     }
 
-    public function fillCity(CityValidator $request, City $city)
+    public function fillCity($arr, City $city)
     {
-        $city->fill(['name' => $request->input('name')]);
+        $city->fill(['name' => $arr['name']]);
         return $city->save();
     }
 

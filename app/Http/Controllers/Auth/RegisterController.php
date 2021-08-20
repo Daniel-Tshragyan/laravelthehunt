@@ -60,7 +60,7 @@ class RegisterController extends Controller
             'location' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'image' => ['required','image'],
+            'image' => ['nullable','image'],
             'role' => ['required', 'string', 'in:1,2'],
         ];
         if ($data['role'] == 'candidate') {
@@ -92,8 +92,14 @@ class RegisterController extends Controller
         $user->save();
         $id = $user->id;
 
-        $random = Str::random(60);
-        $imageName = $random . '.' . $data['image']->extension();
+        if (isset($data['image'])) {
+            $random = Str::random(60);
+            $imageName = $random . '.' . $data['image']->extension();
+            $data['image']->storeAs('public/users_images',$imageName);
+        } else {
+            $imageName = 'a';
+        }
+
         if ($data['role'] == '1') {
             $candidat = new Candidate();
             $candidat->fill([
@@ -104,7 +110,6 @@ class RegisterController extends Controller
                 'location' => $data['location'],
                 'image' => $imageName
             ]);
-            $data['image']->storeAs('public/users_images',$imageName);
             $candidat->save();
         }
         if ($data['role'] == '2') {
@@ -118,7 +123,6 @@ class RegisterController extends Controller
                 'image' => $imageName
             ]);
             $company->save();
-            $data['image']->storeAs('public/users_images',$imageName);
 
         }
         return $user;

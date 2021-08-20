@@ -8,7 +8,7 @@
     <form action="{{route('city.update',['city' => $city])}}" class="w-50" method="post">
         @csrf
         @method('put')
-        <input type="text" name="name" value="{{ $city->name }}" placeholder="Name" class="form-control">
+        <input type="text" name="name"  value="{{ $city->name }}" placeholder="Name" class="form-control">
         @if ($errors->has('name'))
             <p class="text-danger">{{ $errors->first('name') }}</p>
         @endif

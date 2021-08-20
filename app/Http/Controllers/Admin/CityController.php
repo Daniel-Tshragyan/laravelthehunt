@@ -19,7 +19,7 @@ class CityController extends Controller
      */
     public function index(Request $request, CityService $cityService)
     {
-        $paginationArguments = $cityService->paginationArguments($request);
+        $paginationArguments = $cityService->paginationArguments($request->all());
         return view('admin.city.index', $paginationArguments);
     }
 
@@ -43,7 +43,7 @@ class CityController extends Controller
     {
 
         $city = new City();
-        $cityService->fillCity($request,$city);
+        $cityService->fillCity($request->all(),$city);
         Session::flash('message', 'City Added');
         return redirect()->route('city.index');
 
@@ -80,7 +80,7 @@ class CityController extends Controller
      */
     public function update(CityValidator $request, City $city, CityService $cityService)
     {
-        $cityService->fillCity($request,$city);
+        $cityService->fillCity($request->all(),$city);
         Session::flash('message', 'City Changed');
         return redirect()->route('city.index');
 
