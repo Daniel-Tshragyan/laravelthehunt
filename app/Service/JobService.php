@@ -8,6 +8,7 @@ use App\Models\Job;
 use Illuminate\Http\Request;
 use App\Http\Requests\JobValidation;
 use App\Http\Requests\AdminJobValidator;
+use function PHPUnit\Framework\isNull;
 
 class JobService
 {
@@ -103,88 +104,44 @@ class JobService
     }
 
 
+
     public function jobFill($arr)
     {
         $job = new Job();
-        $job->fill([
-            'title' => $arr['title'],
-            'location' => $arr['location'],
-            'job_tags' => $arr['job_tags'],
-            'description' => $arr['description'],
-            'closing_date' => $arr['closing_date'],
-            'price' => $arr['price'],
-            'url' => $arr['url'],
-            'company_id' => $arr['company_id'],
-            'category_id' => $arr['category_id'],
-        ]);
+        $job->fill($arr);
         return $job->save();
     }
 
     public function frontJobUpdate($arr, Job $job)
     {
-        $job->fill([
-            'title' => $arr['title'],
-            'location' => $arr['location'],
-            'job_tags' => $arr['job_tags'],
-            'description' => $arr['description'],
-            'closing_date' => $arr['closing_date'],
-            'price' => $arr['price'],
-            'url' => $arr['url'],
-            'category_id' => $arr['category_id'],
-        ]);
-        return $job->save();
+        $job->fill($arr);
+        return $job->update();
     }
 
     public function JobUpdate($arr, Job $job)
     {
-        $job->fill([
-            'title' => $arr['title'],
-            'location' => $arr['location'],
-            'job_tags' => $arr['job_tags'],
-            'description' => $arr['description'],
-            'closing_date' => $arr['closing_date'],
-            'price' => $arr['price'],
-            'url' => $arr['url'],
-            'company_id' => $arr['company_id'],
-            'category_id' => $arr['category_id'],
-        ]);
-        return $job->save();
+        $job->fill($arr);
+        return $job->update();
     }
 
     public function jobFrontFill($arr)
     {
         $job = new Job();
-        $job->fill([
-            'title' => $arr['title'],
-            'location' => $arr['location'],
-            'job_tags' => $arr['job_tags'],
-            'description' => $arr['description'],
-            'closing_date' => $arr['closing_date'],
-            'price' => $arr['price'],
-            'url' => $arr['url'],
-            'company_id' => auth()->id(),
-            'category_id' => $arr['category_id'],
-        ]);
+        $job->fill($arr);
         return $job->save();
     }
 
-    public function addCategoryCount(Category $category)
-    {
-        $count = $category->jobs_count;
-        $count += 1;
-        $category->fill([
-            'jobs_count' => $count
-        ]);
-        return $category->save();
-    }
 
-    public function downCategoryCount(Category $category)
+
+    public function changeCategoryJobCount(int $id)
     {
-        $count = $category->jobs_count;
-        $count -= 1;
-        $category->fill([
-            'jobs_count' => $count
-        ]);
-        return $category->save();
+        $category = Category::find($id);
+        if(!is_null($category)){
+            $category->fill([
+                'jobs_count' => $category->job->count()
+            ]);
+            return $category->update();
+        }
+        return true;
     }
 }

@@ -111,7 +111,11 @@
                     <p>{{ $job->url }}</p>
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-12">
-                    <p>{{ $job->category->title }}</p>
+                    @if(!is_null($job->category))
+                        <p>{{ $job->category->title }}</p>
+                    @else
+                        Null
+                    @endif
                 </div>
 
                 <div class="col-lg-1 col-md-1 col-xs-12">

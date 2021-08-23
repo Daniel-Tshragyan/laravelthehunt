@@ -61,7 +61,7 @@
                     <select name="city" id="" class="form-control">
                         @foreach($cities as $key => $value)
                             <option value="{{$value}}"
-                                    @if($value == $comapny['city_id'])
+                                    @if($value == $company['city_id'])
                                     selected="selected"
                                 @endif
                             >{{$key}}</option>

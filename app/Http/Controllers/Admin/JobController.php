@@ -50,10 +50,7 @@ class JobController extends Controller
     public function store(AdminJobValidator $request,JobService $jobService)
     {
         $jobService->jobFill($request->all());
-        $category = Category::find($request->input('category_id'));
-        $jobService->addCategoryCount($category);
-
-
+        $jobService->changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Added');
         return redirect()->route('job.index');
     }
@@ -93,13 +90,12 @@ class JobController extends Controller
      */
     public function update(AdminJobValidator $request, Job $job,JobService $jobService)
     {
-        if ($request->input('category_id') != $job->category_id) {
-            $category = Category::find($job->category_id);
-            $jobService->downCategoryCount($category);
-            $category1 = Category::find($request->input('category_id'));
-            $jobService->addCategoryCount($category1);
+        $id = $job->category_id;
+        $jobService->jobUpdate($request->validated(),$job);
+        if ($request->input('category_id') != $id) {
+            $jobService->changeCategoryJobCount($id);
+            $jobService->changeCategoryJobCount($job->category_id);
         }
-        $jobService->jobUpdate($request->all(),$job);
         Session::flash('message', 'Job Updated');
         return redirect()->route('job.index');
     }
@@ -112,9 +108,8 @@ class JobController extends Controller
      */
     public function destroy(Job $job, JobService $jobService)
     {
-        $category = Category::find($job->category_id);
-        $jobService->downCategoryCount($category);
         $jobService->deleteJob($job);
+        $jobService->changeCategoryJobCount($job->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('job.index');
     }

@@ -29,7 +29,7 @@ class AdminJobValidator extends FormRequest
             'job_tags' => ['required', 'string'],
             'description' => ['required', 'string'],
             'closing_date' => ['required', 'date'],
-            'price' => ['required', 'numeric','digits_between:1,7'],
+            'price' => ['required', 'numeric','digits_between:1,6'],
             'url' => ['required', 'string'],
             'company_id' => ['required', 'exists:App\Models\Company,user_id'],
             'category_id' => ['required', 'exists:categories,id'],

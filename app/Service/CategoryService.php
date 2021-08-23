@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Http\Requests\CategoryValidator;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -95,7 +96,18 @@ class CategoryService
             $arr['image']->storeAs('public/categories_images', $imageName);
         }
         $category->fill($categoryInformation);
-        $category->save();
+        $category->update();
+    }
+
+    public function deleteCategory(Category $category)
+    {
+        Storage::delete('/public/categories_images/' . $category->image);
+        foreach($category->job as $job)
+        {
+            $job->fill(['category_id' => null]);
+            $job->update();
+        }
+        return $category->delete();
     }
 
 }

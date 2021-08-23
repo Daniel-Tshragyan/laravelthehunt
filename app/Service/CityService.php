@@ -67,7 +67,7 @@ class CityService
 
     public function fillCity($arr, City $city)
     {
-        $city->fill(['name' => $arr['name']]);
+        $city->fill($arr);
         return $city->save();
     }
 

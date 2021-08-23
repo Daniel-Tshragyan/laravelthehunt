@@ -24,7 +24,6 @@ class JobController extends Controller
         $paginationArguments = $jobService->paginationArguments($request->all(),$from = 'front');
         $paginationArguments['categories'] = Category::all();
         return view('frontend.company.job.index', $paginationArguments);
-
     }
 
     /**
@@ -46,9 +45,8 @@ class JobController extends Controller
      */
     public function store(JobValidation $request,JobService $jobService)
     {
-        $jobService->jobFrontFill($request->all());
-        $category = Category::find($request->input('category_id'));
-        $jobService->addCategoryCount($category);
+        $jobService->jobFrontFill($request->validated());
+        $jobService->changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }
@@ -86,13 +84,12 @@ class JobController extends Controller
      */
     public function update(JobValidation $request, Job $frontjob, JobService $jobService)
     {
-        if ($request->input('category_id') != $frontjob->category_id) {
-            $category = Category::find($frontjob->category_id);
-            $jobService->downCategoryCount($category);
-            $category1 = Category::find($request->input('category_id'));
-            $jobService->addCategoryCount($category1);
+        $id = $frontjob->category_id;
+        $jobService->frontJobUpdate($request->validated(), $frontjob);
+        if ($request->input('category_id') != $id) {
+            $jobService->changeCategoryJobCount($id);
+            $jobService->changeCategoryJobCount($frontjob->category_id);
         }
-        $jobService->frontJobUpdate($request->all(), $frontjob);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }
@@ -105,11 +102,9 @@ class JobController extends Controller
      */
     public function destroy(Job $frontjob, JobService $jobService)
     {
-        $category = Category::find($frontjob->category_id);
-        $jobService->downCategoryCount( $category);
-        $frontjob->delete();
+        $jobService->deleteJob($frontjob);
+        $jobService->changeCategoryJobCount($frontjob->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('frontjob.index');
-
     }
 }

@@ -52,11 +52,11 @@ class UserService
     public function getPaginationArguments($array)
     {
         if (!empty($array['where'])) {
-            $users = User::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
+            $users = User::where($array['where'])->whereNotIn('email',['admin'])->orderBy($array['order_by'], $array['how'])->paginate(3);
             $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
 
         } else {
-            $users = User::orderBy($array['order_by'], $array['how'])->paginate(3);
+            $users = User::whereNotIn('email',['admin'])->orderBy($array['order_by'], $array['how'])->paginate(3);
             $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}");
         }
         if ($array['how'] == 'asc') {
@@ -82,7 +82,7 @@ class UserService
             $userInformation['password'] = Hash::make($arr['password']);
         }
         $user->fill($userInformation);
-        return $user->save();
+        return $user->update();
     }
 
     public function updateCandidate($arr, User $user)
@@ -106,14 +106,12 @@ class UserService
             $fillInformation['password'] = $arr['password'];
         }
         $user->candidate->fill($fillInformation);
-        return $user->candidate->save();
+        return $user->candidate->update();
     }
 
     public function updateCompany($arr, User $user)
     {
-        $data = $request->validated();
-
-
+        $data = $arr;
         $fillInformation = [
             'city_id' => $arr['city'] ,
             'location' => $arr['location'],
@@ -132,7 +130,7 @@ class UserService
             $fillInformation['image'] = $imageName;
         }
         $user->company->fill($fillInformation);
-        return $user->company->save();
+        return $user->company->update();
     }
 
     public function deleteCompany(User $user)

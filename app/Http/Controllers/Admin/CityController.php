@@ -43,7 +43,7 @@ class CityController extends Controller
     {
 
         $city = new City();
-        $cityService->fillCity($request->all(),$city);
+        $cityService->fillCity($request->validated(),$city);
         Session::flash('message', 'City Added');
         return redirect()->route('city.index');
 
@@ -80,7 +80,7 @@ class CityController extends Controller
      */
     public function update(CityValidator $request, City $city, CityService $cityService)
     {
-        $cityService->fillCity($request->all(),$city);
+        $cityService->fillCity($request->validated(),$city);
         Session::flash('message', 'City Changed');
         return redirect()->route('city.index');
 

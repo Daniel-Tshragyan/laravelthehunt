@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryValidator $request, CategoryService $categoryService)
     {
-        $categoryService->categoryCreate($request->all());
+        $categoryService->categoryCreate($request->validated());
         Session::flash('message', 'Category Added');
         return redirect()->route('category.index');
     }
@@ -80,7 +80,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryValidator $request, Category $category, CategoryService $categoryService)
     {
-        $categoryService->categoryUpdate($request->all(),$category);
+        $categoryService->categoryUpdate($request->validated(),$category);
         Session::flash('message', 'Categoey Updated');
         return redirect()->route('category.index');
     }
@@ -91,10 +91,10 @@ class CategoryController extends Controller
      * @param \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category, CategoryService $categoryService)
     {
-        Storage::delete('/public/categories_images/' . $category->image);
-        $category->delete();
+        $categoryService->deleteCategory($category);
+
         Session::flash('message', 'Categoey Deleted');
         return redirect()->route('category.index');
     }

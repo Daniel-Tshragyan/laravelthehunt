@@ -74,7 +74,11 @@
                 {{ $job->user->name }}
             </td>
             <td>
-                {{ $job->category->title }}
+                @if(!is_null($job->category))
+                    {{ $job->category->title }}
+                @else
+                    Null
+                @endif
             </td>
             <td>
                 <img width="80px" src="{{ asset('storage/categories_images/'.$job->category->image) }}" alt="">

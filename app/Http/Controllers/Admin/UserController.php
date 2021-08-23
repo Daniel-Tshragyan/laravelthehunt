@@ -93,8 +93,8 @@ class UserController extends Controller
             return view('admin.user.update', compact('user','candidate','cities'));
         }
         if ($user->role == self::Company_Number) {
-            $companies = $user->company->toArray();
-            return view('admin.user.update', compact('user','companies','cities'));
+            $company = $user->company->toArray();
+            return view('admin.user.update', compact('user','company','cities'));
         }
     }
 
@@ -110,13 +110,13 @@ class UserController extends Controller
         $userService = new UserService();
 
         if ($user->role == self::Candidate_Number) {
-            $userService->updateCandidate($request->all(), $user);
+            $userService->updateCandidate($request->validated(), $user);
         }
         if ($user->role == self::Company_Number) {
             Session::flash('message', 'User Updated');
-            $userService->updateCompany($request->all(), $user);
+            $userService->updateCompany($request->validated(), $user);
         }
-        $userService->updateUser($request->all(), $user);
+        $userService->updateUser($request->validated(), $user);
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }

@@ -23,7 +23,7 @@ class CreateJobsTable extends Migration
             $table->decimal('price');
             $table->string('url');
             $table->bigInteger('company_id')->unsigned();
-            $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('category_id')->unsigned()->nullable(true);
             $table->foreign('company_id')
                 ->references('id')
                 ->on('users')
