@@ -10,8 +10,6 @@
                         <div class="img-wrapper">
                             @if(!is_null($job->category))
                                 <img style="max-width:150%" src="{{asset('storage/categories_images/'.$job->category->image)}}" alt="">
-                            @else
-                                Null
                             @endif
                         </div>
                         <div class="content">

@@ -129,11 +129,7 @@
                     {{ $job->user->name }}
                 </td>
                 <td>
-                    @if(!is_null($job->category))
-                        {{ $job->category->title }}
-                    @else
-                        Null
-                    @endif
+                    {{ $job->category->title ?? '-' }}
                 </td>
 
                 <td>

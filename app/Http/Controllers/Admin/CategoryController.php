@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\User;
-use App\Service\CategoryService;
+use App\Facades\CategoryFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -20,9 +20,9 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, CategoryService $categoryService)
+    public function index(Request $request)
     {
-        $paginationArguments = $categoryService->paginationArguments($request->all());
+        $paginationArguments = CategoryFacade::paginationArguments($request->all());
         return view('admin.category.index', $paginationArguments);
     }
 
@@ -42,9 +42,9 @@ class CategoryController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryValidator $request, CategoryService $categoryService)
+    public function store(CategoryValidator $request)
     {
-        $categoryService->categoryCreate($request->validated());
+        CategoryFacade::categoryCreate($request->validated());
         Session::flash('message', 'Category Added');
         return redirect()->route('category.index');
     }
@@ -78,9 +78,9 @@ class CategoryController extends Controller
      * @param \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryValidator $request, Category $category, CategoryService $categoryService)
+    public function update(CategoryValidator $request, Category $category)
     {
-        $categoryService->categoryUpdate($request->validated(), $category);
+        CategoryFacade::categoryUpdate($request->validated(), $category);
         Session::flash('message', 'Categoey Updated');
         return redirect()->route('category.index');
     }
@@ -91,9 +91,9 @@ class CategoryController extends Controller
      * @param \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category, CategoryService $categoryService)
+    public function destroy(Category $category)
     {
-        $categoryService->deleteCategory($category);
+        CategoryFacade::deleteCategory($category);
 
         Session::flash('message', 'Categoey Deleted');
         return redirect()->route('category.index');

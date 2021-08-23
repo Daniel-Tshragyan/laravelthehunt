@@ -20,7 +20,7 @@ class Company extends Migration
             $table->string('comapnyname');
             $table->string('tagline');
             $table->string('location');
-            $table->string('image');
+            $table->string('image')->nullable(true);
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

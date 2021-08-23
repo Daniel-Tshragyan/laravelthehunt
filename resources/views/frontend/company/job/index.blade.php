@@ -111,11 +111,7 @@
                     <p>{{ $job->url }}</p>
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-12">
-                    @if(!is_null($job->category))
-                        <p>{{ $job->category->title }}</p>
-                    @else
-                        Null
-                    @endif
+                    {{ $job->category->title ?? '-' }}
                 </div>
 
                 <div class="col-lg-1 col-md-1 col-xs-12">

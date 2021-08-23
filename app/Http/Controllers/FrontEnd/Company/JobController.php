@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobValidation;
-use App\Service\JobService;
+use App\Facades\JobFacade;
 use Illuminate\Support\Facades\Session;
 
 class JobController extends Controller
@@ -18,10 +18,10 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, JobService $jobService)
+    public function index(Request $request)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request->all(), $from = 'front');
+        $paginationArguments = JobFacade::paginationArguments($request->all(), $from = 'front');
         $paginationArguments['categories'] = Category::all();
         return view('frontend.company.job.index', $paginationArguments);
     }
@@ -43,10 +43,10 @@ class JobController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JobValidation $request, JobService $jobService)
+    public function store(JobValidation $request)
     {
-        $jobService->jobFrontFill($request->validated());
-        $jobService->changeCategoryJobCount($request->validated()['category_id']);
+        JobFacade::jobFrontFill($request->validated());
+        JobFacade::changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }
@@ -82,13 +82,13 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(JobValidation $request, Job $frontjob, JobService $jobService)
+    public function update(JobValidation $request, Job $frontjob)
     {
         $id = $frontjob->category_id;
-        $jobService->frontJobUpdate($request->validated(), $frontjob);
+        JobFacade::frontJobUpdate($request->validated(), $frontjob);
         if ($request->input('category_id') != $id) {
-            $jobService->changeCategoryJobCount($id);
-            $jobService->changeCategoryJobCount($frontjob->category_id);
+            JobFacade::changeCategoryJobCount($id);
+            JobFacade::changeCategoryJobCount($frontjob->category_id);
         }
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
@@ -100,10 +100,10 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $frontjob, JobService $jobService)
+    public function destroy(Job $frontjob)
     {
-        $jobService->deleteJob($frontjob);
-        $jobService->changeCategoryJobCount($frontjob->category_id);
+        JobFacade::deleteJob($frontjob);
+        JobFacade::changeCategoryJobCount($frontjob->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('frontjob.index');
     }

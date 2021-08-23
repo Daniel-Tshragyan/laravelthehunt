@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
 use App\Models\User;
-use App\Service\JobService;
+use App\Facades\JobFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\AdminJobValidator;
@@ -21,10 +21,10 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, JobService $jobService)
+    public function index(Request $request)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request->all());
+        $paginationArguments = JobFacade::paginationArguments($request->all());
         $paginationArguments['categories'] = Category::all();
         $paginationArguments['companies'] = $user->where(['role' => self::companyRole])->get();
         return view('admin.job.index', $paginationArguments);
@@ -48,10 +48,10 @@ class JobController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdminJobValidator $request, JobService $jobService)
+    public function store(AdminJobValidator $request)
     {
-        $jobService->jobFill($request->all());
-        $jobService->changeCategoryJobCount($request->validated()['category_id']);
+        JobFacade::jobFill($request->all());
+        JobFacade::changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Added');
         return redirect()->route('job.index');
     }
@@ -89,13 +89,13 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminJobValidator $request, Job $job, JobService $jobService)
+    public function update(AdminJobValidator $request, Job $job)
     {
         $id = $job->category_id;
-        $jobService->jobUpdate($request->validated(), $job);
+        JobFacade::jobUpdate($request->validated(), $job);
         if ($request->input('category_id') != $id) {
-            $jobService->changeCategoryJobCount($id);
-            $jobService->changeCategoryJobCount($job->category_id);
+            JobFacade::changeCategoryJobCount($id);
+            JobFacade::changeCategoryJobCount($job->category_id);
         }
         Session::flash('message', 'Job Updated');
         return redirect()->route('job.index');
@@ -107,10 +107,10 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job, JobService $jobService)
+    public function destroy(Job $job)
     {
-        $jobService->deleteJob($job);
-        $jobService->changeCategoryJobCount($job->category_id);
+        JobFacade::deleteJob($job);
+        JobFacade::changeCategoryJobCount($job->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('job.index');
     }

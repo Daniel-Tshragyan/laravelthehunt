@@ -13,7 +13,7 @@ use function PHPUnit\Framework\isNull;
 class JobService
 {
 
-    public function paginationArguments($arr, $from = null)
+    public function paginationArguments($data, $from = null)
     {
         $withPath = '';
         $order_by = 'id';
@@ -22,23 +22,23 @@ class JobService
         $searched = ['title' => '', 'location' => '', 'id' => '', 'job_tags' => '', 'description' => '',
             'closing_date' => '', 'price' => '', 'url' => '', 'company_id' => '', 'category_id' => '',];
 
-        if (isset($arr["order_by"])) {
-            $order_by = $arr["order_by"];
+        if (isset($data["order_by"])) {
+            $order_by = $data["order_by"];
         }
 
-        if (isset($arr["how"])) {
-            $how = $arr['how'];
+        if (isset($data["how"])) {
+            $how = $data['how'];
         }
         foreach ($searched as $key => $value) {
-            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
+            if (isset($data[$key]) || isset($data[$key]) && (!is_null($data[$key]) && $data[$key] == 0)) {
                 if ($key == 'title' || $key == 'location' || $key == 'job_tags' || $key == 'description' || $key == 'url') {
-                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, 'like', "%{$data[$key]}%"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 } else {
-                    $where[] = [$key, '=', "{$arr[$key]}"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, '=', "{$data[$key]}"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 }
             }
         }
@@ -52,48 +52,48 @@ class JobService
 
     }
 
-    public function getPagination($array)
+    public function getPagination($dataay)
     {
-        if (!empty($array['where'])) {
-            $jobs = Job::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $jobs->withPath("job?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($dataay['where'])) {
+            $jobs = Job::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
 
         } else {
-            $jobs = Job::orderBy($array['order_by'], $array['how'])->paginate(3);
-            $jobs->withPath("job?order_by={$array['order_by']}&how={$array['how']}");
+            $jobs = Job::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$dataay['order_by']}&how={$dataay['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($dataay['how'] == 'asc') {
+            $dataay['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $dataay['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'location' => $array['how'], 'job_tags' => $array['how'], 'description' => $array['how'],
-            'closing_date' => $array['how'], 'price' => $array['how'], 'url' => $array['how'], 'company_id' => $array['how'], 'category_id' => $array['how'],
+        $dataay['sorts'] = ['id' => $dataay['how'], 'title' => $dataay['how'], 'location' => $dataay['how'], 'job_tags' => $dataay['how'], 'description' => $dataay['how'],
+            'closing_date' => $dataay['how'], 'price' => $dataay['how'], 'url' => $dataay['how'], 'company_id' => $dataay['how'], 'category_id' => $dataay['how'],
         ];
-        $newarray = ['jobs' => $jobs, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $newarray = ['jobs' => $jobs, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
 
         return $newarray;
     }
 
-    public function frontJobGetPagination($array)
+    public function frontJobGetPagination($dataay)
     {
-        if (!empty($array['where'])) {
-            $jobs = Job::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $jobs->withPath("frontjob?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($dataay['where'])) {
+            $jobs = Job::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
 
         } else {
-            $jobs = Job::orderBy($array['order_by'], $array['how'])->paginate(3);
-            $jobs->withPath("frontjob?order_by={$array['order_by']}&how={$array['how']}");
+            $jobs = Job::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$dataay['order_by']}&how={$dataay['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($dataay['how'] == 'asc') {
+            $dataay['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $dataay['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'location' => $array['how'], 'job_tags' => $array['how'], 'description' => $array['how'],
-            'closing_date' => $array['how'], 'price' => $array['how'], 'url' => $array['how'], 'company_id' => $array['how'], 'category_id' => $array['how'],
+        $dataay['sorts'] = ['id' => $dataay['how'], 'title' => $dataay['how'], 'location' => $dataay['how'], 'job_tags' => $dataay['how'], 'description' => $dataay['how'],
+            'closing_date' => $dataay['how'], 'price' => $dataay['how'], 'url' => $dataay['how'], 'company_id' => $dataay['how'], 'category_id' => $dataay['how'],
         ];
-        $newarray = ['jobs' => $jobs, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $newarray = ['jobs' => $jobs, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
 
         return $newarray;
     }
@@ -103,30 +103,30 @@ class JobService
         return $job->delete();
     }
 
-    public function jobFill($arr)
+    public function jobFill($data)
     {
         $job = new Job();
-        $job->fill($arr);
+        $job->fill($data);
         return $job->save();
     }
 
-    public function frontJobUpdate($arr, Job $job)
+    public function frontJobUpdate($data, Job $job)
     {
-        $job->fill($arr);
+        $job->fill($data);
         return $job->update();
     }
 
-    public function JobUpdate($arr, Job $job)
+    public function JobUpdate($data, Job $job)
     {
-        $job->fill($arr);
+        $job->fill($data);
         return $job->update();
     }
 
-    public function jobFrontFill($arr)
+    public function jobFrontFill($data)
     {
-        $arr['company_id'] = auth()->user()->id;
+        $data['company_id'] = auth()->user()->id;
         $job = new Job();
-        $job->fill($arr);
+        $job->fill($data);
         return $job->save();
     }
 

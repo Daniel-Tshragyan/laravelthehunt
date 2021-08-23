@@ -19,29 +19,29 @@ class UserService
         '2' => 'company'
     ];
 
-    public function paginationArguments($arr)
+    public function paginationArguments($data)
     {
         $searched = ['name' => '', 'email' => '', 'id' => '', 'role' => '',];
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
-        if (isset($arr["order_by"])) {
-            $order_by = $arr["order_by"];
+        if (isset($data["order_by"])) {
+            $order_by = $data["order_by"];
         }
-        if (isset($arr["how"])) {
-            $how = $arr["how"];
+        if (isset($data["how"])) {
+            $how = $data["how"];
         }
         foreach ($searched as $key => $value) {
-            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
+            if (isset($data[$key]) || isset($data[$key]) && (!is_null($data[$key]) && $data[$key] == 0)) {
                 if ($key == 'name' || $key == 'email') {
-                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, 'like', "%{$data[$key]}%"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 } else {
-                    $where[] = [$key, '=', "{$arr[$key]}"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, '=', "{$data[$key]}"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 }
             }
         }
@@ -49,84 +49,84 @@ class UserService
             'where' => $where, 'how' => $how]);
     }
 
-    public function getPaginationArguments($array)
+    public function getPaginationArguments($data)
     {
-        if (!empty($array['where'])) {
-            $users = User::where($array['where'])->whereNotIn('email',['admin'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($data['where'])) {
+            $users = User::where($data['where'])->whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $users = User::whereNotIn('email',['admin'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $users->withPath("user?order_by={$array['order_by']}&how={$array['how']}");
+            $users = User::whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'name' => $array['how'], 'role' => $array['how'], 'email' => $array['how']];
+        $data['sorts'] = ['id' => $data['how'], 'name' => $data['how'], 'role' => $data['how'], 'email' => $data['how']];
 
-        $newarray = ['filters' => self::filters, 'users' => $users, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $newarray = ['filters' => self::filters, 'users' => $users, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }
 
 
-    public function updateUser($arr, User $user)
+    public function updateUser($data, User $user)
     {
         $userInformation = [
-            'name' => $arr['name'],
-            'email' => $arr['email'],
+            'name' => $data['name'],
+            'email' => $data['email'],
         ];
-        if (isset($arr['password'])) {
-            $userInformation['password'] = Hash::make($arr['password']);
+        if (isset($data['password'])) {
+            $userInformation['password'] = Hash::make($data['password']);
         }
         $user->fill($userInformation);
         return $user->update();
     }
 
-    public function updateCandidate($arr, User $user)
+    public function updateCandidate($data, User $user)
     {
         $fillInformation = [
-            'city_id' => $arr['city'] ,
-            'location' => $arr['location'],
-            'age' => $arr['age'],
-            'profession' => $arr['profession'],
+            'city_id' => $data['city'] ,
+            'location' => $data['location'],
+            'age' => $data['age'],
+            'profession' => $data['profession'],
         ];
 
         $candidat = $user->candidate->toArray();
-        if (isset($arr['image'])) {
+        if (isset($data['image'])) {
             Storage::delete('/public/users_images/' . $candidat['image']);
             $random = Str::random(60);
-            $imageName = $random . '.' . $arr['image']->extension();
-            $arr['image']->storeAs('public/users_images', $imageName);
+            $imageName = $random . '.' . $data['image']->extension();
+            $data['image']->storeAs('public/users_images', $imageName);
             $fillInformation['image'] = $imageName;
         }
-        if (isset($arr['password'])) {
-            $fillInformation['password'] = $arr['password'];
+        if (isset($data['password'])) {
+            $fillInformation['password'] = $data['password'];
         }
         $user->candidate->fill($fillInformation);
         return $user->candidate->update();
     }
 
-    public function updateCompany($arr, User $user)
+    public function updateCompany($data, User $user)
     {
-        $data = $arr;
+        $data = $data;
         $fillInformation = [
-            'city_id' => $arr['city'] ,
-            'location' => $arr['location'],
-            'age' => $arr['tagline'],
-            'profession' => $arr['comapnyname'],
+            'city_id' => $data['city'] ,
+            'location' => $data['location'],
+            'age' => $data['tagline'],
+            'profession' => $data['comapnyname'],
         ];
         $company = $user->company->toArray();
-        if (isset($arr['password'])) {
-            $fillInformation['password'] = $arr['password'];
+        if (isset($data['password'])) {
+            $fillInformation['password'] = $data['password'];
         }
-        if (isset($arr['image'])) {
+        if (isset($data['image'])) {
             Storage::delete('/public/users_images/' . $company['image']);
             $random = Str::random(60);
-            $imageName = $random . '.' . $arr['image']->extension();
-            $arr['image']->storeAs('public/users_images', $imageName);
+            $imageName = $random . '.' . $data['image']->extension();
+            $data['image']->storeAs('public/users_images', $imageName);
             $fillInformation['image'] = $imageName;
         }
         $user->company->fill($fillInformation);

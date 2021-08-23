@@ -161,6 +161,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Providers\CityFacadeProvider::class,
+        App\Providers\JobFacadeProvider::class,
+        App\Providers\CategoryFacadeProvider::class,
 
         /*
          * Package Service Providers...
@@ -228,6 +231,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'UserServiceFacade' => App\Facades\UserServiceFacade::class,
+        'CityFacade' => App\Facades\CityFacade::class,
+        'JobFacade' => App\Facades\JobFacade::class,
+        'CategoryFacade' => App\Facades\CategoryFacade::class,
 
     ],
 

@@ -20,7 +20,7 @@ class Candidat extends Migration
             $table->string('location');
             $table->integer('age');
             $table->string('profession');
-            $table->string('image');
+            $table->string('image')->nullable(true);
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('id')

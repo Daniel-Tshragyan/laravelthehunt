@@ -13,29 +13,29 @@ use Illuminate\Support\Str;
 
 class CategoryService
 {
-    public function paginationArguments($arr)
+    public function paginationArguments($data)
     {
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
         $searched = ['title' => '', 'jobs_count' => '', 'id' => '', 'sort' => '',];
-        if (isset($arr["order_by"])) {
-            $order_by = $arr["order_by"];
+        if (isset($data["order_by"])) {
+            $order_by = $data["order_by"];
         }
-        if (isset($arr["how"])) {
-            $how = $arr["how"];
+        if (isset($data["how"])) {
+            $how = $data["how"];
         }
         foreach ($searched as $key => $value) {
-            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
+            if (isset($data[$key]) || isset($data[$key]) && (!is_null($data[$key]) && $data[$key] == 0)) {
                 if ($key == 'title') {
-                    $where[] = [$key, 'like', "%{$arr[$key]}%"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, 'like', "%{$data[$key]}%"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 } else {
-                    $where[] = [$key, '=', "{$arr[$key]}"];
-                    $withPath .= "&{$key}={$arr[$key]}";
-                    $searched[$key] = $arr[$key];
+                    $where[] = [$key, '=', "{$data[$key]}"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 }
             }
         }
@@ -43,57 +43,57 @@ class CategoryService
             'where' => $where, 'how' => $how]);
     }
 
-    public function getPagination($array)
+    public function getPagination($data)
     {
-        if (!empty($array['where'])) {
-            $category = Category::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($data['where'])) {
+            $category = Category::where($data['where'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $category->withPath("city?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $category = Category::orderBy($array['order_by'], $array['how'])->paginate(3);
-            $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}");
+            $category = Category::orderBy($data['order_by'], $data['how'])->paginate(3);
+            $category->withPath("city?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'jobs_cont' => $array['how'],
-            'sort' => $array['how']];
-        $newarray = ['categories' => $category, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'jobs_cont' => $data['how'],
+            'sort' => $data['how']];
+        $newarray = ['categories' => $category, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }
 
-    public function categoryCreate($arr)
+    public function categoryCreate($data)
     {
         $random = Str::random(60);
-        $imageName = $random . '.' . $arr['image']->extension();
+        $imageName = $random . '.' . $data['image']->extension();
         $category = new Category();
         $category->fill(
             [
-                'title' => $arr['title'],
-                'sort' => $arr['sort'],
+                'title' => $data['title'],
+                'sort' => $data['sort'],
                 'image' => $imageName,
             ]
         );
         $category->save();
-        return $arr['image']->storeAs('public/categories_images', $imageName);
+        return $data['image']->storeAs('public/categories_images', $imageName);
     }
 
-    public function categoryUpdate($arr, Category $category)
+    public function categoryUpdate($data, Category $category)
     {
         $categoryInformation = [
-            'title' => $arr['title'],
-            'sort' => $arr['sort'],
+            'title' => $data['title'],
+            'sort' => $data['sort'],
         ];
 
-        if ($arr['image']) {
+        if ($data['image']) {
             $random = Str::random(60);
             Storage::delete('/public/users_images/' . $category->image);
-            $imageName = $random . '.' . $arr['image']->extension();
+            $imageName = $random . '.' . $data['image']->extension();
             $categoryInformation['image'] = $imageName;
-            $arr['image']->storeAs('public/categories_images', $imageName);
+            $data['image']->storeAs('public/categories_images', $imageName);
         }
         $category->fill($categoryInformation);
         $category->update();

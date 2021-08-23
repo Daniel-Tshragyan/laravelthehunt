@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\User;
-use App\Service\CityService;
+use App\Facades\CityFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\CityValidator;
@@ -17,9 +17,9 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, CityService $cityService)
+    public function index(Request $request)
     {
-        $paginationArguments = $cityService->paginationArguments($request->all());
+        $paginationArguments = CityFacade::paginationArguments($request->all());
         return view('admin.city.index', $paginationArguments);
     }
 
@@ -39,11 +39,11 @@ class CityController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CityValidator $request, CityService $cityService)
+    public function store(CityValidator $request)
     {
 
         $city = new City();
-        $cityService->fillCity($request->validated(),$city);
+        CityFacade::fillCity($request->validated(),$city);
         Session::flash('message', 'City Added');
         return redirect()->route('city.index');
 
@@ -78,9 +78,9 @@ class CityController extends Controller
      * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function update(CityValidator $request, City $city, CityService $cityService)
+    public function update(CityValidator $request, City $city)
     {
-        $cityService->fillCity($request->validated(),$city);
+        CityFacade::fillCity($request->validated(),$city);
         Session::flash('message', 'City Changed');
         return redirect()->route('city.index');
 
@@ -92,9 +92,9 @@ class CityController extends Controller
      * @param \App\Models\City $city
      * @return \Illuminate\Http\Response
      */
-    public function destroy(City $city, CityService $cityService)
+    public function destroy(City $city)
     {
-        $cityService->deleteCity($city);
+        CityFacade::deleteCity($city);
         Session::flash('message', 'City Deleted');
         return redirect()->route('city.index');
     }
