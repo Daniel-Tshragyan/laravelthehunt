@@ -23,6 +23,9 @@
         .alerts-content .row .col-lg-1{
             margin: 0 0 0 10px
         }
+        p{
+            word-break: break-all;
+        }
     </style>
 
 </head>

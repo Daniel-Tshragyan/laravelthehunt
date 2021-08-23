@@ -124,6 +124,7 @@ class JobService
 
     public function jobFrontFill($arr)
     {
+        $arr['company_id'] = auth()->user()->id;
         $job = new Job();
         $job->fill($arr);
         return $job->save();
