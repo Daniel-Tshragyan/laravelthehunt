@@ -80,7 +80,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryValidator $request, Category $category, CategoryService $categoryService)
     {
-        $categoryService->categoryUpdate($request->validated(),$category);
+        $categoryService->categoryUpdate($request->validated(), $category);
         Session::flash('message', 'Categoey Updated');
         return redirect()->route('category.index');
     }

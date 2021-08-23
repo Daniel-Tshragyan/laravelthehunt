@@ -30,7 +30,7 @@ class JobService
             $how = $arr['how'];
         }
         foreach ($searched as $key => $value) {
-            if (isset($arr[$key]) ||isset($arr[$key]) && (!is_null($arr[$key]) &&  $arr[$key] == 0)) {
+            if (isset($arr[$key]) || isset($arr[$key]) && (!is_null($arr[$key]) && $arr[$key] == 0)) {
                 if ($key == 'title' || $key == 'location' || $key == 'job_tags' || $key == 'description' || $key == 'url') {
                     $where[] = [$key, 'like', "%{$arr[$key]}%"];
                     $withPath .= "&{$key}={$arr[$key]}";
@@ -45,7 +45,7 @@ class JobService
         if ($from == 'front') {
             return $this->frontJobGetPagination(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
                 'where' => $where, 'how' => $how]);
-        }else{
+        } else {
             return $this->getPagination(['withPath' => $withPath, 'order_by' => $order_by, 'searched' => $searched,
                 'where' => $where, 'how' => $how]);
         }
@@ -103,8 +103,6 @@ class JobService
         return $job->delete();
     }
 
-
-
     public function jobFill($arr)
     {
         $job = new Job();
@@ -131,12 +129,10 @@ class JobService
         return $job->save();
     }
 
-
-
-    public function changeCategoryJobCount(int $id)
+    public function changeCategoryJobCount($id)
     {
         $category = Category::find($id);
-        if(!is_null($category)){
+        if (!is_null($category)) {
             $category->fill([
                 'jobs_count' => $category->job->count()
             ]);

@@ -15,13 +15,11 @@ use App\Service\UserService;
 use App\Http\Requests\UserValidator;
 
 
-
 class UserController extends Controller
 {
     const Admin_Number = 0;
     const Company_Number = 2;
     const Candidate_Number = 1;
-
 
 
     /**
@@ -90,11 +88,11 @@ class UserController extends Controller
         $cities = City::all()->pluck('id', 'name')->toArray();
         if ($user->role == self::Candidate_Number) {
             $candidate = $user->candidate->toArray();
-            return view('admin.user.update', compact('user','candidate','cities'));
+            return view('admin.user.update', compact('user', 'candidate', 'cities'));
         }
         if ($user->role == self::Company_Number) {
             $company = $user->company->toArray();
-            return view('admin.user.update', compact('user','company','cities'));
+            return view('admin.user.update', compact('user', 'company', 'cities'));
         }
     }
 
@@ -127,7 +125,7 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user,UserService $userService)
+    public function destroy(User $user, UserService $userService)
     {
         if ($user->role == self::Candidate_Number) {
             $userService->deleteCandidate($user);

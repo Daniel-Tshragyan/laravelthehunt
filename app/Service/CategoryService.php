@@ -102,8 +102,7 @@ class CategoryService
     public function deleteCategory(Category $category)
     {
         Storage::delete('/public/categories_images/' . $category->image);
-        foreach($category->job as $job)
-        {
+        foreach ($category->job as $job) {
             $job->fill(['category_id' => null]);
             $job->update();
         }

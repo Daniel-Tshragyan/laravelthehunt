@@ -15,12 +15,13 @@ use App\Http\Requests\AdminJobValidator;
 class JobController extends Controller
 {
     const companyRole = 2;
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,JobService $jobService)
+    public function index(Request $request, JobService $jobService)
     {
         $user = new User();
         $paginationArguments = $jobService->paginationArguments($request->all());
@@ -47,7 +48,7 @@ class JobController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdminJobValidator $request,JobService $jobService)
+    public function store(AdminJobValidator $request, JobService $jobService)
     {
         $jobService->jobFill($request->all());
         $jobService->changeCategoryJobCount($request->validated()['category_id']);
@@ -78,7 +79,7 @@ class JobController extends Controller
         $companies = $user->where(['role' => '2'])->get();
         $price = (int)$job->price;
         $categories = Category::all();
-        return view('admin.job.update', compact('companies','price','categories','job'));
+        return view('admin.job.update', compact('companies', 'price', 'categories', 'job'));
     }
 
     /**
@@ -88,10 +89,10 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminJobValidator $request, Job $job,JobService $jobService)
+    public function update(AdminJobValidator $request, Job $job, JobService $jobService)
     {
         $id = $job->category_id;
-        $jobService->jobUpdate($request->validated(),$job);
+        $jobService->jobUpdate($request->validated(), $job);
         if ($request->input('category_id') != $id) {
             $jobService->changeCategoryJobCount($id);
             $jobService->changeCategoryJobCount($job->category_id);

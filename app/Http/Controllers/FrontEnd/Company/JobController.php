@@ -18,10 +18,10 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,JobService $jobService)
+    public function index(Request $request, JobService $jobService)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request->all(),$from = 'front');
+        $paginationArguments = $jobService->paginationArguments($request->all(), $from = 'front');
         $paginationArguments['categories'] = Category::all();
         return view('frontend.company.job.index', $paginationArguments);
     }
@@ -34,16 +34,16 @@ class JobController extends Controller
     public function create()
     {
         $category = Category::all();
-        return view('frontend.company.job.create',['categories' => $category]);
+        return view('frontend.company.job.create', ['categories' => $category]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JobValidation $request,JobService $jobService)
+    public function store(JobValidation $request, JobService $jobService)
     {
         $jobService->jobFrontFill($request->validated());
         $jobService->changeCategoryJobCount($request->validated()['category_id']);
@@ -54,32 +54,32 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function show(Job $frontjob)
     {
-        return view('frontend.company.job.show',['job' => $frontjob]);
+        return view('frontend.company.job.show', ['job' => $frontjob]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function edit(Job $frontjob)
     {
         $category = Category::all();
         $price = (int)$frontjob->price;
-        return view('frontend.company.job.update',['job' => $frontjob, 'categories' => $category,'price' =>$price]);
+        return view('frontend.company.job.update', ['job' => $frontjob, 'categories' => $category, 'price' => $price]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Job  $job
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function update(JobValidation $request, Job $frontjob, JobService $jobService)
@@ -97,7 +97,7 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function destroy(Job $frontjob, JobService $jobService)
