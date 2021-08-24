@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,5 +26,17 @@ class HomeController extends Controller
     {
         dd(auth()->user());
         return view('home');
+    }
+
+    public function candidatreg()
+    {
+        $city = City::all();
+        return view('viewarchive.register', ['cities' => $city]);
+    }
+
+    public function companyreg()
+    {
+        $city = City::all();
+        return view('viewarchive.register1', ['cities' => $city]);
     }
 }
