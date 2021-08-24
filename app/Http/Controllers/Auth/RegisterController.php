@@ -60,7 +60,7 @@ class RegisterController extends Controller
             'location' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'image' => ['required','image'],
+            'image' => ['nullable','image'],
             'role' => ['required', 'string', 'in:1,2'],
         ];
         if ($data['role'] == 'candidate') {
@@ -81,7 +81,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-
         $user = new User();
         $user->fill([
             'name' => $data['name'],
@@ -89,37 +88,35 @@ class RegisterController extends Controller
             'role' => $data['role'],
             'password' => Hash::make($data['password']),
         ]);
+
         $user->save();
         $id = $user->id;
+        $arrayToFill = [
+            'user_id' => $id,
+            'city_id' => $data['city'],
+            'location' => $data['location'],
+        ];
 
-        $random = Str::random(60);
-        $imageName = $random . '.' . $data['image']->extension();
+        if (isset($data['image'])) {
+            $random = Str::random(60);
+            $imageName = $random . '.' . $data['image']->extension();
+            $data['image']->storeAs('public/users_images',$imageName);
+            $arrayToFill['image'] = $imageName;
+        }
+
         if ($data['role'] == '1') {
             $candidat = new Candidate();
-            $candidat->fill([
-                'user_id' => $id,
-                'age' => $data['age'],
-                'profession' => $data['profession'],
-                'city_id' => $data['city'],
-                'location' => $data['location'],
-                'image' => $imageName
-            ]);
-            $data['image']->storeAs('public/users_images',$imageName);
+            $arrayToFill['age'] = $data['age'];
+            $arrayToFill['profession'] = $data['profession'];
+            $candidat->fill($arrayToFill);
             $candidat->save();
         }
         if ($data['role'] == '2') {
             $company = new Company();
-            $company->fill([
-                'user_id' => $id,
-                'comapnyname' => $data['companyname'],
-                'tagline' => $data['tagline'],
-                'location' => $data['location'],
-                'city_id' => $data['city'],
-                'image' => $imageName
-            ]);
+            $arrayToFill['comapnyname'] = $data['companyname'];
+            $arrayToFill['tagline'] = $data['tagline'];
+            $company->fill($arrayToFill);
             $company->save();
-            $data['image']->storeAs('public/users_images',$imageName);
-
         }
         return $user;
 

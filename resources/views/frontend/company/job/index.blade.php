@@ -99,7 +99,7 @@
                     <p><span class="full-time">{{ $job->job_tags }}</span></p>
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-12">
-                    <p>{{ $job->description }}</p>
+                    <p style="overflow:hidde">{{ $job->description }}</p>
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-12">
                     <p>{{ $job->closing_date }}</p>
@@ -111,7 +111,7 @@
                     <p>{{ $job->url }}</p>
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-12">
-                    <p>{{ $job->category->title }}</p>
+                    {{ $job->category->title ?? '-' }}
                 </div>
 
                 <div class="col-lg-1 col-md-1 col-xs-12">

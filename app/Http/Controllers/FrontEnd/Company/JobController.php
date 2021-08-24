@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobValidation;
-use App\Service\JobService;
+use App\Facades\JobFacade;
 use Illuminate\Support\Facades\Session;
 
 class JobController extends Controller
@@ -18,13 +18,12 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,JobService $jobService)
+    public function index(Request $request)
     {
         $user = new User();
-        $paginationArguments = $jobService->paginationArguments($request,$from = 'front');
+        $paginationArguments = JobFacade::paginationArguments($request->all(), $from = 'front');
         $paginationArguments['categories'] = Category::all();
         return view('frontend.company.job.index', $paginationArguments);
-
     }
 
     /**
@@ -35,20 +34,19 @@ class JobController extends Controller
     public function create()
     {
         $category = Category::all();
-        return view('frontend.company.job.create',['categories' => $category]);
+        return view('frontend.company.job.create', ['categories' => $category]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JobValidation $request,JobService $jobService)
+    public function store(JobValidation $request)
     {
-        $jobService->jobFrontFill($request);
-        $category = Category::find($request->input('category_id'));
-        $jobService->addCategoryCount($category);
+        JobFacade::jobFrontFill($request->validated());
+        JobFacade::changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }
@@ -56,43 +54,42 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function show(Job $frontjob)
     {
-        return view('frontend.company.job.show',['job' => $frontjob]);
+        return view('frontend.company.job.show', ['job' => $frontjob]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
     public function edit(Job $frontjob)
     {
         $category = Category::all();
         $price = (int)$frontjob->price;
-        return view('frontend.company.job.update',['job' => $frontjob, 'categories' => $category,'price' =>$price]);
+        return view('frontend.company.job.update', ['job' => $frontjob, 'categories' => $category, 'price' => $price]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Job  $job
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(JobValidation $request, Job $frontjob, JobService $jobService)
+    public function update(JobValidation $request, Job $frontjob)
     {
-        if ($request->input('category_id') != $frontjob->category_id) {
-            $category = Category::find($frontjob->category_id);
-            $jobService->downCategoryCount($category);
-            $category1 = Category::find($request->input('category_id'));
-            $jobService->addCategoryCount($category1);
+        $id = $frontjob->category_id;
+        JobFacade::frontJobUpdate($request->validated(), $frontjob);
+        if ($request->input('category_id') != $id) {
+            JobFacade::changeCategoryJobCount($id);
+            JobFacade::changeCategoryJobCount($frontjob->category_id);
         }
-        $jobService->frontJobUpdate($request, $frontjob);
         Session::flash('message', 'Job Updated');
         return redirect()->route('frontjob.index');
     }
@@ -100,16 +97,14 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Job  $job
+     * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $frontjob, JobService $jobService)
+    public function destroy(Job $frontjob)
     {
-        $category = Category::find($frontjob->category_id);
-        $jobService->downCategoryCount( $category);
-        $frontjob->delete();
+        JobFacade::deleteJob($frontjob);
+        JobFacade::changeCategoryJobCount($frontjob->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('frontjob.index');
-
     }
 }

@@ -8,7 +8,9 @@
                 <div class="col-lg-8 col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper">
                         <div class="img-wrapper">
-                            <img style="max-width:150%" src="{{asset('storage/categories_images/'.$job->category->image)}}" alt="">
+                            @if(!is_null($job->category))
+                                <img style="max-width:150%" src="{{asset('storage/categories_images/'.$job->category->image)}}" alt="">
+                            @endif
                         </div>
                         <div class="content">
                             <h3 class="product-title">{{ $job->title }}</h3>

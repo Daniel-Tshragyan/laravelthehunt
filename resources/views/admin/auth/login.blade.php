@@ -29,7 +29,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-user"></i>
-                                    <input type="text" id="sender-email" class="form-control" name="email" placeholder="Username">
+                                    <input type="text" value="{{ old('email') }}" id="sender-email" class="form-control" name="email" placeholder="Username">
                                     @if (Session::has('login'))
                                         <div class="alert alert-danger" role="alert">
                                             {{ Session::get('login') }}
@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <div class="input-icon">
                                     <i class="lni-lock"></i>
-                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                    <input type="password" value="{{ old('password') }}" name="password" class="form-control" placeholder="Password">
                                     @if (Session::has('password'))
                                         <div class="alert alert-danger" role="alert">
                                             {{ Session::get('password') }}

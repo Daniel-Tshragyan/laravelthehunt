@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
@@ -91,8 +92,8 @@ Route::get('/single-post', function () {
 Route::get('/log', function () {
     return view('viewarchive.login');
 })->name('login1');
-Route::get('/reg', [UserController::class, 'candidatreg'])->name('reg');
-Route::get('/regcompany', [UserController::class, 'companyreg'])->name('reg1');
+Route::get('/reg', [HomeController::class, 'candidatreg'])->name('reg');
+Route::get('/regcompany', [HomeController::class, 'companyreg'])->name('reg1');
 Route::get('/pricing', function () {
     return view('viewarchive.pricing');
 })->name('pricing');

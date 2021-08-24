@@ -3,6 +3,7 @@
     Update Job
 @endsection
 @section('content')
+    {{ Breadcrumbs::render('jobUpdate') }}
     <h1>Update Job</h1>
     <form action="{{route('job.update',['job' => $job])}}" class="w-50" method="post">
         @csrf

@@ -6,35 +6,36 @@ namespace App\Service;
 use App\Http\Requests\CategoryValidator;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryService
 {
-    public function paginationArguments(Request $request)
+    public function paginationArguments($data)
     {
         $withPath = '';
         $order_by = 'id';
         $how = 'asc';
         $where = [];
         $searched = ['title' => '', 'jobs_count' => '', 'id' => '', 'sort' => '',];
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($data["order_by"])) {
+            $order_by = $data["order_by"];
         }
-        if ($request->input("how")) {
-            $how = $request->input('how');
+        if (isset($data["how"])) {
+            $how = $data["how"];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($data[$key]) || isset($data[$key]) && (!is_null($data[$key]) && $data[$key] == 0)) {
                 if ($key == 'title') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$data[$key]}%"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$data[$key]}"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 }
             }
         }
@@ -42,60 +43,70 @@ class CategoryService
             'where' => $where, 'how' => $how]);
     }
 
-    public function getPagination($array)
+    public function getPagination($data)
     {
-        if (!empty($array['where'])) {
-            $category = Category::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($data['where'])) {
+            $category = Category::where($data['where'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $category->withPath("city?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $category = Category::orderBy($array['order_by'], $array['how'])->paginate(3);
-            $category->withPath("city?order_by={$array['order_by']}&how={$array['how']}");
+            $category = Category::orderBy($data['order_by'], $data['how'])->paginate(3);
+            $category->withPath("city?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'title' => $array['how'], 'jobs_cont' => $array['how'],
-            'sort' => $array['how']];
-        $newarray = ['categories' => $category, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'jobs_cont' => $data['how'],
+            'sort' => $data['how']];
+        $newarray = ['categories' => $category, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }
 
-    public function categoryCreate(CategoryValidator $request)
+    public function categoryCreate($data)
     {
         $random = Str::random(60);
-        $imageName = $random . '.' . $request->file('image')->extension();
+        $imageName = $random . '.' . $data['image']->extension();
         $category = new Category();
         $category->fill(
             [
-                'title' => $request->input('title'),
-                'sort' => $request->input('sort'),
+                'title' => $data['title'],
+                'sort' => $data['sort'],
                 'image' => $imageName,
             ]
         );
         $category->save();
-        return $request->file('image')->storeAs('public/categories_images', $imageName);
+        return $data['image']->storeAs('public/categories_images', $imageName);
     }
 
-    public function categoryUpdate(CategoryValidator $request, Category $category)
+    public function categoryUpdate($data, Category $category)
     {
         $categoryInformation = [
-            'title' => $request->input('title'),
-            'sort' => $request->input('sort'),
+            'title' => $data['title'],
+            'sort' => $data['sort'],
         ];
 
-        if ($request->input('image')) {
+        if ($data['image']) {
             $random = Str::random(60);
             Storage::delete('/public/users_images/' . $category->image);
-            $imageName = $random . '.' . $request->file('image')->extension();
+            $imageName = $random . '.' . $data['image']->extension();
             $categoryInformation['image'] = $imageName;
-            $request->file('image')->storeAs('public/categories_images', $imageName);
+            $data['image']->storeAs('public/categories_images', $imageName);
         }
         $category->fill($categoryInformation);
-        $category->save();
+        $category->update();
+    }
+
+    public function deleteCategory(Category $category)
+    {
+        Storage::delete('/public/categories_images/' . $category->image);
+        foreach ($category->job as $job) {
+            $job->fill(['category_id' => null]);
+            $job->update();
+        }
+        return $category->delete();
     }
 
 }

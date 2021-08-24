@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\City;
+use App\Facades\UserServiceFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -11,18 +12,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Service\UserService;
+
+//use App\Service\UserService;
 use App\Http\Requests\UserValidator;
-
-
+use App\Facades\UserServiceHelper;
 
 class UserController extends Controller
 {
-    const userCategories = [
-        'admin' => 0,
-        'candidate' => 1,
-        'company' => 2,
-    ];
 
 
     /**
@@ -30,9 +26,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, UserService $userService)
+    public function index(Request $request)
     {
-        $paginationArguments = $userService->paginationArguments($request);
+        $paginationArguments = UserServiceFacade::paginationArguments($request->all());
         return view('admin.user.index', $paginationArguments);
     }
 
@@ -65,17 +61,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if ($user->role == self::userCategories['candidate']) {
+        if ($user->role == User::ROLE_CANDIDATE) {
             $candidate = $user->candidate->toArray();
             $city = City::find($candidate['city_id']);
             return view('admin.user.show', ['user' => $user, 'candidate' => $candidate, 'city' => $city]);
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == User::ROLE_COMPANY) {
             $company = $user->company->toArray();
             $city = City::find($company['city_id']);
             return view('admin.user.show', ['user' => $user, 'company' => $company, 'city' => $city]);
         }
-        if ($user->role == self::userCategories['admin']) {
+        if ($user->role == User::ROLE_ADMIN) {
             return view('admin.user.show', ['user' => $user]);
         }
     }
@@ -88,18 +84,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $cities = City::all();
-        if ($user->role == self::userCategories['candidate']) {
+        $cities = City::all()->pluck('id', 'name')->toArray();
+        if ($user->role == User::ROLE_CANDIDATE) {
             $candidate = $user->candidate->toArray();
-            $city = City::find($candidate['city_id']);
-            return view('admin.user.update', ['user' => $user, 'candidate' => $candidate, 'cities' => $cities,
-                'city' => $city]);
+            return view('admin.user.update', compact('user', 'candidate', 'cities'));
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == User::ROLE_COMPANY) {
             $company = $user->company->toArray();
-            $city = City::find($company['city_id']);
-            return view('admin.user.update', ['user' => $user, 'company' => $company, 'cities' => $cities,
-                'city' => $city]);
+            return view('admin.user.update', compact('user', 'company', 'cities'));
         }
     }
 
@@ -112,16 +104,16 @@ class UserController extends Controller
      */
     public function update(UserValidator $request, User $user)
     {
-        $userService = new UserService();
 
-        if ($user->role == self::userCategories['candidate']) {
-            $userService->updateCandidate($request, $user);
+
+        if ($user->role == User::ROLE_CANDIDATE) {
+            UserServiceFacade::updateCandidate($request->validated(), $user);
         }
-        if ($user->role == self::userCategories['company']) {
+        if ($user->role == User::ROLE_COMPANY) {
             Session::flash('message', 'User Updated');
-            $userService->updateCompany($request, $user);
+            UserServiceFacade::updateCompany($request->validated(), $user);
         }
-        $userService->updateUser($request, $user);
+        UserServiceFacade::updateUser($request->validated(), $user);
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }
@@ -132,28 +124,17 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user,UserService $userService)
+    public function destroy(User $user)
     {
-        if ($user->role == self::userCategories['candidate']) {
-            $userService->deleteCandidate($user);
+        if ($user->role == User::ROLE_CANDIDATE) {
+            UserServiceFacade::deleteCandidate($user);
         }
-        if ($user->role == self::userCategories['company']) {
-            $userService->deleteCompany($user);
+        if ($user->role == User::ROLE_COMPANY) {
+            UserServiceFacade::deleteCompany($user);
         }
-        $userService->deleteUser($user);
+        UserServiceFacade::deleteUser($user);
         Session::flash('message', 'User Deleted');
         return redirect()->route('user.index');
     }
 
-    public function candidatreg()
-    {
-        $city = City::all();
-        return view('viewarchive.register', ['cities' => $city]);
-    }
-
-    public function companyreg()
-    {
-        $city = City::all();
-        return view('viewarchive.register1', ['cities' => $city]);
-    }
 }

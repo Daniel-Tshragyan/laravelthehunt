@@ -50,27 +50,28 @@
                 @endif
             </div>
         </div>
-        <div class="form-group">
-            <div class="input-icon">
-                <i class="lni-unlock"></i>
-                <label for="">
-                    City
-                </label>
-                <select name="city" id="" class="form-control">
-                    @foreach($cities as $city1)
-                        <option value="{{$city1->id}}"
-                                @if($city1->id == $city->id)
-                                selected="selected"
-                            @endif
-                        >{{$city1->name}}</option>
-                    @endforeach
-                </select>
-                @if ($errors->has('city'))
-                    <p class="text-danger">{{ $errors->first('city') }}</p>
-                @endif
-            </div>
-        </div>
+
         @if($user->role == '2')
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="lni-unlock"></i>
+                    <label for="">
+                        City
+                    </label>
+                    <select name="city" id="" class="form-control">
+                        @foreach($cities as $key => $value)
+                            <option value="{{$value}}"
+                                    @if($value == $company['city_id'])
+                                    selected="selected"
+                                @endif
+                            >{{$key}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('city'))
+                        <p class="text-danger">{{ $errors->first('city') }}</p>
+                    @endif
+                </div>
+            </div>
             <div class="form-group">
                 <div class="input-icon">
                     <i class="lni-unlock"></i>
@@ -124,6 +125,26 @@
                 </div>
             </div>
         @else
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="lni-unlock"></i>
+                    <label for="">
+                        City
+                    </label>
+                    <select name="city" id="" class="form-control">
+                        @foreach($cities as $key => $value)
+                            <option value="{{$value}}"
+                                    @if($key == $candidate['city_id'])
+                                    selected="selected"
+                                @endif
+                            >{{$key}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('city'))
+                        <p class="text-danger">{{ $errors->first('city') }}</p>
+                    @endif
+                </div>
+            </div>
             <div class="form-group">
                 <div class="input-icon">
                     <i class="lni-unlock"></i>

@@ -129,7 +129,7 @@
                     {{ $job->user->name }}
                 </td>
                 <td>
-                    {{ $job->category->title }}
+                    {{ $job->category->title ?? '-' }}
                 </td>
 
                 <td>

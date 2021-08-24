@@ -7,21 +7,21 @@
     <h1>Add Job</h1>
     <form action="{{route('job.store')}}" class="w-50" method="post">
         @csrf
-        <input type="text" name="title" placeholder="Title" class="form-control">
+        <input type="text" value="{{ old('title') }}" name="title" placeholder="Title" class="form-control">
         <br>
         @if ($errors->has('title'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('title') }}
             </div>
         @endif
-        <input type="text" name="description" placeholder="Description" class="form-control">
+        <input type="text" value="{{ old('description') }}" name="description" placeholder="Description" class="form-control">
         <br>
         @if ($errors->has('description'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('description') }}
             </div>
         @endif
-        <input type="date" name="closing_date" placeholder="Cloasing Date" class="form-control">
+        <input type="date" value="{{ old('closing_date') }}" name="closing_date" placeholder="Cloasing Date" class="form-control">
         <br>
         @if ($errors->has('closing_date'))
             <div class="alert alert-danger" role="alert">
@@ -29,28 +29,28 @@
             </div>
         @endif
 
-        <input type="text" name="job_tags" placeholder="Job Tags" class="form-control">
+        <input type="text" value="{{ old('job_tags') }}" name="job_tags" placeholder="Job Tags" class="form-control">
         <br>
         @if ($errors->has('job_tags'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('job_tags') }}
             </div>
         @endif
-        <input type="text" name="location" placeholder="Location" class="form-control">
+        <input type="text" value="{{ old('location') }}" name="location" placeholder="Location" class="form-control">
         <br>
         @if ($errors->has('location'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('location') }}
             </div>
         @endif
-        <input type="number" name="price" placeholder="Price" class="form-control">
+        <input type="number" value="{{ old('price') }}" name="price" placeholder="Price" class="form-control">
         <br>
         @if ($errors->has('price'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('price') }}
             </div>
         @endif
-        <input type="text" name="url" placeholder="Aplication Url" class="form-control">
+        <input type="text" value="{{ old('url') }}" name="url" placeholder="Aplication Url" class="form-control">
         <br>
         @if ($errors->has('url'))
             <div class="alert alert-danger" role="alert">

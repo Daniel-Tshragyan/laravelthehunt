@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CityService
 {
-    public function paginationArguments(Request $request)
+    public function paginationArguments($data)
     {
         $order_by = 'id';
         $how = 'asc';
@@ -20,23 +20,23 @@ class CityService
             'id' => '',
         ];
 
-        if ($request->input("order_by")) {
-            $order_by = $request->input('order_by');
+        if (isset($data['order_by'])) {
+            $order_by = $data['order_by'];
         }
 
-        if ($request->input("how")) {
-            $how = $request->input('how');
+        if (isset($data['how'])) {
+            $how = $data['how'];
         }
         foreach ($searched as $key => $value) {
-            if ($request->input($key) || (!is_null($request->input($key)) && $request->input($key) == 0)) {
+            if (isset($data[$key]) || isset($data[$key]) && (!is_null($data[$key]) && $data[$key] == 0)) {
                 if ($key == 'name') {
-                    $where[] = [$key, 'like', "%{$request->input($key)}%"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, 'like', "%{$data[$key]}%"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 } else {
-                    $where[] = [$key, '=', "{$request->input($key)}"];
-                    $withPath .= "&{$key}={$request->input($key)}";
-                    $searched[$key] = $request->input($key);
+                    $where[] = [$key, '=', "{$data[$key]}"];
+                    $withPath .= "&{$key}={$data[$key]}";
+                    $searched[$key] = $data[$key];
                 }
             }
         }
@@ -44,30 +44,30 @@ class CityService
             'where' => $where, 'how' => $how]);
     }
 
-    public function getPagination($array)
+    public function getPagination($dataay)
     {
-        if (!empty($array['where'])) {
-            $city = City::where($array['where'])->orderBy($array['order_by'], $array['how'])->paginate(3);
-            $city->withPath("city?order_by={$array['order_by']}&how={$array['how']}" . $array['withPath']);
+        if (!empty($dataay['where'])) {
+            $city = City::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $city->withPath("city?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
 
         } else {
-            $city = City::orderBy($array['order_by'], $array['how'])->paginate(3);
-            $city->withPath("city?order_by={$array['order_by']}&how={$array['how']}");
+            $city = City::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
+            $city->withPath("city?order_by={$dataay['order_by']}&how={$dataay['how']}");
         }
-        if ($array['how'] == 'asc') {
-            $array['how'] = 'desc';
+        if ($dataay['how'] == 'asc') {
+            $dataay['how'] = 'desc';
         } else {
-            $array['how'] = 'asc';
+            $dataay['how'] = 'asc';
         }
-        $array['sorts'] = ['id' => $array['how'], 'name' => $array['how']];
-        $newarray = ['cities' => $city, 'sorts' => $array['sorts'], 'searched' => $array['searched']];
+        $dataay['sorts'] = ['id' => $dataay['how'], 'name' => $dataay['how']];
+        $newarray = ['cities' => $city, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
 
         return $newarray;
     }
 
-    public function fillCity(CityValidator $request, City $city)
+    public function fillCity($data, City $city)
     {
-        $city->fill(['name' => $request->input('name')]);
+        $city->fill($data);
         return $city->save();
     }
 

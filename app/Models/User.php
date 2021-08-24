@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    const ROLE_ADMIN = 0;
+    const ROLE_COMPANY = 2;
+    const ROLE_CANDIDATE = 1;
+
     use HasFactory, Notifiable;
 
     public $timestamps = false;
