@@ -10,7 +10,7 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $applications = ApplicationFacade::getApplications($request->all(),auth()->user()->company->id);
-        return view('frontend.company.applications.index',$applications);
+        $applications = ApplicationFacade::getApplications($request->all(), auth()->user()->company->id);
+        return view('frontend.company.applications.index', $applications);
     }
 }

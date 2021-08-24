@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
 use App\Http\Controllers\FrontEnd\Candidate\JobController as CandidateJob;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -100,9 +101,8 @@ Route::get('/pricing', function () {
 
 Route::get('/browse-jobs', [CandidateJob::class, 'index'])->name('browse-jobs');
 Route::post('/applyJob/{id}', [CandidateJob::class, 'applyJob'])->name('applyJob');
-Route::get('/manage-applications', [ApplicationController::class,'index'])->name('manage-applications');
-Route::resource('/frontjob',JobController::class);
-
+Route::get('/manage-applications', [ApplicationController::class, 'index'])->name('manage-applications');
+Route::resource('/frontjob', JobController::class);
 
 
 Auth::routes();

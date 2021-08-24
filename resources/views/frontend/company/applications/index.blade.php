@@ -37,22 +37,23 @@
                 <div style="margin:0 0 0 10px;padding:0;" class="col-lg-3 col-md-3 col-xs-12">
                     <input class="form-control" placeholder="Id" value="{{ $searched['id'] }}" type="number" name="id">
                 </div>
-                <div  style="margin:0 0 0 10px;padding:0;" class="col-lg-3 col-md-3 col-xs-12">
-                    <input class="form-control" placeholder="Text" value="{{ $searched['text'] }}" type="text" name="text">
+                <div style="margin:0 0 0 10px;padding:0;" class="col-lg-3 col-md-3 col-xs-12">
+                    <input class="form-control" placeholder="Text" value="{{ $searched['text'] }}" type="text"
+                           name="text">
                 </div>
                 <div style="margin:0 0 0 10px;padding:0;" class="col-lg-3 col-md-3 col-xs-12">
                     <button class="btn btn-success" type="submit">Search</button>
                 </div>
             </div>
         </form>
-    @foreach($applications as $application)
-        <div class="notification-item">
-            <div class="text-left">
-                <p style="margin-right:10px;display:inline-block">{{ $application->id }}</p>
-                <p style="display:inline-block">{{ $application->text }}.</p>
-                <span class="time"><i class="lni-alarm-clock"></i>{{ $application->created_at }}</span>
+        @foreach($applications as $application)
+            <div class="notification-item">
+                <div class="text-left">
+                    <p style="margin-right:10px;display:inline-block">{{ $application->id }}</p>
+                    <p style="display:inline-block">{{ $application->text }}.</p>
+                    <span class="time"><i class="lni-alarm-clock"></i>{{ $application->created_at }}</span>
+                </div>
             </div>
-        </div>
-        {{ $applications->links() }}
+    {{ $applications->links() }}
     @endforeach
 @endsection

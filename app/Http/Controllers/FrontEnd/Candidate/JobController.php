@@ -17,8 +17,9 @@ class JobController extends Controller
         return view('frontend.candidate.job.alljobs', $paginationArguments);
     }
 
-    public function applyJob(Request $request,$id){
+    public function applyJob(Request $request, $id)
+    {
         $job = JobFacade::apply($id);
-        return redirect()->route('frontjob.show',['frontjob' => $job]);
+        return redirect()->route('frontjob.show', ['frontjob' => $job]);
     }
 }
