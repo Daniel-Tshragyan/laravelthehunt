@@ -10,6 +10,8 @@
                         <div class="img-wrapper">
                             @if(!is_null($job->category))
                                 <img style="max-width:150%" src="{{asset('storage/categories_images/'.$job->category->image)}}" alt="">
+                            @else
+                                <img style="width:50px" src="{{asset('img/features/img2.png')}}" alt="">
                             @endif
                         </div>
                         <div class="content">
@@ -42,6 +44,22 @@
                         <h4>Job Description</h4>
                         {{ $job->description }}
                     </div>
+                    @if(auth()->user()->role != 2)
+
+                        <form method="post" action="{{ route('applyJob',['id' => $job->id]) }}">
+                            @csrf
+                            @if(count($job->candidate))
+                                @foreach($job->candidate as $candidate)
+                                    @if($candidate->id != auth()->user()->candidate->id)
+                                    <button type="submit" class="btn btn-success" >Apply Job</button>
+                                    @endif
+                                @endforeach
+                            @else
+                                <button type="submit" class="btn btn-success" >Apply Job</button>
+                            @endif
+                        </form>
+                    @endif
+
                 </div>
                 <div class="col-lg-4 col-md-12 col-xs-12">
                     <div class="sideber">

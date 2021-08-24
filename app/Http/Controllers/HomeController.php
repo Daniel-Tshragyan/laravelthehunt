@@ -28,15 +28,5 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function candidatreg()
-    {
-        $city = City::all();
-        return view('viewarchive.register', ['cities' => $city]);
-    }
 
-    public function companyreg()
-    {
-        $city = City::all();
-        return view('viewarchive.register1', ['cities' => $city]);
-    }
 }

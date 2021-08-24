@@ -17,29 +17,6 @@ class User extends Authenticatable
 
     public $timestamps = false;
 
-    public function company()
-    {
-        return $this->hasOne(Company::class, 'user_id', 'id');
-    }
-
-    public function candidate()
-    {
-        return $this->hasOne(Candidate::class, 'user_id', 'id');
-    }
-
-
-    public function job()
-    {
-        return $this->hasMany(Job::class,'company_id','id');
-    }
-
-
-
-    public function isAdmin()
-    {
-        return $this->role == 'admin';
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -70,4 +47,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id', 'id');
+    }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidate::class, 'user_id', 'id');
+    }
+
+
+    public function job()
+    {
+        return $this->hasMany(Job::class,'company_id','id');
+    }
+
+
+
+    public function isAdmin()
+    {
+        return $this->role == 'admin';
+    }
+
 }

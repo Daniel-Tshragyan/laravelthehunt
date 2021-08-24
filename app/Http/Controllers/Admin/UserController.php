@@ -137,4 +137,16 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
+    public function candidatreg()
+    {
+        $city = City::all();
+        return view('viewarchive.register', ['cities' => $city]);
+    }
+
+    public function companyreg()
+    {
+        $city = City::all();
+        return view('viewarchive.register1', ['cities' => $city]);
+    }
+
 }

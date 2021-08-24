@@ -164,6 +164,7 @@ return [
         App\Providers\CityFacadeProvider::class,
         App\Providers\JobFacadeProvider::class,
         App\Providers\CategoryFacadeProvider::class,
+        App\Providers\AplicationProvider::class,
 
         /*
          * Package Service Providers...
@@ -235,6 +236,7 @@ return [
         'CityFacade' => App\Facades\CityFacade::class,
         'JobFacade' => App\Facades\JobFacade::class,
         'CategoryFacade' => App\Facades\CategoryFacade::class,
+        'ApplicationFacade' => App\Facades\ApplicationFacade::class,
 
     ],
 

@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    use HasFactory;
-
     public $timestamps = false;
 
 
@@ -32,6 +30,12 @@ class Job extends Model
     public function category()
     {
         return $this->belongsTo(Category::class,'category_id','id');
+    }
+
+    public function candidate()
+    {
+        return $this->belongsToMany(Candidate::class, CandidateJob::class, 'candidate_id', 'job_id')
+            ->withTimestamps();
     }
 
 }

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\FrontEnd\Company\ApplicationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
+use App\Http\Controllers\FrontEnd\Candidate\JobController as CandidateJob;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,9 +47,7 @@ Route::get('/bookmarked', function () {
 Route::get('/browse-categories', function () {
     return view('viewarchive.browse-categories');
 })->name('browse-categories');
-Route::get('/browse-jobs', function () {
-    return view('viewarchive.browse-jobs');
-})->name('browse-jobs');
+
 Route::get('/browse-resumes', function () {
     return view('viewarchive.browse-resumes');
 })->name('browse-resumes');
@@ -69,9 +69,7 @@ Route::get('/job-details', function () {
 Route::get('/job-page', function () {
     return view('viewarchive.job-page');
 })->name('job-page');
-Route::get('/manage-applications', function () {
-    return view('viewarchive.manage-applications');
-})->name('manage-applications');
+
 
 Route::get('/manage-resumes', function () {
     return view('viewarchive.manage-resumes');
@@ -92,12 +90,17 @@ Route::get('/single-post', function () {
 Route::get('/log', function () {
     return view('viewarchive.login');
 })->name('login1');
-Route::get('/reg', [HomeController::class, 'candidatreg'])->name('reg');
-Route::get('/regcompany', [HomeController::class, 'companyreg'])->name('reg1');
+Route::get('/reg', [UserController::class, 'candidatreg'])->name('reg');
+Route::get('/regcompany', [UserController::class, 'companyreg'])->name('reg1');
 Route::get('/pricing', function () {
     return view('viewarchive.pricing');
 })->name('pricing');
 
+//_____________________________________________________________________________
+
+Route::get('/browse-jobs', [CandidateJob::class, 'index'])->name('browse-jobs');
+Route::post('/applyJob/{id}', [CandidateJob::class, 'applyJob'])->name('applyJob');
+Route::get('/manage-applications', [ApplicationController::class,'index'])->name('manage-applications');
 Route::resource('/frontjob',JobController::class);
 
 

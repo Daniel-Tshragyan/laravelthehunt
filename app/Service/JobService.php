@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\Models\Aplication;
 use App\Models\Category;
 use App\Models\Job;
 use Illuminate\Http\Request;
@@ -52,48 +53,48 @@ class JobService
 
     }
 
-    public function getPagination($dataay)
+    public function getPagination($data)
     {
-        if (!empty($dataay['where'])) {
-            $jobs = Job::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $jobs->withPath("job?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
+        if (!empty($data['where'])) {
+            $jobs = Job::where($data['where'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $jobs = Job::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $jobs->withPath("job?order_by={$dataay['order_by']}&how={$dataay['how']}");
+            $jobs = Job::orderBy($data['order_by'], $data['how'])->paginate(3);
+            $jobs->withPath("job?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($dataay['how'] == 'asc') {
-            $dataay['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $dataay['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $dataay['sorts'] = ['id' => $dataay['how'], 'title' => $dataay['how'], 'location' => $dataay['how'], 'job_tags' => $dataay['how'], 'description' => $dataay['how'],
-            'closing_date' => $dataay['how'], 'price' => $dataay['how'], 'url' => $dataay['how'], 'company_id' => $dataay['how'], 'category_id' => $dataay['how'],
+        $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'location' => $data['how'], 'job_tags' => $data['how'], 'description' => $data['how'],
+            'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'], 'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['jobs' => $jobs, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
+        $newarray = ['jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }
 
-    public function frontJobGetPagination($dataay)
+    public function frontJobGetPagination($data)
     {
-        if (!empty($dataay['where'])) {
-            $jobs = Job::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $jobs->withPath("frontjob?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
+        if (!empty($data['where'])) {
+            $jobs = Job::where($data['where'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $jobs = Job::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $jobs->withPath("frontjob?order_by={$dataay['order_by']}&how={$dataay['how']}");
+            $jobs = Job::orderBy($data['order_by'], $data['how'])->paginate(3);
+            $jobs->withPath("frontjob?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($dataay['how'] == 'asc') {
-            $dataay['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $dataay['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $dataay['sorts'] = ['id' => $dataay['how'], 'title' => $dataay['how'], 'location' => $dataay['how'], 'job_tags' => $dataay['how'], 'description' => $dataay['how'],
-            'closing_date' => $dataay['how'], 'price' => $dataay['how'], 'url' => $dataay['how'], 'company_id' => $dataay['how'], 'category_id' => $dataay['how'],
+        $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'location' => $data['how'], 'job_tags' => $data['how'], 'description' => $data['how'],
+            'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'], 'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['jobs' => $jobs, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
+        $newarray = ['jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }
@@ -140,5 +141,46 @@ class JobService
             return $category->update();
         }
         return true;
+    }
+
+    public function candidateJobs($data)
+    {
+        $searched = ['city' => '', 'location' => '', 'title' => ''];
+        $where = [];
+        $withPath = '';
+        foreach($searched as $key => $value){
+            if(isset($data[$key]) && !is_null($data[$key]) && $key != 'city'){
+                $where[] = [$key, 'like', "%{$data[$key]}%"];
+                $withPath.="&{$key}={$data[$key]}";
+                $searched[$key] = $data[$key];
+            }
+        }
+        if (isset($data['city'])) {
+            $jobs = Job::whereHas('user',function($u) use ($data){
+                $u->whereHas('company',function($c) use ($data){
+                    $c->where('city_id','=',$data['city']);
+                });
+            })->where($where)->paginate('3');
+            $withPath.="&city={$data['city']}";
+            $jobs->withPath('browse-jobs?'.$withPath);
+            $searched['city'] = $data['city'];
+        }else{
+            $jobs = Job::where($where)->paginate('3');
+            $jobs->withPath('browse-jobs?'.$withPath);
+        }
+        return ['jobs' => $jobs, 'searched' => $searched];
+    }
+
+    public function apply(int $id)
+    {
+        $job = Job::find($id);
+        $job->candidate()->attach(auth()->user()->candidate->id);
+        $application = new Aplication();
+        $application->fill([
+            'company_id' => $job->user->company->id,
+            'text' => "User ".auth()->user()->name." appliyed to {$job->title} Job",
+        ]);
+        $application->save();
+        return $job;
     }
 }
