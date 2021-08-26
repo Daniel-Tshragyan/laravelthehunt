@@ -17,7 +17,6 @@ class CreateJobsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('location');
-            $table->string('job_tags');
             $table->string('description');
             $table->date('closing_date');
             $table->decimal('price');

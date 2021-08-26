@@ -55,7 +55,24 @@
             </td>
             <td>
 
-                {{ $job->job_tags }}
+                @foreach($job->tags as $tag)
+                    <a href="{{ route('browse-jobs',['job_tag' => $tag->id,'title' => Request::get('title'),'location' => Request::get('location'),'city' => Request::get('city')]) }}">
+                        <span class="full-time" style="
+                            font-size: 11px;
+                            font-weight: 500;
+                            display: inline-block;
+                            padding: 5px 15px;
+                            border-radius: 50px;
+                            cursor: pointer;
+                            text-transform: uppercase;
+                            color: #26ae61;
+                            background: #d5ffe7;
+                        @if($tag->id ==$searched['job_tag'])
+                            background: red;
+                        @endif
+                            ">{{ $tag->title }}</span>
+                    </a>
+                @endforeach
             </td>
             <td>
 

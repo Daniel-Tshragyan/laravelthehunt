@@ -17,7 +17,7 @@
                 <div class="col-lg-9 col-md-12 col-xs-12">
                     <div class="post-job box">
                         <h3 class="job-title">Post a new Job</h3>
-                        <form class="form-ad" action="{{route('frontjob.store')}}" method="post">
+                        <form class="form-ad" action="{{route('front-job.store')}}" method="post">
                             @csrf
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">
                             <div class="form-group">
@@ -59,8 +59,11 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Job Tags</label>
-                                <input type="text" name="job_tags" value="{{ old('job_tags') }}" class="form-control" placeholder="e.g.PHP,Social Media,Management">
-                                <p class="note">Comma separate tags, such as required skills or technologies, for this job.</p>
+                                <select class="tags1 form-control" name="job_tags[]" multiple="multiple">
+                                    @foreach($tags as $tag)
+                                        <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             @if ($errors->has('job_tags'))
                                 <div class="alert alert-danger" role="alert">

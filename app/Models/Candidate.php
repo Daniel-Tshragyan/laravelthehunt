@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Candidate extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['user_id', 'age', 'location', 'city_id', 'image', 'profession'];
 
     public function city()
@@ -19,6 +17,11 @@ class Candidate extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'user_id');
+    }
+
+    public function job()
+    {
+        $this->belongsToMany(Job::class, CandidateJob::class, 'candidate_id', 'job_id');
     }
 
 }

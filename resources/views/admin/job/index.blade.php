@@ -46,7 +46,15 @@
                     <input class="form-control" value="{{ $searched['location'] }}" type="text" name="location">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['job_tags'] }}" type="text" name="job_tags">
+                    <select name="job_tags[]" id="" multiple="multiple" class="tags1 form-control">
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}"
+                                @if(in_array($tag->id, $searched['job_tags']))
+                                    selected="selected"
+                                @endif
+                            >{{ $tag->title }}</option>
+                        @endforeach
+                    </select>
                 </td>
                 <td>
                     <input class="form-control" value="{{ $searched['description'] }}" type="text" name="description">
@@ -111,7 +119,19 @@
                 </td>
 
                 <td>
-                    {{ $job->job_tags }}
+                    @foreach($job->tags as $tag)
+                        <span class="full-time" style="
+                            font-size: 11px;
+                            font-weight: 500;
+                            display: inline-block;
+                            padding: 5px 15px;
+                            border-radius: 50px;
+                            cursor: pointer;
+                            text-transform: uppercase;
+                            color: #26ae61;
+                            background: #d5ffe7;
+                        ">{{ $tag->title }}</span>
+                    @endforeach
                 </td>
                 <td>
                     {{ $job->description }}

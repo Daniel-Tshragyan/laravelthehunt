@@ -13,7 +13,12 @@ class Company extends Model
 
     public function city()
     {
-        return $this->belongsTo(City::class, 'id', 'city_id');
+        return $this->belongsTo(City::class, 'city_id', 'id');
+    }
+
+    public function aplications()
+    {
+        return $this->hasMany(Aplication::class,'company_id','id');
     }
 
 

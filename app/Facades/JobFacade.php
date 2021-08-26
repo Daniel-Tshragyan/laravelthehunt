@@ -13,7 +13,8 @@ use App\Modles\Job;
  * @method static jobFill(array $data, Job $job)
  * @method static JobUpdate(array $data, Job $job)
  * @method static jobFrontFill(array $data)
- * @method static changeCategoryJobCount($id)
+ * @method static changeCategoryJobCount(int $id)
+ * @method static apply(int $id)
  */
 class JobFacade extends Facade
 {

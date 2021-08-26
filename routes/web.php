@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\FrontEnd\Company\ApplicationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
+use App\Http\Controllers\FrontEnd\Candidate\JobController as CandidateJob;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,91 +18,89 @@ use App\Http\Controllers\FrontEnd\Company\JobController;
 |
 */
 Route::get('/', function () {
-    return view('viewarchive.welcome');
+    return view('frontend.home.welcome');
 })->name('home');
 
 Route::get('/home', function () {
-    return view('viewarchive.welcome');
+    return view('frontend.home.welcome');
 })->name('home');
 Route::get('/home2', function () {
-    return view('viewarchive.index2');
+    return view('frontend.home.index2');
 })->name('index2');
 Route::get('/about', function () {
-    return view('viewarchive.about');
+    return view('frontend.main.about');
 })->name('about');
 Route::get('/add-resume', function () {
-    return view('viewarchive.add-resume');
+    return view('frontend.candidate.resume.add-resume');
 })->name('add-resume');
 Route::get('/blog', function () {
     return view('blog');
 })->name('blog');
 Route::get('/blog-fuul-width', function () {
-    return view('viewarchive.blog-full-width');
+    return view('frontend.blog.blog-full-width');
 })->name('blog-full-width');
 Route::get('/blog-left-sidebar', function () {
-    return view('viewarchive.blog-left-sidebar');
+    return view('frontend.blog.blog-left-sidebar');
 })->name('blog-left-sidebar');
 Route::get('/bookmarked', function () {
-    return view('viewarchive.bookmarked');
+    return view('frontend.company.job.bookmarked');
 })->name('bookmarked');
 Route::get('/browse-categories', function () {
-    return view('viewarchive.browse-categories');
+    return view('frontend.category.browse-categories');
 })->name('browse-categories');
-Route::get('/browse-jobs', function () {
-    return view('viewarchive.browse-jobs');
-})->name('browse-jobs');
+
 Route::get('/browse-resumes', function () {
-    return view('viewarchive.browse-resumes');
+    return view('frontend.candidate.resume.add-resume');
 })->name('browse-resumes');
 Route::get('/change-password', function () {
-    return view('viewarchive.change-password');
+    return view('auth.change-password');
 })->name('change-password');
 Route::get('/contact', function () {
-    return view('viewarchive.contact');
+    return view('frontend.main.contact');
 })->name('contact');
 Route::get('/faq', function () {
-    return view('viewarchive.faq');
+    return view('frontend.main.faq');
 })->name('faq');
 Route::get('/job-alerts', function () {
-    return view('viewarchive.job-alerts');
+    return view('frontend.candidate.job.job-alerts');
 })->name('job-alerts');
-Route::get('/job-details', function () {
-    return view('viewarchive.job-details');
-})->name('job-details');
 Route::get('/job-page', function () {
-    return view('viewarchive.job-page');
-})->name('job-page');
-Route::get('/manage-applications', function () {
-    return view('viewarchive.manage-applications');
-})->name('manage-applications');
+    return view('frontend.candidate.job.job-page');
+})->name('job-page')->middleware(['auth', 'IsCandidate']);
+
 
 Route::get('/manage-resumes', function () {
-    return view('viewarchive.manage-resumes');
-})->name('manage-resumes');
+    return view('frontend.candidate.resume.manage-resumes');
+})->name('manage-resumes')->middleware(['auth', 'IsCandidate']);
 Route::get('/notifications', function () {
-    return view('viewarchive.notifications');
+    return view('frontend.candidate.notifications.notifications');
 })->name('notifications');
 
 Route::get('/privacy-policy', function () {
-    return view('viewarchive.privacy-policy');
+    return view('frontend.main.privacy-policy');
 })->name('privacy-policy');
 Route::get('/resume', function () {
-    return view('viewarchive.resume');
+    return view('frontend.candidate.resume.resume');
 })->name('resume');
 Route::get('/single-post', function () {
-    return view('viewarchive.single-post');
+    return view('frontend.blog.single-post');
 })->name('single-post');
 Route::get('/log', function () {
-    return view('viewarchive.login');
+    return view('auth.login');
 })->name('login1');
-Route::get('/reg', [HomeController::class, 'candidatreg'])->name('reg');
-Route::get('/regcompany', [HomeController::class, 'companyreg'])->name('reg1');
+Route::get('/reg', [UserController::class, 'candidateReg'])->name('reg');
+Route::get('/reg-company', [UserController::class, 'companyReg'])->name('reg1');
 Route::get('/pricing', function () {
-    return view('viewarchive.pricing');
+    return view('frontend.main.pricing');
 })->name('pricing');
 
-Route::resource('/frontjob',JobController::class);
+//_____________________________________________________________________________
 
+Route::get('/browse-jobs', [CandidateJob::class, 'index'])->name('browse-jobs');
+Route::get('/show-job/{id}', [CandidateJob::class, 'show'])->name('show-job');
+Route::post('/apply-job/{id}', [CandidateJob::class, 'applyJob'])->middleware(['auth', 'isCandidate'])->name('apply-job');
+Route::get('/manage-applications', [ApplicationController::class, 'index'])->middleware(['auth', 'isCompany'])->name('manage-applications');
+Route::resource('/front-job', JobController::class)->middleware(['auth', 'isCompany']);
 
 
 Auth::routes();

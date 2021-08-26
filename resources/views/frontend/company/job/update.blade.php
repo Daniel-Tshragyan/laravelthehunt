@@ -17,7 +17,7 @@
                 <div class="col-lg-9 col-md-12 col-xs-12">
                     <div class="post-job box">
                         <h3 class="job-title">Post a new Job</h3>
-                        <form class="form-ad" action="{{route('frontjob.update',['frontjob' => $job])}}" method="post">
+                        <form class="form-ad" action="{{route('front-job.update',['front_job' => $job])}}" method="post">
                             @csrf
                             @method('put')
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">
@@ -64,7 +64,15 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Job Tags</label>
-                                <input type="text" value="{{ $job->job_tags }}" name="job_tags" class="form-control" placeholder="e.g.PHP,Social Media,Management">
+                                <select class="tags1 form-control" name="job_tags[]" multiple="multiple">
+                                    @foreach($tags as $tag)
+                                        <option value="{{ $tag->id }}"
+                                                @if(in_array($tag->id, $job->tags->pluck('id')->toArray())))
+                                                selected="selected"
+                                            @endif
+                                        >{{ $tag->title }}</option>
+                                    @endforeach
+                                </select>
                                 <p class="note">Comma separate tags, such as required skills or technologies, for this job.</p>
                             </div>
                             @if ($errors->has('job_tags'))

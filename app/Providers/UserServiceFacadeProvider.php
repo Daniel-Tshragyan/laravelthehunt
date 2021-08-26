@@ -25,7 +25,7 @@ class UserServiceFacadeProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton('userservicehelper', function () {
+        $this->app->singleton('userfacade', function () {
             return new UserService();
         });
     }
