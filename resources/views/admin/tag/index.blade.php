@@ -11,7 +11,7 @@
             {{ Session::get('message') }}
         </div>
     @endif
-    <h1> All Jobs</h1>
+    <h1> All Tags</h1>
     <table class="table table-bordered">
         <thead>
         <tr>

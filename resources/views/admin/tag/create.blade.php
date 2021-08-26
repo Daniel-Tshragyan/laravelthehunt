@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     {{ Breadcrumbs::render('tagCreate') }}
-    <h1>Add Job</h1>
+    <h1>Add Tag</h1>
     <form action="{{route('tag.store')}}" class="w-50" method="post">
         @csrf
         <input type="text" value="{{ old('title') }}" name="title" placeholder="Title" class="form-control">
