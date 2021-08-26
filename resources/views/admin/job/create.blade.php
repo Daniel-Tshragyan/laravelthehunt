@@ -28,8 +28,12 @@
                 {{ $errors->first('closing_date') }}
             </div>
         @endif
-
-        <input type="text" value="{{ old('job_tags') }}" name="job_tags" placeholder="Job Tags" class="form-control">
+        <select class="tags1 form-control" name="job_tags[]" multiple="multiple">
+            @foreach($tags as $tag)
+                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+            @endforeach
+        </select>
+        <br>
         <br>
         @if ($errors->has('job_tags'))
             <div class="alert alert-danger" role="alert">

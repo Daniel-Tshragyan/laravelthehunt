@@ -149,7 +149,7 @@
                         <img src="{{asset('img/features/img1.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Software Engineer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Software Engineer</a></h3>--}}
                         <p class="brand">MizTech</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -165,7 +165,7 @@
                         <img src="{{asset('img/features/img2.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Graphic Designer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Graphic Designer</a></h3>--}}
                         <p class="brand">Hunter Inc.</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -181,7 +181,7 @@
                         <img src="{{asset('img/features/img3.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Managing Director</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Managing Director</a></h3>--}}
                         <p class="brand">MagNews</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -197,7 +197,7 @@
                         <img src="{{asset('img/features/img4.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Software Engineer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Software Engineer</a></h3>--}}
                         <p class="brand">AmazeSoft</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -213,7 +213,7 @@
                         <img src="{{asset('img/features/img5.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Graphic Designer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Graphic Designer</a></h3>--}}
                         <p class="brand">Bingo</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -229,7 +229,7 @@
                         <img src="{{asset('img/features/img6.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Managing Director</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Managing Director</a></h3>--}}
                         <p class="brand">MagNews</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -324,7 +324,7 @@
                         <img src="{{asset('img/features/img1.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">UX Designer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">UX Designer</a></h3>--}}
                         <p class="brand">MizTech</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -343,7 +343,7 @@
                         <img src="{{asset('img/features/img2.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">UI Designer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">UI Designer</a></h3>--}}
                         <p class="brand">Hunter Inc.</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -362,7 +362,7 @@
                         <img src="{{asset('img/features/img3.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Web Developer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Web Developer</a></h3>--}}
                         <p class="brand">MagNews</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -381,7 +381,7 @@
                         <img src="{{asset('img/features/img4.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">UX Designer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">UX Designer</a></h3>--}}
                         <p class="brand">AmazeSoft</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -400,7 +400,7 @@
                         <img src="{{asset('img/features/img5.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Digital Marketer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Digital Marketer</a></h3>--}}
                         <p class="brand">Bingo</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>
@@ -419,7 +419,7 @@
                         <img src="{{asset('img/features/img6.png')}}" alt="">
                     </div>
                     <div class="content">
-                        <h3><a href="{{route('job-details')}}">Web Developer</a></h3>
+{{--                        <h3><a href="{{route('job-details')}}">Web Developer</a></h3>--}}
                         <p class="brand">MagNews</p>
                         <div class="tags">
                             <span><i class="lni-map-marker"></i> New York</span>

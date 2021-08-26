@@ -137,16 +137,16 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
-    public function candidatreg()
+    public function candidateReg()
     {
-        $city = City::all();
-        return view('viewarchive.register', ['cities' => $city]);
+        $cities = City::all();
+        return view('auth.register', ['cities' => $cities]);
     }
 
-    public function companyreg()
+    public function companyReg()
     {
-        $city = City::all();
-        return view('viewarchive.register1', ['cities' => $city]);
+        $cities = City::all();
+        return view('auth.register1', ['cities' => $cities]);
     }
 
 }

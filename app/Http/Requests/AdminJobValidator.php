@@ -26,7 +26,7 @@ class AdminJobValidator extends FormRequest
         return [
             'title' => ['required', 'string'],
             'location' => ['required', 'string'],
-            'job_tags' => ['required', 'string'],
+            'job_tags' => ['required', 'array'],
             'description' => ['required', 'string'],
             'closing_date' => ['required', 'date'],
             'price' => ['required', 'numeric','digits_between:1,6'],

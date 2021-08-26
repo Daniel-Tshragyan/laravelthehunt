@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FrontEnd\Company;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,8 +34,9 @@ class JobController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
-        return view('frontend.company.job.create', ['categories' => $category]);
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('frontend.company.job.create', compact('categories','tags'));
     }
 
     /**
@@ -47,8 +49,8 @@ class JobController extends Controller
     {
         JobFacade::jobFrontFill($request->validated());
         JobFacade::changeCategoryJobCount($request->validated()['category_id']);
-        Session::flash('message', 'Job Updated');
-        return redirect()->route('frontjob.index');
+        Session::flash('message', 'Job Added');
+        return redirect()->route('front-job.index');
     }
 
     /**
@@ -57,9 +59,16 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $frontjob)
+    public function show(Job $frontJob)
     {
-        return view('frontend.company.job.show', ['job' => $frontjob]);
+        $applyed = false;
+
+        foreach($frontJob->candidates as $candidate){
+            if($candidate->id == auth()->user()->candidate->id){
+                $applyed = true;
+            }
+        }
+        return view('frontend.company.job.show', ['job' => $frontJob,'applyed' => $applyed]);
     }
 
     /**
@@ -68,11 +77,13 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $frontjob)
+    public function edit(Job $front_job)
     {
         $category = Category::all();
-        $price = (int)$frontjob->price;
-        return view('frontend.company.job.update', ['job' => $frontjob, 'categories' => $category, 'price' => $price]);
+        $price = (int)$front_job->price;
+        $tags = Tag::all();
+//         dd($front_job->tags->pluck('id')->toArray());
+        return view('frontend.company.job.update', ['tags' => $tags, 'job' => $front_job, 'categories' => $category, 'price' => $price]);
     }
 
     /**
@@ -82,16 +93,16 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(JobValidation $request, Job $frontjob)
+    public function update(JobValidation $request, Job $front_job)
     {
-        $id = $frontjob->category_id;
-        JobFacade::frontJobUpdate($request->validated(), $frontjob);
+        $id = $front_job->category_id;
+        JobFacade::frontJobUpdate($request->validated(), $front_job);
         if ($request->input('category_id') != $id) {
             JobFacade::changeCategoryJobCount($id);
-            JobFacade::changeCategoryJobCount($frontjob->category_id);
+            JobFacade::changeCategoryJobCount($front_job->category_id);
         }
         Session::flash('message', 'Job Updated');
-        return redirect()->route('frontjob.index');
+        return redirect()->route('front-job.index');
     }
 
     /**
@@ -105,6 +116,6 @@ class JobController extends Controller
         JobFacade::deleteJob($frontjob);
         JobFacade::changeCategoryJobCount($frontjob->category_id);
         Session::flash('message', 'Job Deleted');
-        return redirect()->route('frontjob.index');
+        return redirect()->route('front-job.index');
     }
 }

@@ -14,7 +14,7 @@
             @foreach($sorts as $key => $val)
                 @if($key != 'company_id')
                     <div style="margin:0 0 0 10px;padding:0; " class="col-lg-3 col-md-3 col-xs-12">
-                        <a style="margin:10px" href="{{ route('frontjob.index',['order_by' => $key, 'how' => $val]) }}">
+                        <a style="margin:10px" href="{{ route('manage-applications',['order_by' => $key, 'how' => $val]) }}">
                             @if($key == 'category_id')
                                 category
                             @else
@@ -51,9 +51,11 @@
                 <div class="text-left">
                     <p style="margin-right:10px;display:inline-block">{{ $application->id }}</p>
                     <p style="display:inline-block">{{ $application->text }}.</p>
+                    <br>
                     <span class="time"><i class="lni-alarm-clock"></i>{{ $application->created_at }}</span>
                 </div>
             </div>
-    {{ $applications->links() }}
     @endforeach
+
+    {{ $applications->links() }}
 @endsection

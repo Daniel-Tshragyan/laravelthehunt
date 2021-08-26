@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TagController;
 
 
 
@@ -19,5 +20,6 @@ Route::prefix('admin')->group(function () {
     Route::resource('/category',CategoryController::class)->middleware(['isadmin','trim']);
     Route::resource('/job',JobController::class)->middleware(['isadmin','trim']);
     Route::resource('/user',UserController::class)->middleware(['isadmin','trim']);
+    Route::resource('/tag',TagController::class)->middleware(['isadmin','trim']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('isadmin')->name('adminDashboard');
 });

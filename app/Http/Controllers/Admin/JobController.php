@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Job;
+use App\Models\Tag;
 use App\Models\User;
 use App\Facades\JobFacade;
 use Illuminate\Http\Request;
@@ -39,7 +40,8 @@ class JobController extends Controller
     {
         $companies = User::where(['role' => self::companyRole])->get();
         $categories = Category::all();
-        return view('admin.job.create', ['categories' => $categories, 'companies' => $companies]);
+        $tags = Tag::all();
+        return view('admin.job.create', compact('categories', 'companies', 'tags'));
     }
 
     /**
@@ -79,7 +81,8 @@ class JobController extends Controller
         $companies = $user->where(['role' => '2'])->get();
         $price = (int)$job->price;
         $categories = Category::all();
-        return view('admin.job.update', compact('companies', 'price', 'categories', 'job'));
+        $tags = Tag::all();
+        return view('admin.job.update', compact('tags','companies', 'price', 'categories', 'job'));
     }
 
     /**

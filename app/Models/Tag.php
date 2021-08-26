@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Aplication extends Model
+class Tag extends Model
 {
+
     protected $fillable = [
-        'company_id',
-        'text'
+        'title',
     ];
 
-    public function Company()
+    public function jobs()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsToMany(Job::class, JobTag::class, 'tag_id', 'job_id');
     }
 }

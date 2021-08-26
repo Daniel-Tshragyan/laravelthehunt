@@ -18,7 +18,7 @@
                             <h3 class="product-title">{{ $job->title }}</h3>
                             <p class="brand">{{ $job->user->name }}</p>
                             <div class="tags">
-                                <span><i class="lni-map-marker"></i> {{ $job->location }}</span>
+                                <span><i class="lni-map-marker"></i> {{ $job->location }}</span><br>
                                 <span><i class="lni-calendar"></i> Deadline {{ $job->closing_date }}</span>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <form method="post" action="{{ route('apply-job',['id' => $job->id]) }}">
                             @csrf
                             @if(!$applyed)
-                                    <button type="submit" class="btn btn-success" >Apply Job</button>
+                                <button type="submit" class="btn btn-success" >Apply Job</button>
                             @else
                                 <p class="text-success">Already Applyed</p>
                             @endif

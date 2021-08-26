@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use App\Service\UserService;
+use App\Service\TagService;
 use Illuminate\Support\ServiceProvider;
-use App\Facades\UserServiceHelper;
 
-class UserServiceFacadeProvider extends ServiceProvider
+class TagProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -25,8 +24,8 @@ class UserServiceFacadeProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton('userfacade', function () {
-            return new UserService();
+        $this->app->singleton('tagfacade', function () {
+            return new TagService();
         });
     }
 }

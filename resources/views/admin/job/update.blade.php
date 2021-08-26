@@ -41,7 +41,15 @@
         <label for="">
             Job Tags
         </label>
-        <input type="text" name="job_tags" value="{{ $job->job_tags }}" placeholder="Job Tags" class="form-control">
+        <select class="tags1 form-control" name="job_tags[]" multiple="multiple">
+            @foreach($tags as $tag)
+                <option value="{{ $tag->id }}"
+                @if(in_array($tag->id, $job->tags->pluck('id')->toArray()))
+                    selected="selected"
+                @endif
+                >{{ $tag->title }}</option>
+            @endforeach
+        </select>
         <br>
 
         @if ($errors->has('job_tags'))

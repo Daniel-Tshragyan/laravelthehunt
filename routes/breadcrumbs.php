@@ -71,3 +71,19 @@ Breadcrumbs::for('userShow', function (BreadcrumbTrail $trail) {
     $trail->parent('user');
     $trail->push('User');
 });
+Breadcrumbs::for('tag', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin');
+    $trail->push('All Tags', route('tag.index'));
+});
+Breadcrumbs::for('tagCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('tag');
+    $trail->push('Create tag', route('tag.create'));
+});
+Breadcrumbs::for('tagUpdate', function (BreadcrumbTrail $trail) {
+    $trail->parent('tag');
+    $trail->push('Update tag');
+});
+Breadcrumbs::for('tagShow', function (BreadcrumbTrail $trail) {
+    $trail->parent('tag');
+    $trail->push('tag');
+});

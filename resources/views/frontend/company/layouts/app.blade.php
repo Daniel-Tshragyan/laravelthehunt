@@ -23,11 +23,10 @@
                     <div class="right-sideabr">
                         <h4>Manage Account</h4>
                         <ul class="list-item">
-                            <li><a href="{{route('resume')}}">My Resume</a></li>
                             <li><a href="{{route('bookmarked')}}">Bookmarked Jobs</a></li>
                             <li><a href="{{route('notifications')}}">Notifications <span class="notinumber">2</span></a></li>
                             <li><a class="@yield('manageApplication')" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                            <li><a class="@yield('manageApplication')" href="{{route('frontjob.index')}}">Manage Jobs</a></li>
+                            <li><a class="@yield('manageApplication')" href="{{route('front-job.index')}}">Manage Jobs</a></li>
                             <li><a href="{{route('job-alerts')}}">Job Alerts</a></li>
                             <li><a href="{{route('change-password')}}">Change Password</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">
