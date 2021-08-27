@@ -26,6 +26,10 @@ class Company extends Model
         return $this->hasMany(Aplication::class, 'company_id', 'id');
     }
 
+    public function payment()
+    {
+        return $this->hasOne(PlanPayment::class, 'company_id', 'id');
+    }
 
     public function user()
     {

@@ -22,4 +22,12 @@ class Plan extends Model
     {
         return $this->hasMany(Company::class, 'id', 'plan_id');
     }
+
+
+
+    public function payments()
+    {
+        return $this->hasMany(PlanPayment::class,'plan_id','id');
+    }
+
 }

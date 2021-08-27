@@ -32,7 +32,7 @@ class PlanValidation extends FormRequest
         if ($this->routeMethod[0] == 'PUT') {
             return [
                 'title' => ['required', 'string', 'unique:App\Models\PLan,title,' . $this->plan->id],
-                'expired_days' => ['required', 'numeric', 'digits_between:1,6'],
+                'expired_days' => ['required', 'numeric'],
                 'jobs_count' => ['required', 'numeric', 'digits_between:1,6'],
                 'featured_job' => ['nullable', 'in:on'],
                 'job_listing' => ['nullable', 'in:on'],

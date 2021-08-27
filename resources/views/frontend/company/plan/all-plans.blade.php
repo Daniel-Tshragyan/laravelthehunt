@@ -5,6 +5,28 @@
             {{ Session::get('message') }}
         </div>
     @endif
+        <div class="modal paymentModal" tabindex="-1" role="dialog" style="display:none">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="flex-direction: column">
+                        <h5 class="modal-title">Pay For Plan </h5>
+                        <br>
+                        <h3>
+                            <span>$</span><span class="plan_price"></span><span>/Month</span>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('pricing-apply') }}" method="post">
+                            @csrf
+                            <input type="hidden" class="plan_name" name="id">
+                            <button type="submit" class="btn btn-success">
+                                Pay
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     <div class="row pricing-tables " style="display:flex;justify-content:space-between">
         @foreach($plans as $plan)
             <div class="col-lg-4 col-md-4 col-xs-12">
@@ -37,13 +59,9 @@
                     </div>
                     <div class="plan-button">
                         @if($plan->id != auth()->user()->company->plan_id)
-                            <form action="{{ route('pricing-apply') }}" method="post">
-                                @csrf
-                                <input type="hidden" value="{{ $plan->id }}" name="id">
-                                <button class="btn btn-success">
+                                <button class="btn btn-success getplan" data-id="{{ $plan->id }}" data-price="{{ $plan->price }}">
                                     Get Started
                                 </button>
-                            </form>
                         @else
                             <p class="text-primary">Your Plan</p>
                         @endif

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\Plan;
+use App\Models\PlanPayment;
 use App\Models\User;
 
 class PlanService
@@ -102,8 +103,10 @@ class PlanService
 
     public function apply($id)
     {
-        $user = User::find(auth()->user()->id);
-        $user->company->fill(['plan_id' => $id]);
-        return $user->company->save();
+        $payment = new PlanPayment();
+        $payment->fill(['plan_id' => $id, 'company_id' => auth()->user()->company->id]);
+        $payment->save();
+        auth()->user()->company->fill(['plan_id' => $id]);
+        return auth()->user()->company->save();
     }
 }
