@@ -42,6 +42,9 @@
                                 <input type="text" value="{{ old('title') }}" class="form-control" name="title"
                                        placeholder="Write job title">
                             </div>
+                            <input type="text" name="a[]" value="a">
+                            <input type="text" name="a[]" value="ab">
+                            <input type="text" name="a[]" value="ac">
                             @if ($errors->has('title'))
                                 <div class="alert alert-danger" role="alert">
                                     {{ $errors->first('title') }}

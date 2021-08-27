@@ -116,10 +116,10 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $frontjob)
+    public function destroy(Job $front_job)
     {
-        JobFacade::deleteJob($frontjob);
-        JobFacade::changeCategoryJobCount($frontjob->category_id);
+        JobFacade::deleteJob($front_job);
+        JobFacade::changeCategoryJobCount($front_job->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('front-job.index');
     }
