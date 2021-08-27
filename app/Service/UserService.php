@@ -52,11 +52,11 @@ class UserService
     public function getPaginationArguments($data)
     {
         if (!empty($data['where'])) {
-            $users = User::where($data['where'])->whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users = User::where($data['where'])->whereNotIn('email', ['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
             $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $users = User::whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users = User::whereNotIn('email', ['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
             $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}");
         }
         if ($data['how'] == 'asc') {
@@ -88,7 +88,7 @@ class UserService
     public function updateCandidate($data, User $user)
     {
         $fillInformation = [
-            'city_id' => $data['city'] ,
+            'city_id' => $data['city'],
             'location' => $data['location'],
             'age' => $data['age'],
             'profession' => $data['profession'],
@@ -113,7 +113,7 @@ class UserService
     {
         $data = $data;
         $fillInformation = [
-            'city_id' => $data['city'] ,
+            'city_id' => $data['city'],
             'location' => $data['location'],
             'age' => $data['tagline'],
             'profession' => $data['comapnyname'],

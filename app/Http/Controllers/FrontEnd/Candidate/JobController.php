@@ -26,6 +26,6 @@ class JobController extends Controller
     {
         $data = JobFacade::showCandidateJob($id);
 
-        return view('frontend.candidate.job.show-job',$data);
+        return view('frontend.candidate.job.show-job', $data);
     }
 }

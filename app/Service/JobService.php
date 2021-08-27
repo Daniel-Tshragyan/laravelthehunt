@@ -190,7 +190,7 @@ class JobService
         $where = [];
         $withPath = '';
         $tag = '';
-        if(isset($data['city'])){
+        if (isset($data['city'])) {
             $searched['city'] = $data['city'];
         }
         foreach ($searched as $key => $value) {
@@ -200,12 +200,12 @@ class JobService
                 $searched[$key] = $data[$key];
             }
         }
-        if (isset($data['job_tag'])){
+        if (isset($data['job_tag'])) {
 //            die('ka');
             $tag = $data['job_tag'];
             $searched['job_tag'] = $data['job_tag'];
-            $jobs = $this->getCandidateJobsWithTags($data,$tag, $where, $withPath);
-        }else {
+            $jobs = $this->getCandidateJobsWithTags($data, $tag, $where, $withPath);
+        } else {
 //            die('chka');
             $searched['job_tag'] = $tag;
             $jobs = $this->getCandidateJobsWithOutTags($data, $where, $withPath);
@@ -214,33 +214,34 @@ class JobService
         $applyed = false;
         $tags = Tag::all();
 
-        return compact('jobs','searched','tags','applyed','cities');
+        return compact('jobs', 'searched', 'tags', 'applyed', 'cities');
     }
 
     public function getCandidateJobsWithTags($data, $job_tag, $where, $withPath)
     {
-            if (isset($data['city'])) {
-                $jobs = Job::whereHas('user', function ($u) use ($data) {
-                    $u->whereHas('company', function ($c) use ($data) {
-                        $c->where('city_id', '=', $data['city']);
-                    });
-                })->whereHas('tags',function($tag) use ($job_tag){
-                    $tag->whereIn('tags.id', [$job_tag]);
-                })->where($where)->paginate('3');
-                $withPath .= "&city={$data['city']}";
-                $withPath .= "&job_tag={$job_tag}";
-                $jobs->withPath('browse-jobs?' . $withPath);
-                $searched['city'] = $data['city'];
-            } else {
-                $jobs = Job::whereHas('tags',function($tag) use ($job_tag){
-                    $tag->whereIn('tags.id', [$job_tag]);
-                })->where($where)->paginate(3);
-                $withPath .= "&job_tag={$job_tag}";
-                $jobs->withPath('browse-jobs?' . $withPath);
-            }
+        if (isset($data['city'])) {
+            $jobs = Job::whereHas('user', function ($u) use ($data) {
+                $u->whereHas('company', function ($c) use ($data) {
+                    $c->where('city_id', '=', $data['city']);
+                });
+            })->whereHas('tags', function ($tag) use ($job_tag) {
+                $tag->whereIn('tags.id', [$job_tag]);
+            })->where($where)->paginate('3');
+            $withPath .= "&city={$data['city']}";
+            $withPath .= "&job_tag={$job_tag}";
+            $jobs->withPath('browse-jobs?' . $withPath);
+            $searched['city'] = $data['city'];
+        } else {
+            $jobs = Job::whereHas('tags', function ($tag) use ($job_tag) {
+                $tag->whereIn('tags.id', [$job_tag]);
+            })->where($where)->paginate(3);
+            $withPath .= "&job_tag={$job_tag}";
+            $jobs->withPath('browse-jobs?' . $withPath);
+        }
 
         return $jobs;
     }
+
     public function getCandidateJobsWithOutTags($data, $where, $withPath)
     {
         if (isset($data['city'])) {
@@ -278,12 +279,12 @@ class JobService
     {
         $job = Job::find($id);
         $applyed = false;
-        foreach($job->candidates as $candidate){
-            if($candidate->id == auth()->user()->candidate->id){
+        foreach ($job->candidates as $candidate) {
+            if ($candidate->id == auth()->user()->candidate->id) {
                 $applyed = true;
             }
         }
         $tags = Tag::all();
-        return compact('tags', 'job','applyed');
+        return compact('tags', 'job', 'applyed');
     }
 }

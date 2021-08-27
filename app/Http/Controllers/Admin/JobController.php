@@ -89,7 +89,7 @@ class JobController extends Controller
         $price = (int)$job->price;
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.job.update', compact('tags','companies', 'price', 'categories', 'job'));
+        return view('admin.job.update', compact('tags', 'companies', 'price', 'categories', 'job'));
     }
 
     /**

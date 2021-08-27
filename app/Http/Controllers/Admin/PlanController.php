@@ -19,7 +19,7 @@ class PlanController extends Controller
     public function index(Request $request)
     {
         $paginationArguments = PlanFacade::paginationArguments($request->all());
-        return view('admin.plan.index',$paginationArguments);
+        return view('admin.plan.index', $paginationArguments);
     }
 
     /**
@@ -35,7 +35,7 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(PlanValidation $request)
@@ -48,36 +48,36 @@ class PlanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Plan  $plan
+     * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
     public function show(Plan $plan)
     {
-        return view('admin.plan.show',['plan' => $plan]);
+        return view('admin.plan.show', ['plan' => $plan]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Plan  $plan
+     * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
     public function edit(Plan $plan)
     {
         $price = (int)$plan->price;
-        return view('admin.plan.update',['plan' => $plan,'price' => $price]);
+        return view('admin.plan.update', ['plan' => $plan, 'price' => $price]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Plan  $plan
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
     public function update(PlanValidation $request, Plan $plan)
     {
-        PlanFacade::updatePlan($request->validated(),$plan);
+        PlanFacade::updatePlan($request->validated(), $plan);
         Session::flash('message', 'Plan Updated');
         return redirect()->route('plan.index');
     }
@@ -85,7 +85,7 @@ class PlanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Plan  $plan
+     * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
     public function destroy(Plan $plan)

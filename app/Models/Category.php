@@ -16,6 +16,6 @@ class Category extends Model
 
     public function job()
     {
-        return $this->hasMany(Job::class,'category_id','id');
+        return $this->hasMany(Job::class, 'category_id', 'id');
     }
 }

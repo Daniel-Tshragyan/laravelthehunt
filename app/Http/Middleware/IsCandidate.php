@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 class IsCandidate
 {
     const ROLE_CANDIDATE = 1;
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)

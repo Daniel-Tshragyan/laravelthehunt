@@ -6,7 +6,7 @@
         </div>
     @endif
     <div class="row pricing-tables " style="display:flex;justify-content:space-between">
-    @foreach($plans as $plan)
+        @foreach($plans as $plan)
             <div class="col-lg-4 col-md-4 col-xs-12">
                 <div class="pricing-table border-color-defult">
                     <div class="pricing-details">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-    @endforeach
+        @endforeach
     </div>
     {{ $plans->links() }}
 

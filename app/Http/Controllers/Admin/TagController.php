@@ -19,7 +19,7 @@ class TagController extends Controller
     public function index(Request $request)
     {
         $pagination = TagFacade::paginationArguments($request->all());
-        return view('admin.tag.index',$pagination);
+        return view('admin.tag.index', $pagination);
     }
 
     /**
@@ -35,7 +35,7 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(TagValidator $request)
@@ -52,7 +52,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        return view('admin.tag.show',['tag' => $tag]);
+        return view('admin.tag.show', ['tag' => $tag]);
     }
 
     /**
@@ -62,18 +62,18 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        return view('admin.tag.update',['tag' => $tag]);
+        return view('admin.tag.update', ['tag' => $tag]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(TagValidator $request, Tag $tag)
     {
-        TagFacade::updateTag($tag,$request->validated());
+        TagFacade::updateTag($tag, $request->validated());
         Session::flash('message', 'Job Updated');
         return redirect()->route('tag.index');
     }

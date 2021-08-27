@@ -64,7 +64,7 @@ class PlanService
             $data['how'] = 'asc';
         }
         $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'jobs_count' => $data['how'],
-             'expired_days' => $data['how'],'price' => $data['how'],'featured_job' => $data['how'], 'job_listing' => $data['how'],
+            'expired_days' => $data['how'], 'price' => $data['how'], 'featured_job' => $data['how'], 'job_listing' => $data['how'],
             'manage_applications' => $data['how']];
         $newarray = ['plans' => $plans, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
@@ -100,7 +100,8 @@ class PlanService
         return $plan->update();
     }
 
-    public function apply($id){
+    public function apply($id)
+    {
         $user = User::find(auth()->user()->id);
         $user->company->fill(['plan_id' => $id]);
         return $user->company->save();

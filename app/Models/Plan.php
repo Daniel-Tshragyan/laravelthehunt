@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
 
-    protected $fillable =[
+    protected $fillable = [
         'title',
         'jobs_count',
         'expired_days',
@@ -20,6 +20,6 @@ class Plan extends Model
 
     public function companies()
     {
-        return $this->hasMany(Company::class,'id','plan_id');
+        return $this->hasMany(Company::class, 'id', 'plan_id');
     }
 }

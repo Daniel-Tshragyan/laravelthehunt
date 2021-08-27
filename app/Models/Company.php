@@ -23,9 +23,8 @@ class Company extends Model
 
     public function aplications()
     {
-        return $this->hasMany(Aplication::class,'company_id','id');
+        return $this->hasMany(Aplication::class, 'company_id', 'id');
     }
-
 
 
     public function user()
