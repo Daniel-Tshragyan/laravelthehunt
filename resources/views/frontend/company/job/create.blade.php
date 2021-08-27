@@ -42,7 +42,6 @@
                                 <input type="text" value="{{ old('title') }}" class="form-control" name="title"
                                        placeholder="Write job title">
                             </div>
-
                             @if ($errors->has('title'))
                                 <div class="alert alert-danger" role="alert">
                                     {{ $errors->first('title') }}

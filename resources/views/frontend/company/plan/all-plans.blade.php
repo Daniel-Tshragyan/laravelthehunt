@@ -18,17 +18,17 @@
                             <li>Post {{ $plan->jobs_count }} Job</li>
                             <li>Featured Job
                                 @if($plan->featured_job == 1)
-                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9756;</span>
+                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9745;</span>
                                 @endif
                             </li>
                             <li>Edit Your Job Listing
                                 @if($plan->job_listing == 1)
-                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9756;</span>
+                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9745;</span>
                                 @endif
                             </li>
                             <li>Manage Application
                                 @if($plan->manage_applications == 1)
-                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9756;</span>
+                                    <span style="margin-right:-20px;font-size:20px;color:green">&#9745;</span>
                                 @endif
                             </li>
                             <li>{{ $plan->expired_days }}-day Expired</li>
