@@ -76,6 +76,29 @@
                 <div class="input-icon">
                     <i class="lni-unlock"></i>
                     <label for="">
+                        Plan
+                    </label>
+                    <select name="plan" id="" class="form-control">
+                        <option value="">
+                            This user dont have plan
+                        </option>
+                        @foreach($plans as $plan)
+                            <option value="{{$plan->id}}"
+                                    @if($plan->id == $company['plan_id'])
+                                    selected="selected"
+                                @endif
+                            >{{$plan->title}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('city'))
+                        <p class="text-danger">{{ $errors->first('city') }}</p>
+                    @endif
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="lni-unlock"></i>
+                    <label for="">
                         Location
                     </label>
                     <input type="text" class="form-control" value="{{ $company['location'] }}" name="location"

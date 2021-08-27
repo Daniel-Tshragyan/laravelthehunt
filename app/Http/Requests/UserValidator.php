@@ -7,10 +7,9 @@ use App\Models\User;
 class UserValidator extends FormRequest
 {
     private $user;
-    const userRole =[
-        'comapny' => 2,
-        'candidate' => 1,
-    ];
+
+    const ROLE_CANDIDATE = 1;
+    const ROLE_COMPANY = 2;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,10 +42,11 @@ class UserValidator extends FormRequest
             $validationArray['image'] = ['image'];
         }
 
-        if ($this->user->role == self::userRole['candidate']) {
+        if ($this->user->role == self::ROLE_CANDIDATE) {
             $validationArray['age'] = ['required', 'numeric'];
             $validationArray['profession'] = ['required', 'string', 'max:255'];
         } else {
+            $validationArray['plan'] = ['nullable', 'exists:App\Models\Plan,id'];
             $validationArray['comapnyname'] = ['required', 'string', 'max:255'];
             $validationArray['tagline'] = ['required', 'string'];
         }

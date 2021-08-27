@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Plan;
 use App\Models\User;
 use App\Models\City;
 use App\Facades\UserServiceFacade;
@@ -90,8 +91,9 @@ class UserController extends Controller
             return view('admin.user.update', compact('user', 'candidate', 'cities'));
         }
         if ($user->role == User::ROLE_COMPANY) {
+            $plans = Plan::all();
             $company = $user->company->toArray();
-            return view('admin.user.update', compact('user', 'company', 'cities'));
+            return view('admin.user.update', compact('user', 'company', 'cities','plans'));
         }
     }
 

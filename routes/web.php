@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
 use App\Http\Controllers\FrontEnd\Candidate\JobController as CandidateJob;
+use App\Http\Controllers\FrontEnd\Company\PlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,9 +91,9 @@ Route::get('/log', function () {
 })->name('login1');
 Route::get('/reg', [UserController::class, 'candidateReg'])->name('reg');
 Route::get('/reg-company', [UserController::class, 'companyReg'])->name('reg1');
-Route::get('/pricing', function () {
-    return view('frontend.main.pricing');
-})->name('pricing');
+
+
+
 
 //_____________________________________________________________________________
 
@@ -101,6 +102,8 @@ Route::get('/show-job/{id}', [CandidateJob::class, 'show'])->name('show-job');
 Route::post('/apply-job/{id}', [CandidateJob::class, 'applyJob'])->middleware(['auth', 'isCandidate'])->name('apply-job');
 Route::get('/manage-applications', [ApplicationController::class, 'index'])->middleware(['auth', 'isCompany'])->name('manage-applications');
 Route::resource('/front-job', JobController::class)->middleware(['auth', 'isCompany']);
+Route::get('/pricing',[PlanController::class, 'index'])->middleware(['auth', 'isCompany'])->name('pricing');
+Route::post('/pricing-apply',[PlanController::class, 'apply'])->middleware(['auth', 'isCompany'])->name('pricing-apply');
 
 
 Auth::routes();

@@ -19,6 +19,12 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('hasPlan', ['only' => ['store']]);
+    }
+
     public function index(Request $request)
     {
         $user = new User();
@@ -36,7 +42,7 @@ class JobController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-        return view('frontend.company.job.create', compact('categories','tags'));
+        return view('frontend.company.job.create', compact('categories', 'tags'));
     }
 
     /**
@@ -63,12 +69,12 @@ class JobController extends Controller
     {
         $applyed = false;
 
-        foreach($frontJob->candidates as $candidate){
-            if($candidate->id == auth()->user()->candidate->id){
+        foreach ($frontJob->candidates as $candidate) {
+            if ($candidate->id == auth()->user()->candidate->id) {
                 $applyed = true;
             }
         }
-        return view('frontend.company.job.show', ['job' => $frontJob,'applyed' => $applyed]);
+        return view('frontend.company.job.show', ['job' => $frontJob, 'applyed' => $applyed]);
     }
 
     /**
@@ -82,7 +88,6 @@ class JobController extends Controller
         $category = Category::all();
         $price = (int)$front_job->price;
         $tags = Tag::all();
-//         dd($front_job->tags->pluck('id')->toArray());
         return view('frontend.company.job.update', ['tags' => $tags, 'job' => $front_job, 'categories' => $category, 'price' => $price]);
     }
 

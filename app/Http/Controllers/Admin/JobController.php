@@ -15,19 +15,26 @@ use App\Http\Requests\AdminJobValidator;
 
 class JobController extends Controller
 {
-    const companyRole = 2;
+    const ROLE_COMPANY = 2;
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('hasPlan', ['only' => ['store']]);
+    }
+
+
     public function index(Request $request)
     {
         $user = new User();
         $paginationArguments = JobFacade::paginationArguments($request->all());
         $paginationArguments['categories'] = Category::all();
-        $paginationArguments['companies'] = $user->where(['role' => self::companyRole])->get();
+        $paginationArguments['companies'] = $user->where(['role' => self::ROLE_COMPANY])->get();
         return view('admin.job.index', $paginationArguments);
     }
 
@@ -38,7 +45,7 @@ class JobController extends Controller
      */
     public function create()
     {
-        $companies = User::where(['role' => self::companyRole])->get();
+        $companies = User::where(['role' => self::ROLE_COMPANY])->get();
         $categories = Category::all();
         $tags = Tag::all();
         return view('admin.job.create', compact('categories', 'companies', 'tags'));

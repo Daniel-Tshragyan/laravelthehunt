@@ -1,5 +1,22 @@
 @extends('layouts.app')
 @section('content')
+    @if(Session::has('message'))
+        <div class="modal" tabindex="-1" role="dialog" style="display:block">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Plan</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">{{ Session::get('message') }}</p>
+                        <a href="{{ route('pricing') }}">
+                            Update Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="page-header">
         <div class="container">
             <div class="row">

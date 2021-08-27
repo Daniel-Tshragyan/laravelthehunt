@@ -44,23 +44,23 @@ class CityService
             'where' => $where, 'how' => $how]);
     }
 
-    public function getPagination($dataay)
+    public function getPagination($data)
     {
-        if (!empty($dataay['where'])) {
-            $city = City::where($dataay['where'])->orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $city->withPath("city?order_by={$dataay['order_by']}&how={$dataay['how']}" . $dataay['withPath']);
+        if (!empty($data['where'])) {
+            $city = City::where($data['where'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $city->withPath("city?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $city = City::orderBy($dataay['order_by'], $dataay['how'])->paginate(3);
-            $city->withPath("city?order_by={$dataay['order_by']}&how={$dataay['how']}");
+            $city = City::orderBy($data['order_by'], $data['how'])->paginate(3);
+            $city->withPath("city?order_by={$data['order_by']}&how={$data['how']}");
         }
-        if ($dataay['how'] == 'asc') {
-            $dataay['how'] = 'desc';
+        if ($data['how'] == 'asc') {
+            $data['how'] = 'desc';
         } else {
-            $dataay['how'] = 'asc';
+            $data['how'] = 'asc';
         }
-        $dataay['sorts'] = ['id' => $dataay['how'], 'name' => $dataay['how']];
-        $newarray = ['cities' => $city, 'sorts' => $dataay['sorts'], 'searched' => $dataay['searched']];
+        $data['sorts'] = ['id' => $data['how'], 'name' => $data['how']];
+        $newarray = ['cities' => $city, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }

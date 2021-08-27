@@ -75,14 +75,16 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('about')}}">About</a></li>
                                 @guest
-                                @else(auth()->user()->role == '1')
-                                <li><a class="dropdown-item" href="{{route('job-page')}}">Job Page</a></li>
-                                {{--                                <li><a class="dropdown-item" href="{{route('job-details')}}">Job Details</a></li>--}}
-                                <li><a class="dropdown-item" href="{{route('resume')}}">Resume Page</a></li>
-                                @endguest
-                                <li><a class="dropdown-item" href="{{route('privacy-policy')}}">Privacy Policy</a></li>
-                                <li><a class="dropdown-item" href="{{route('faq')}}">FAQ</a></li>
-                                <li><a class="dropdown-item" href="{{route('pricing')}}">Pricing Tables</a></li>
+                                @else()
+                                    @if(auth()->user()->role == '1')
+                                        <li><a class="dropdown-item" href="{{route('resume')}}">Resume Page</a></li>
+                                        <li><a class="dropdown-item" href="{{route('job-page')}}">Job Page</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{route('pricing')}}">Pricing Tables</a></li>
+                                    @endif
+                                    @endguest
+                                        <li><a class="dropdown-item" href="{{route('privacy-policy')}}">Privacy Policy</a></li>
+                                        <li><a class="dropdown-item" href="{{route('faq')}}">FAQ</a></li>
                                 <li><a class="dropdown-item" href="{{route('contact')}}">Contact</a></li>
                             </ul>
                         </li>

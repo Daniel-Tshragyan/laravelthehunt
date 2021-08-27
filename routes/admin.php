@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PlanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -21,5 +22,6 @@ Route::prefix('admin')->group(function () {
     Route::resource('/job',JobController::class)->middleware(['isadmin','trim']);
     Route::resource('/user',UserController::class)->middleware(['isadmin','trim']);
     Route::resource('/tag',TagController::class)->middleware(['isadmin','trim']);
+    Route::resource('/plan',PlanController::class)->middleware(['isadmin','trim']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('isadmin')->name('adminDashboard');
 });

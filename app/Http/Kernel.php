@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'notAdmin' => Middleware\NotAdmin::class,
         'trim' => Middleware\TrimStrings::class,
         'isCompany' => Middleware\IsCompany::class,
-        'isCandidate' => Middleware\IsCandidate::class
+        'isCandidate' => Middleware\IsCandidate::class,
+        'hasPlan' => Middleware\HasPlan::class
     ];
 }

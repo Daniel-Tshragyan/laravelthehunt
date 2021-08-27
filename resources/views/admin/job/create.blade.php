@@ -4,6 +4,11 @@
 @endsection
 @section('content')
     {{ Breadcrumbs::render('jobCreate') }}
+    @if(Session::has('message'))
+        <div class="alert text-danger" role="alert">
+            {{ Session::get('message') }}
+        </div>
+    @endif
     <h1>Add Job</h1>
     <form action="{{route('job.store')}}" class="w-50" method="post">
         @csrf

@@ -87,3 +87,19 @@ Breadcrumbs::for('tagShow', function (BreadcrumbTrail $trail) {
     $trail->parent('tag');
     $trail->push('tag');
 });
+Breadcrumbs::for('plan', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin');
+    $trail->push('All Plans', route('plan.index'));
+});
+Breadcrumbs::for('planCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('plan');
+    $trail->push('Create Plan', route('plan.create'));
+});
+Breadcrumbs::for('planUpdate', function (BreadcrumbTrail $trail) {
+    $trail->parent('plan');
+    $trail->push('Update Plan');
+});
+Breadcrumbs::for('planShow', function (BreadcrumbTrail $trail) {
+    $trail->parent('plan');
+    $trail->push('Plan');
+});

@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+
     {{ Breadcrumbs::render('userShow') }}
     <h1>User</h1>
     <table class="table table-bordered">
@@ -25,6 +26,7 @@
             <td>
                 Location
             </td>
+
             @if($user->role=='1')
                 <td>
                     Age
@@ -39,6 +41,9 @@
                 <td>
                     Tagline
                 </td>
+                    <td>
+                        Plan
+                    </td>
             @endif
                 <td>
                     Image
@@ -83,6 +88,9 @@
                 </td>
                 <td>
                     {{ $company['tagline'] }}
+                </td>
+                <td>
+                    {{ $user->company->plan->title }}
                 </td>
                 <td>
                     <img src="{{ asset('storage/users_images/'.$company['image']) }}" alt="" width="58%">

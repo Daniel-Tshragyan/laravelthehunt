@@ -17,6 +17,7 @@ class Company extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('city_id')->unsigned();
+            $table->bigInteger('plan_id')->unsigned()->nullable(true);
             $table->string('comapnyname');
             $table->string('tagline');
             $table->string('location');
@@ -28,6 +29,9 @@ class Company extends Migration
             $table->foreign('city_id')
                 ->references('id')
                 ->on('cities');
+            $table->foreign('plan_id')
+                ->references('id')
+                ->on('plans');
             $table->timestamps();
         });
     }

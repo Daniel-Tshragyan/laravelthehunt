@@ -117,6 +117,7 @@ class UserService
             'location' => $data['location'],
             'age' => $data['tagline'],
             'profession' => $data['comapnyname'],
+            'plan_id' => $data['plan'],
         ];
         $company = $user->company->toArray();
         if (isset($data['password'])) {
