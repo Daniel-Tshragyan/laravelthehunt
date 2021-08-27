@@ -21,8 +21,9 @@ class HasPlan
     {
         if(auth()->user() && auth()->user()->role != self::ROLE_ADMIN){
             if(!is_null(auth()->user()->company->plan)){
+
                 if(auth()->user()->company->plan->jobs_count <= auth()->user()->job->count()){
-                    Session::flash('message', "The number of works provided by this plan is completed. Please update the plan");
+                    Session::flash('message', "The number of jobs provided by this plan is completed. Please update the plan");
                     return redirect()->route('front-job.create');
                 }
             }else{
@@ -33,7 +34,7 @@ class HasPlan
             $user = User::find($request->input('company_id'));
             if(!is_null($user->company->plan)){
                 if($user->company->plan->jobs_count <= $user->job->count()){
-                    Session::flash('message', "The number of works provided by this plan is completed. Please update the plan");
+                    Session::flash('message', "The number of jobs provided by this plan is completed. Please update the plan");
                     return redirect()->route('job.create');
                 }
             }else{
@@ -41,8 +42,8 @@ class HasPlan
                 return redirect()->route('job.create');
             }
 
-            return $next($request);
         }
+        return $next($request);
 
     }
 }
