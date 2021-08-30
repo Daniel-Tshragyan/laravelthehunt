@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    All Jobs
+@endsection
 @section('content')
     <div class="page-header">
         <div class="container">

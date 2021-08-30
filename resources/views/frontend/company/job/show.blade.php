@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+{{ $job->title }}
+@endsection
 @section('content')
 
     <!-- Page Header Start -->

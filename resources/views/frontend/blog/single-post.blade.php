@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Blog
+@endsection
 @section('content')
     <!-- Page Header Start -->
     <div class="page-header">

@@ -56,7 +56,7 @@ class JobController extends Controller
         JobFacade::jobFrontFill($request->validated());
         JobFacade::changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Added');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 
     /**
@@ -107,7 +107,7 @@ class JobController extends Controller
             JobFacade::changeCategoryJobCount($front_job->category_id);
         }
         Session::flash('message', 'Job Updated');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 
     /**
@@ -121,6 +121,6 @@ class JobController extends Controller
         JobFacade::deleteJob($front_job);
         JobFacade::changeCategoryJobCount($front_job->category_id);
         Session::flash('message', 'Job Deleted');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 }

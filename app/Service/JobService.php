@@ -78,7 +78,7 @@ class JobService
             'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'],
             'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['tags' => Tag::all(), 'jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
+        $newarray = ['tags' => Tag::all(), 'admin_jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
         return $newarray;
     }
 
@@ -152,14 +152,15 @@ class JobService
         return $job->tags()->sync($tags);
     }
 
-    public function JobUpdate($data, Job $job)
+    public function JobUpdate($data, Job $admin_job)
     {
         $tags = $data['job_tags'];
         unset($data['job_tags']);
-        $job->fill($data);
-        $job->update();
-        return $job->tags()->sync($tags);
+        $admin_job->fill($data);
+        $admin_job->update();
+        return $admin_job->tags()->sync($tags);
     }
+
 
     public function jobFrontFill($data)
     {

@@ -103,9 +103,14 @@ class PlanService
 
     public function apply($id)
     {
-        $payment = new PlanPayment();
-        $payment->fill(['plan_id' => $id, 'company_id' => auth()->user()->company->id]);
-        $payment->save();
+        if(auth()->user()->company->payment){
+            auth()->user()->company->payment->fill(['plan_id' => $id]);
+            auth()->user()->company->payment->save();
+        }else{
+            $payment = new PlanPayment();
+            $payment->fill(['plan_id' => $id, 'company_id' => auth()->user()->company->id]);
+            $payment->save();
+        }
         auth()->user()->company->fill(['plan_id' => $id]);
         return auth()->user()->company->save();
     }

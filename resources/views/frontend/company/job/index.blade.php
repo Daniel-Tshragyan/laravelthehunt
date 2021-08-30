@@ -5,6 +5,9 @@
 @section('title')
     Manage Jobs
 @endsection
+@section('title1')
+    Manage Jobs
+@endsection
 @section('content1')
     <div class="alerts-list">
         @if(Session::has('message'))
@@ -17,7 +20,7 @@
                 @if($key != 'company_id')
 
                 <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-                        <a style="margin:10px" href="{{ route('front-job.index',['order_by' => $key, 'how' => $val]) }}">
+                        <a style="margin:10px" href="{{ route('job.index',['order_by' => $key, 'how' => $val]) }}">
                             @if($key == 'category_id')
                                 category
                             @else
@@ -34,7 +37,7 @@
         </div>
 
             <form
-                action="{{ route('front-job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
+                action="{{ route('job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
     <div class="alerts-list d-flex justify-content-around">
 
         @csrf
@@ -135,18 +138,18 @@
                 </div>
 
                 <div class="col-lg-1 col-md-1 col-xs-12">
-                    <a title="Show" style="margin:5px" href="{{ route('front-job.show',['front_job' => $job]) }}">
+                    <a title="Show" style="margin:5px" href="{{ route('job.show',['job' => $job]) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                             <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                         </svg>
                     </a>
-                    <a title="Update" style="margin:5px" href="{{ route('front-job.edit',['front_job' => $job]) }}">
+                    <a title="Update" style="margin:5px" href="{{ route('job.edit',['job' => $job]) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-pen-fill" viewBox="0 0 16 16">
                             <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                         </svg>
                     </a>
-                    <form style="display:inline-block" action="{{ route('front-job.destroy',['front_job' => $job]) }}" method="post">
+                    <form style="display:inline-block" action="{{ route('job.destroy',['job' => $job]) }}" method="post">
                         @csrf
                         @method('delete')
                         <button title="Remove" style="border:none;background-color:transparent" type="submit">

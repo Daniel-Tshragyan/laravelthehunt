@@ -3,7 +3,7 @@
    Update City
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('cityUpdate') }}
+    {{ Breadcrumbs::render('cityUpdate',$city) }}
     <h1>Update City</h1>
     <form action="{{route('city.update',['city' => $city])}}" class="w-50" method="post">
         @csrf

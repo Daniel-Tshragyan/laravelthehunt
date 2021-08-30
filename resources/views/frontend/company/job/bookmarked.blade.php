@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Bookmarked Jobs
+@endsection
 @section('content')
     <!-- Header Section End -->
 

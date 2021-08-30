@@ -3,11 +3,13 @@
     Update Plan
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('planUpdate') }}
+    {{ Breadcrumbs::render('planUpdate',$plan) }}
     <h1>Update Plan</h1>
     <form action="{{route('plan.update',['plan' => $plan])}}" class="w-50" method="post">
         @csrf
         @method('put')
+        <label for="">Title</label>
+        <br>
         <input type="text" value="{{ $plan->title }}" name="title" placeholder="Title" class="form-control">
         <br>
         @if ($errors->has('title'))
@@ -15,6 +17,8 @@
                 {{ $errors->first('title') }}
             </div>
         @endif
+        <label for="">Jobs Count</label>
+        <br>
         <input type="number" value="{{ $plan->jobs_count }}" name="jobs_count" placeholder="Jobs Count" class="form-control">
         <br>
         @if ($errors->has('jobs_count'))
@@ -22,13 +26,17 @@
                 {{ $errors->first('jobs_count') }}
             </div>
         @endif
-        <input type="number" value="{{ $price }}" name="price" placeholder="Jobs Count" class="form-control">
+        <label for="">Price</label>
+        <br>
+        <input type="number" value="{{ $price }}" name="price" placeholder="Price" class="form-control">
         <br>
         @if ($errors->has('price'))
             <div class="alert alert-danger" role="alert">
                 {{ $errors->first('price') }}
             </div>
         @endif
+        <label for="">Expayred Days</label>
+        <br>
         <input type="number" value="{{ $plan->expired_days }}" name="expired_days" placeholder="Expayred Days" class="form-control">
         <br>
         @if ($errors->has('expired_days'))

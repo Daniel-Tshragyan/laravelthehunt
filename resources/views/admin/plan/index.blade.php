@@ -17,8 +17,8 @@
         <tr>
             @foreach($sorts as $key => $val)
                 <td>
-                    <a style="margin:10px" href="{{ route('plan.index',['order_by' => $key, 'how' => $val]) }}">
-                            {{$key}}
+                    <a style="margin:10px;text-align:center" href="{{ route('plan.index',['order_by' => $key, 'how' => $val]) }}">
+                        {{str_replace('_',' ',$key)}}
                     </a>
                 </td>
             @endforeach()

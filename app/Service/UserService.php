@@ -65,8 +65,8 @@ class UserService
             $data['how'] = 'asc';
         }
         $data['sorts'] = ['id' => $data['how'], 'name' => $data['how'], 'role' => $data['how'], 'email' => $data['how']];
-
-        $newarray = ['filters' => self::filters, 'users' => $users, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
+        $data['roles'] = ['Admin','Candidate','Company'];
+        $newarray = ['filters' => self::filters, 'roles' =>$data['roles'], 'users' => $users, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
         return $newarray;
     }

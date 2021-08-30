@@ -101,7 +101,7 @@ Route::get('/browse-jobs', [CandidateJob::class, 'index'])->name('browse-jobs');
 Route::get('/show-job/{id}', [CandidateJob::class, 'show'])->name('show-job');
 Route::post('/apply-job/{id}', [CandidateJob::class, 'applyJob'])->middleware(['auth', 'isCandidate'])->name('apply-job');
 Route::get('/manage-applications', [ApplicationController::class, 'index'])->middleware(['auth', 'isCompany'])->name('manage-applications');
-Route::resource('/front-job', JobController::class)->middleware(['auth', 'isCompany']);
+Route::resource('/job', JobController::class)->middleware(['auth', 'isCompany']);
 Route::get('/pricing',[PlanController::class, 'index'])->middleware(['auth', 'isCompany'])->name('pricing');
 Route::post('/pricing-apply',[PlanController::class, 'apply'])->middleware(['auth', 'isCompany'])->name('pricing-apply');
 

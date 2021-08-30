@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Resume
+@endsection
 @section('content')
 
     <!-- Page Header Start -->

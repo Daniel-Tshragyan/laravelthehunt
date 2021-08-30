@@ -1,5 +1,8 @@
 @extends('frontend.company.layouts.app')
 @section('title')
+    Applications
+@endsection
+@section('title1')
     Manage Applications
 @endsection
 @section('content1')

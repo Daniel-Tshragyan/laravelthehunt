@@ -68,44 +68,44 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Job $job
+     * @param \App\Models\Job $admin_job
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job)
+    public function show(Job $admin_job)
     {
-        return view('admin.job.show', ['job' => $job]);
+        return view('admin.job.show', ['admin_job' => $admin_job]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Job $job
+     * @param \App\Models\Job $admin_job
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $job)
+    public function edit(Job $admin_job)
     {
         $user = new User();
         $companies = $user->where(['role' => '2'])->get();
-        $price = (int)$job->price;
+        $price = (int)$admin_job->price;
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.job.update', compact('tags', 'companies', 'price', 'categories', 'job'));
+        return view('admin.job.update', compact('tags', 'companies', 'price', 'categories', 'admin_job'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Job $job
+     * @param \App\Models\Job $admin_job
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminJobValidator $request, Job $job)
+    public function update(AdminJobValidator $request, Job $admin_job)
     {
-        $id = $job->category_id;
-        JobFacade::jobUpdate($request->validated(), $job);
+        $id = $admin_job->category_id;
+        JobFacade::jobUpdate($request->validated(), $admin_job);
         if ($request->input('category_id') != $id) {
             JobFacade::changeCategoryJobCount($id);
-            JobFacade::changeCategoryJobCount($job->category_id);
+            JobFacade::changeCategoryJobCount($admin_job->category_id);
         }
         Session::flash('message', 'Job Updated');
         return redirect()->route('job.index');
@@ -114,13 +114,13 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Job $job
+     * @param \App\Models\Job $admin_job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function destroy(Job $admin_job)
     {
-        JobFacade::deleteJob($job);
-        JobFacade::changeCategoryJobCount($job->category_id);
+        JobFacade::deleteJob($admin_job);
+        JobFacade::changeCategoryJobCount($admin_job->category_id);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('job.index');
     }

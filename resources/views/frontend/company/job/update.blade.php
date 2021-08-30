@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Update Job
+@endsection
 @section('content')
     <div class="page-header">
         <div class="container">
@@ -17,7 +20,7 @@
                 <div class="col-lg-9 col-md-12 col-xs-12">
                     <div class="post-job box">
                         <h3 class="job-title">Post a new Job</h3>
-                        <form class="form-ad" action="{{route('front-job.update',['front_job' => $job])}}" method="post">
+                        <form class="form-ad" action="{{route('job.update',['job' => $job])}}" method="post">
                             @csrf
                             @method('put')
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">

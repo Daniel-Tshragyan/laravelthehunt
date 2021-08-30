@@ -10,7 +10,7 @@
         </div>
     @endif
     <h1>Add Job</h1>
-    <form action="{{route('job.store')}}" class="w-50" method="post">
+    <form action="{{route('admin-job.store')}}" class="w-50" method="post">
         @csrf
         <input type="text" value="{{ old('title') }}" name="title" placeholder="Title" class="form-control">
         <br>

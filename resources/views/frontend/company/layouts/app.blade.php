@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="inner-header">
-                        <h3>@yield('title')</h3>
+                        <h3>@yield('title1')</h3>
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                             <li><a href="{{route('bookmarked')}}">Bookmarked Jobs</a></li>
                             <li><a href="{{route('notifications')}}">Notifications <span class="notinumber">2</span></a></li>
                             <li><a class="@yield('manageApplication')" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                            <li><a class="@yield('manageApplication')" href="{{route('front-job.index')}}">Manage Jobs</a></li>
+                            <li><a class="@yield('manageApplication')" href="{{route('job.index')}}">Manage Jobs</a></li>
                             <li><a href="{{route('job-alerts')}}">Job Alerts</a></li>
                             <li><a href="{{route('change-password')}}">Change Password</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">

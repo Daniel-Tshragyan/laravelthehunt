@@ -58,6 +58,7 @@ class CategoryService
         } else {
             $data['how'] = 'asc';
         }
+
         $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'jobs_cont' => $data['how'],
             'sort' => $data['how']];
         $newarray = ['categories' => $category, 'sorts' => $data['sorts'], 'searched' => $data['searched']];

@@ -1,4 +1,7 @@
 @extends('frontend.company.layouts.app')
+@section('title')
+    Pricing Plans
+@endsection
 @section('content1')
     @if(Session::has('message'))
         <div class="alert alert-success" role="alert">

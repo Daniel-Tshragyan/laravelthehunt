@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Create Job
+@endsection
 @section('content')
     @if(Session::has('message'))
         <div class="modal" tabindex="-1" role="dialog" style="display:block">
@@ -34,7 +37,7 @@
                 <div class="col-lg-9 col-md-12 col-xs-12">
                     <div class="post-job box">
                         <h3 class="job-title">Post a new Job</h3>
-                        <form class="form-ad" action="{{route('front-job.store')}}" method="post">
+                        <form class="form-ad" action="{{route('job.store')}}" method="post">
                             @csrf
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">
                             <div class="form-group">

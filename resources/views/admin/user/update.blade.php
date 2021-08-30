@@ -3,7 +3,7 @@
     Update User
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('userUpdate') }}
+    {{ Breadcrumbs::render('userUpdate',$user) }}
 
     <h1>Update User</h1>
     <form class="login-form" method="POST" action="{{ route('user.update',['user' => $user]) }}"

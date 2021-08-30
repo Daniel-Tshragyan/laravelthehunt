@@ -28,16 +28,16 @@ class HasPlan
                 $difference = $payment->created_at->diffInDays(Carbon::now());
                 if($difference >= auth()->user()->company->plan->expired_days ){
                     Session::flash('message', "Days expired. Please update the plan");
-                    return redirect()->route('front-job.create');
+                    return redirect()->route('job.create');
                 }
 
                 if (auth()->user()->company->plan->jobs_count <= auth()->user()->job->count()) {
                     Session::flash('message', "The number of jobs provided by this plan is completed. Please update the plan");
-                    return redirect()->route('front-job.create');
+                    return redirect()->route('job.create');
                 }
             } else {
                 Session::flash('message', "You dont have a plan. Pleas get one");
-                return redirect()->route('front-job.create');
+                return redirect()->route('job.create');
             }
         } else {
             $user = User::find($request->input('company_id'));

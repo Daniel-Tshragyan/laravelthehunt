@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Broese Resume
+@endsection
 @section('content')
 
     <!-- Page Header Start -->

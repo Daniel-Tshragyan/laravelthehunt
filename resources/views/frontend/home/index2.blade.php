@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Home
+@endsection
 @section('content')
     <section class="browse-catagories section">
         <div class="container">
@@ -494,7 +497,7 @@
                             <h3>Recruiter</h3>
                             <p>Post a job to tell us about your project. We'll quickly match you with <br> the right
                                 freelancers find place best.</p>
-                            <a href="{{ route('front-job.create') }}" class="btn btn-border-filled">Post a Job</a>
+                            <a href="{{ route('job.create') }}" class="btn btn-border-filled">Post a Job</a>
                         </div>
                         <div class="img-thumb">
                             <i class="lni-users"></i>

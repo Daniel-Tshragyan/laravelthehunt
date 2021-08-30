@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Manage Resumes
+@endsection
 @section('content')
     <!-- Header Section End -->
 

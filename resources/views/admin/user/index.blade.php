@@ -71,7 +71,7 @@
                 </td>
 
                 <td>
-                    {{ $user->role }}
+                    {{ $roles[$user->role] }}
                 </td>
 
                 <td>

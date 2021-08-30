@@ -17,13 +17,13 @@
         <tr>
             @foreach($sorts as $key => $val)
                 <td>
-                    <a style="margin:10px" href="{{ route('job.index',['order_by' => $key, 'how' => $val]) }}">
+                    <a style="margin:10px" href="{{ route('admin-job.index',['order_by' => $key, 'how' => $val]) }}">
                         @if($key == 'company_id')
                             company
                         @elseif($key == 'category_id')
                             category
                         @else
-                            {{$key}}
+                            {{str_replace('_',' ',$key)}}
                         @endif
                     </a>
                 </td>
@@ -34,7 +34,7 @@
         </tr>
         <tr>
             <form
-                action="{{ route('job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
+                action="{{ route('admin-job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td style="width:80px">
                     <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
@@ -105,7 +105,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($jobs as $job)
+        @foreach($admin_jobs as $job)
             <tr>
                 <td>
                     {{ $job->id }}
@@ -153,13 +153,13 @@
                 </td>
 
                 <td>
-                    <a title="Show" style="margin:5px" href="{{ route('job.show',['job' => $job]) }}">
+                    <a title="Show" style="margin:5px" href="{{ route('admin-job.show',['admin_job' => $job]) }}">
                         <i class="far fa-eye"></i>
                     </a>
-                    <a title="Update" style="margin:5px" href="{{ route('job.edit',['job' => $job]) }}">
+                    <a title="Update" style="margin:5px" href="{{ route('admin-job.edit',['admin_job' => $job]) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-                    <form style="display:inline-block" action="{{ route('job.destroy',['job' => $job]) }}" method="post">
+                    <form style="display:inline-block" action="{{ route('admin-job.destroy',['admin_job' => $job]) }}" method="post">
                         @csrf
                         @method('delete')
                         <button title="Remove" style="border:none;background-color:transparent" type="submit">
@@ -173,9 +173,9 @@
 
 
     </table>
-    {{ $jobs->links() }}
+    {{ $admin_jobs->links() }}
 
-    <a href="{{ route('job.create') }}">
+    <a href="{{ route('admin-job.create') }}">
         <button class="btn btn-success">
             Create New
         </button>
