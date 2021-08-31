@@ -167,6 +167,7 @@ class UserService
 
     public function deleteUser(User $user)
     {
+
         return $user->delete();
     }
 

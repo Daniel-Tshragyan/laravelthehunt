@@ -7,6 +7,7 @@ use App\Models\Dialog;
 use App\Models\DialogMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
 
@@ -28,9 +29,9 @@ class MessageService
         $messages = [];
         $id = auth()->user()->id;
         $dialogs = Dialog::where(['user1_id' => $id])->orWhere(['user2_id' => $id])->get();
-        if ($dialogs->count() > 0) {
-            $dialog = Dialog::where(['user1_id' => $user->id, 'user2_id' => $id])
-                ->orWhere(['user2_id' => $user->id, 'user1_id' => $id])->first();
+        $dialog = Dialog::where(['user1_id' => $user->id, 'user2_id' => $id])
+            ->orWhere(['user2_id' => $user->id])->where([ 'user1_id' => $id])->first();
+        if (!is_null($dialog)) {
             $messages = DialogMessage::where(['dialog_id' => $dialog->id])->limit($limit)->get();
             if ($limit >= DialogMessage::where(['dialog_id' => $dialog->id])->count() || $limit == 0) {
                 $limit = 0;
@@ -46,7 +47,8 @@ class MessageService
         $id = auth()->user()->id;
         $data['sender_id'] = $id;
         $dialog = Dialog::where(['user1_id' => $user->id, 'user2_id' => $id])
-            ->orWhere(['user1_id' => $id, 'user2_id' => $user->id])->first();
+            ->orWhere(['user2_id' => $user->id])->where([ 'user1_id' => $id])->first();
+
         if (isset($data['file'])) {
             $fileName = Str::random(10) . '.' . $data['file']->extension();
             $data['file']->storeAs('public/message_files', $fileName);
