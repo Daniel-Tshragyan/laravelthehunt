@@ -56,6 +56,10 @@
                     <p style="display:inline-block">{{ $application->text }}.</p>
                     <br>
                     <span class="time"><i class="lni-alarm-clock"></i>{{ $application->created_at }}</span>
+                    <br>
+                    <a href="{{ route('open-message',['user' => $application->candidate_id]) }}">
+                        <span style="font-size:25px;color:green">&#9993;</span>
+                    </a>
                 </div>
             </div>
     @endforeach

@@ -271,6 +271,7 @@ class JobService
         $application->fill([
             'company_id' => $job->user->company->id,
             'text' => "User " . auth()->user()->name . " appliyed to {$job->title} Job",
+            'candidate_id' => auth()->user()->id
         ]);
         $application->save();
         return $job;

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontEnd\Company\JobController;
 use App\Http\Controllers\FrontEnd\Candidate\JobController as CandidateJob;
 use App\Http\Controllers\FrontEnd\Company\PlanController;
+use App\Http\Controllers\FrontEnd\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +73,7 @@ Route::get('/job-page', function () {
 
 Route::get('/manage-resumes', function () {
     return view('frontend.candidate.resume.manage-resumes');
-})->name('manage-resumes')->middleware(['auth', 'IsCandidate']);
+})->name('manage-resumes')->middleware(['auth', 'isCandidate']);
 Route::get('/notifications', function () {
     return view('frontend.candidate.notifications.notifications');
 })->name('notifications');
@@ -104,8 +105,10 @@ Route::get('/manage-applications', [ApplicationController::class, 'index'])->mid
 Route::resource('/job', JobController::class)->middleware(['auth', 'isCompany']);
 Route::get('/pricing',[PlanController::class, 'index'])->middleware(['auth', 'isCompany'])->name('pricing');
 Route::post('/pricing-apply',[PlanController::class, 'apply'])->middleware(['auth', 'isCompany'])->name('pricing-apply');
-
-
+Route::get('/dialogs',[MessageController::class, 'index'])->middleware('auth')->name('all-dialogs');
+Route::get('/open-message/{user}',[MessageController::class, 'openMessage'])->middleware('auth')->name('open-message');
+Route::post('/send-message/{user}',[MessageController::class, 'messageSend'])->middleware('auth')->name('send-message');
+Route::get('/download-file/{user}/{message}',[MessageController::class, 'download'])->middleware('auth')->name('download-file');
 Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

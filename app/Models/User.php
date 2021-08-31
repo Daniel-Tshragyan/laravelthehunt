@@ -58,8 +58,15 @@ class User extends Authenticatable
         return $this->hasOne(Candidate::class, 'user_id', 'id');
     }
 
+    public function dialogs()
+    {
+        return $this->hasMany(Dialog::class,'user1_id','id');
+    }
 
-
+    public function dialogs1()
+    {
+        return $this->hasMany(Dialog::class,'user2_id','id');
+    }
 
     public function job()
     {

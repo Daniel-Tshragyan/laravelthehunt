@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\City;
 use App\Facades\UserServiceFacade;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -69,8 +70,13 @@ class UserController extends Controller
         }
         if ($user->role == User::ROLE_COMPANY) {
             $company = $user->company->toArray();
+            $difereance = '-';
+            if($user->company->payment){
+                $difereance = $user->company->payment->created_at->diffInDays(Carbon::now());
+                $difereance = (int)$user->company->payment->plan->expired_days - $difereance;
+            }
             $city = City::find($company['city_id']);
-            return view('admin.user.show', ['user' => $user, 'company' => $company, 'city' => $city]);
+            return view('admin.user.show', compact('difereance','user' , 'company', 'city'));
         }
         if ($user->role == User::ROLE_ADMIN) {
             return view('admin.user.show', ['user' => $user]);

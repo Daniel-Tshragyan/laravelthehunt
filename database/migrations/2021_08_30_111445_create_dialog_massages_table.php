@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAplicationsTable extends Migration
+class CreateDialogMassagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateAplicationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('aplications', function (Blueprint $table) {
+        Schema::create('dialog_messages', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('company_id')->unsigned();
+            $table->bigInteger('dialog_id')->unsigned();
             $table->string('text');
-            $table->integer('candidate_id');
-            $table->foreign('company_id')
+            $table->string('file')->nullable(true);
+            $table->integer('sender_id');
+            $table->foreign('dialog_id')
                 ->references('id')
-                ->on('companies')
+                ->on('dialogs')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -33,6 +34,6 @@ class CreateAplicationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aplications');
+        Schema::dropIfExists('dialog_massages');
     }
 }
