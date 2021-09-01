@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Contact
+@endsection
 @section('content')
     <!-- Header Section End -->
 

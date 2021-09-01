@@ -9,19 +9,27 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'comapnyname', 'tagline', 'location', 'city_id', 'image'];
+    protected $fillable = ['user_id', 'comapnyname', 'tagline', 'location', 'city_id', 'image', 'plan_id'];
 
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
-    public function aplications()
+    public function plan()
     {
-        return $this->hasMany(Aplication::class,'company_id','id');
+        return $this->belongsTo(Plan::class, 'plan_id', 'id');
     }
 
+    public function aplications()
+    {
+        return $this->hasMany(Aplication::class, 'company_id', 'id');
+    }
 
+    public function payment()
+    {
+        return $this->hasOne(PlanPayment::class, 'company_id', 'id');
+    }
 
     public function user()
     {

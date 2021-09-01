@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Job Alerts
+@endsection
 @section('content')
 
     <!-- Page Header Start -->

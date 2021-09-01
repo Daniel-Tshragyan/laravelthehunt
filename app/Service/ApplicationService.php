@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\DataObjects\ApplicationObject;
 use App\Models\Aplication;
 
 class ApplicationService
@@ -54,7 +55,7 @@ class ApplicationService
         }
         $data['sorts'] = ['id' => $data['how'], 'text' => $data['how']];
         $newarray = ['applications' => $application, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
-        return $newarray;
+        return new ApplicationObject($application, $data['sorts'], $data['searched']);
     }
 
 }

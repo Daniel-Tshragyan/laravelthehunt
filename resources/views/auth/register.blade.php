@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Registration As Candidate
+@endsection
 @section('content')
 
     <!-- Page Header Start -->

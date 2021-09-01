@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobValidation;
-use App\Facades\JobFacade;
+use App\Service\JobService;
 use Illuminate\Support\Facades\Session;
 
 class JobController extends Controller
@@ -19,12 +19,18 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+
+    public function __construct()
+    {
+        $this->middleware('hasPlan', ['only' => ['store']]);
+    }
+
+    public function index(Request $request, JobService $jobService)
     {
         $user = new User();
-        $paginationArguments = JobFacade::paginationArguments($request->all(), $from = 'front');
-        $paginationArguments['categories'] = Category::all();
-        return view('frontend.company.job.index', $paginationArguments);
+        $paginationArguments = $jobService->paginationArguments($request->all(), $from = 'front');
+        $paginationArguments->categories = Category::all();
+        return view('frontend.company.job.index', ['paginationArguments' => $paginationArguments]);
     }
 
     /**
@@ -36,7 +42,7 @@ class JobController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-        return view('frontend.company.job.create', compact('categories','tags'));
+        return view('frontend.company.job.create', compact('categories', 'tags'));
     }
 
     /**
@@ -45,12 +51,12 @@ class JobController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(JobValidation $request)
+    public function store(JobValidation $request, JobService $jobService)
     {
-        JobFacade::jobFrontFill($request->validated());
-        JobFacade::changeCategoryJobCount($request->validated()['category_id']);
+        $jobService->jobFrontFill($request->validated());
+        $jobService->changeCategoryJobCount($request->validated()['category_id']);
         Session::flash('message', 'Job Added');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 
     /**
@@ -63,12 +69,12 @@ class JobController extends Controller
     {
         $applyed = false;
 
-        foreach($frontJob->candidates as $candidate){
-            if($candidate->id == auth()->user()->candidate->id){
+        foreach ($frontJob->candidates as $candidate) {
+            if ($candidate->id == auth()->user()->candidate->id) {
                 $applyed = true;
             }
         }
-        return view('frontend.company.job.show', ['job' => $frontJob,'applyed' => $applyed]);
+        return view('frontend.company.job.show', ['job' => $frontJob, 'applyed' => $applyed]);
     }
 
     /**
@@ -82,7 +88,6 @@ class JobController extends Controller
         $category = Category::all();
         $price = (int)$front_job->price;
         $tags = Tag::all();
-//         dd($front_job->tags->pluck('id')->toArray());
         return view('frontend.company.job.update', ['tags' => $tags, 'job' => $front_job, 'categories' => $category, 'price' => $price]);
     }
 
@@ -93,16 +98,16 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function update(JobValidation $request, Job $front_job)
+    public function update(JobValidation $request, Job $front_job, JobService $jobService)
     {
         $id = $front_job->category_id;
-        JobFacade::frontJobUpdate($request->validated(), $front_job);
+        $jobService->frontJobUpdate($request->validated(), $front_job);
         if ($request->input('category_id') != $id) {
-            JobFacade::changeCategoryJobCount($id);
-            JobFacade::changeCategoryJobCount($front_job->category_id);
+            $jobService->changeCategoryJobCount($id);
+            $jobService->changeCategoryJobCount($front_job->category_id);
         }
         Session::flash('message', 'Job Updated');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 
     /**
@@ -111,11 +116,11 @@ class JobController extends Controller
      * @param \App\Models\Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $frontjob)
+    public function destroy(Job $front_job, JobService $jobService)
     {
-        JobFacade::deleteJob($frontjob);
-        JobFacade::changeCategoryJobCount($frontjob->category_id);
+        $jobService->deleteJob($front_job);
+        $jobService->changeCategoryJobCount($front_job->category_id);
         Session::flash('message', 'Job Deleted');
-        return redirect()->route('front-job.index');
+        return redirect()->route('job.index');
     }
 }

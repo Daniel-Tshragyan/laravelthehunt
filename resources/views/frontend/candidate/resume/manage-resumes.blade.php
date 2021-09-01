@@ -1,50 +1,9 @@
-@extends('layouts.app')
-@section('content')
-    <!-- Header Section End -->
+@extends('frontend.candidate.layouts.app')
+@section('title1')
+    Manage Resumes
+@endsection
+@section('content1')
 
-    <!-- Page Header Start -->
-    <div class="page-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="inner-header">
-                        <h3>Manage Resumes</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Header End -->
-
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-12 col-xs-12">
-                    <div class="right-sideabr">
-                        <h4>Manage Account</h4>
-                        <ul class="list-item">
-                            <li><a href="{{route('resume')}}">My Resume</a></li>
-                            <li><a href="{{route('bookmarked')}}">Bookmarked Jobs</a></li>
-                            <li><a href="{{route('notifications')}}">Notifications <span class="notinumber">2</span></a>
-                            </li>
-                            <li><a class="active" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                            <li><a href="{{route('job-alerts')}}">Job Alerts</a></li>
-                            <li><a href="{{route('change-password')}}">Change Password</a></li>
-                            <li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn" style="
-                                        font-size: 14px;
-                                        font-weight: 400;
-                                        color: #9a9a9a;">Sign Out
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-8 col-md-12 col-xs-12">
                     <div class="job-alerts-item candidates">
                         <h3 class="alerts-title">Manage Resumes</h3>
                         <div class="manager-resumes-item">
@@ -153,10 +112,6 @@
                         </div>
                         <a class="btn btn-common btn-sm" href="{{route('add-resume')}}">Add new resume</a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Content -->
+
 
 @endsection

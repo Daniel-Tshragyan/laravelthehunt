@@ -17,6 +17,7 @@ class CreateAplicationsTable extends Migration
             $table->id();
             $table->bigInteger('company_id')->unsigned();
             $table->string('text');
+            $table->integer('candidate_id');
             $table->foreign('company_id')
                 ->references('id')
                 ->on('companies')

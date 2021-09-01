@@ -206,10 +206,17 @@
                     </a>
             </li>
             <li class="nav-item">
-                    <a href="{{ route('job.index') }}" class="nav-link">
+                    <a href="{{ route('admin-job.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Jobs</p>
                     </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('plan.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Plans</p>
+                </a>
+
             </li>
             <li class="nav-item">
                 <form style="margin:20px" action="{{ route('adminlogout') }}" method="post">

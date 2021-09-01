@@ -43,19 +43,19 @@
         <tbody>
         <tr>
             <td>
-                {{ $job->id }}
+                {{ $admin_job->id }}
             </td>
             <td>
-                {{ $job->title }}
+                {{ $admin_job->title }}
 
             </td>
             <td>
 
-                {{ $job->location }}
+                {{ $admin_job->location }}
             </td>
             <td>
 
-                @foreach($job->tags as $tag)
+                @foreach($admin_job->tags as $tag)
                     <a href="{{ route('browse-jobs',['job_tag' => $tag->id,'title' => Request::get('title'),'location' => Request::get('location'),'city' => Request::get('city')]) }}">
                         <span class="full-time" style="
                             font-size: 11px;
@@ -67,34 +67,31 @@
                             text-transform: uppercase;
                             color: #26ae61;
                             background: #d5ffe7;
-                        @if($tag->id ==$searched['job_tag'])
-                            background: red;
-                        @endif
                             ">{{ $tag->title }}</span>
                     </a>
                 @endforeach
             </td>
             <td>
 
-                {{ $job->description }}
+                {{ $admin_job->description }}
             </td>
             <td>
 
-                {{ $job->closing_date }}
+                {{ $admin_job->closing_date }}
             </td>
             <td>
 
-                {{ $job->price }}
+                {{ $admin_job->price }}
             </td>
             <td>
 
-                {{ $job->user->name }}
+                {{ $admin_job->user->name }}
             </td>
             <td>
-                {{ $job->category->title ?? '-' }}
+                {{ $admin_job->category->title ?? '-' }}
             </td>
             <td>
-                <img width="80px" src="{{ asset('storage/categories_images/'.$job->category->image) }}" alt="">
+                <img width="80px" src="{{ asset('storage/categories_images/'.$admin_job->category->image) }}" alt="">
             </td>
         </tr>
         </tbody>

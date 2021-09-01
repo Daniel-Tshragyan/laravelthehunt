@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\DataObjects\UserObject;
 use App\Models\Job;
+use App\Models\PlanPayment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -52,11 +54,11 @@ class UserService
     public function getPaginationArguments($data)
     {
         if (!empty($data['where'])) {
-            $users = User::where($data['where'])->whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users = User::where($data['where'])->whereNotIn('email', ['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
             $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}" . $data['withPath']);
 
         } else {
-            $users = User::whereNotIn('email',['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
+            $users = User::whereNotIn('email', ['admin'])->orderBy($data['order_by'], $data['how'])->paginate(3);
             $users->withPath("user?order_by={$data['order_by']}&how={$data['how']}");
         }
         if ($data['how'] == 'asc') {
@@ -65,10 +67,9 @@ class UserService
             $data['how'] = 'asc';
         }
         $data['sorts'] = ['id' => $data['how'], 'name' => $data['how'], 'role' => $data['how'], 'email' => $data['how']];
+        $data['roles'] = ['Admin','Candidate','Company'];
 
-        $newarray = ['filters' => self::filters, 'users' => $users, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
-
-        return $newarray;
+        return new UserObject(self::filters, $data['roles'], $users, $data['sorts'], $data['searched']);
     }
 
 
@@ -88,7 +89,7 @@ class UserService
     public function updateCandidate($data, User $user)
     {
         $fillInformation = [
-            'city_id' => $data['city'] ,
+            'city_id' => $data['city'],
             'location' => $data['location'],
             'age' => $data['age'],
             'profession' => $data['profession'],
@@ -111,13 +112,14 @@ class UserService
 
     public function updateCompany($data, User $user)
     {
-        $data = $data;
         $fillInformation = [
-            'city_id' => $data['city'] ,
+            'city_id' => $data['city'],
             'location' => $data['location'],
             'age' => $data['tagline'],
             'profession' => $data['comapnyname'],
+            'plan_id' => $data['plan'],
         ];
+        $this->updatePlanPayment($user,$data);
         $company = $user->company->toArray();
         if (isset($data['password'])) {
             $fillInformation['password'] = $data['password'];
@@ -131,6 +133,24 @@ class UserService
         }
         $user->company->fill($fillInformation);
         return $user->company->update();
+    }
+
+    public function updatePlanPayment($user,$data)
+    {
+        if($user->company->payment){
+            if(!empty($data['plan'])){
+                $user->company->payment->fill(['plan_id' => $data['plan']]);
+                return $user->company->payment->save();
+            }else{
+                return $user->company->payment->delete();
+            }
+        }else{
+            if(!empty($data['plan'])){
+                $payment = new PlanPayment();
+                $payment->fill(['plan_id' => $data['plan'], 'company_id' => $user->company->id]);
+               return $payment->save();
+            }
+        }
     }
 
     public function deleteCompany(User $user)
@@ -147,6 +167,7 @@ class UserService
 
     public function deleteUser(User $user)
     {
+
         return $user->delete();
     }
 

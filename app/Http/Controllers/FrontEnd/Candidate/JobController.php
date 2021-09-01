@@ -6,26 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Job;
 use Illuminate\Http\Request;
-use App\Facades\JobFacade;
+use App\Service\JobService;
 
 class JobController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, JobService $jobService)
     {
-        $paginationArguments = JobFacade::candidateJobs($request->all());
-        return view('frontend.candidate.job.alljobs', $paginationArguments);
+        $paginationArguments = $jobService->candidateJobs($request->all());
+        return view('frontend.candidate.job.alljobs', ['paginationArguments' => $paginationArguments]);
     }
 
-    public function applyJob(Request $request, $id)
+    public function applyJob(Request $request, $id, JobService $jobService)
     {
-        $job = JobFacade::apply($id);
+        $job = $jobService->apply($id);
         return redirect()->route('show-job', ['id' => $id]);
     }
 
-    public function show(int $id)
+    public function show(int $id, JobService $jobService)
     {
-        $data = JobFacade::showCandidateJob($id);
+        $data = $jobService->showCandidateJob($id);
 
-        return view('frontend.candidate.job.show-job',$data);
+        return view('frontend.candidate.job.show-job', ['data' => $data]);
     }
 }

@@ -167,6 +167,8 @@ return [
         App\Providers\AplicationProvider::class,
         App\Providers\UserServiceFacadeProvider::class,
         App\Providers\TagProvider::class,
+        App\Providers\PlanProvider::class,
+        App\Providers\MessageProvider::class,
 
         /*
          * Package Service Providers...
@@ -240,6 +242,8 @@ return [
         'CategoryFacade' => App\Facades\CategoryFacade::class,
         'ApplicationFacade' => App\Facades\ApplicationFacade::class,
         'TagFacade' => App\Facades\TagFacade::class,
+        'PlanFacade' => App\Facades\PlanFacade::class,
+        'MessageFacade' => App\Facades\MessageFacade::class,
 
     ],
 

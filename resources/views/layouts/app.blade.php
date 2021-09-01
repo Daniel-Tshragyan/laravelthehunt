@@ -7,7 +7,7 @@
     <meta name="keywords" content="Bootstrap, Landing page, Template, Registration, Landing">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="author" content="Grayrids">
-    <title>TheHunt - Bootstrap HTML5 Job Portal Template</title>
+    <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
     <!-- Bootstrap CSS -->
@@ -75,14 +75,16 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{route('about')}}">About</a></li>
                                 @guest
-                                @else(auth()->user()->role == '1')
-                                <li><a class="dropdown-item" href="{{route('job-page')}}">Job Page</a></li>
-                                {{--                                <li><a class="dropdown-item" href="{{route('job-details')}}">Job Details</a></li>--}}
-                                <li><a class="dropdown-item" href="{{route('resume')}}">Resume Page</a></li>
-                                @endguest
-                                <li><a class="dropdown-item" href="{{route('privacy-policy')}}">Privacy Policy</a></li>
-                                <li><a class="dropdown-item" href="{{route('faq')}}">FAQ</a></li>
-                                <li><a class="dropdown-item" href="{{route('pricing')}}">Pricing Tables</a></li>
+                                @else()
+                                    @if(auth()->user()->role == '1')
+                                        <li><a class="dropdown-item" href="{{route('resume')}}">Resume Page</a></li>
+                                        <li><a class="dropdown-item" href="{{route('job-page')}}">Job Page</a></li>
+                                    @else
+                                        <li><a class="dropdown-item" href="{{route('pricing')}}">Pricing Tables</a></li>
+                                    @endif
+                                    @endguest
+                                        <li><a class="dropdown-item" href="{{route('privacy-policy')}}">Privacy Policy</a></li>
+                                        <li><a class="dropdown-item" href="{{route('faq')}}">FAQ</a></li>
                                 <li><a class="dropdown-item" href="{{route('contact')}}">Contact</a></li>
                             </ul>
                         </li>
@@ -95,9 +97,9 @@
                                         Employers
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{route('front-job.create')}}">Add Job</a>
+                                        <li><a class="dropdown-item" href="{{route('job.create')}}">Add Job</a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{route('front-job.index')}}">Manage Jobs</a>
+                                        <li><a class="dropdown-item" href="{{route('job.index')}}">Manage Jobs</a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{route('manage-applications')}}">Manage
                                                 Applications</a></li>
@@ -167,7 +169,7 @@
                             </li>
                             @if(auth()->user()->role == "2")
                                 <li class="button-group">
-                                    <a href="{{route('front-job.create')}}" class="button btn btn-common">Post a Job</a>
+                                    <a href="{{route('job.create')}}" class="button btn btn-common">Post a Job</a>
                                 </li>
                             @endif
                         @endguest

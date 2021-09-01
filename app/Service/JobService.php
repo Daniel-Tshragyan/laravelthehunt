@@ -13,6 +13,7 @@ use App\Http\Requests\JobValidation;
 use App\Http\Requests\AdminJobValidator;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isNull;
+use App\DataObjects\JObObject;
 
 class JobService
 {
@@ -78,8 +79,8 @@ class JobService
             'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'],
             'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['tags' => Tag::all(), 'jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
-        return $newarray;
+        return new JObObject(null, $jobs, $data['sorts'], $data['searched'], Tag::all());
+
     }
 
     public function frontJobGetPagination($job_tags, $data)
@@ -96,9 +97,9 @@ class JobService
             'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'],
             'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['tags' => Tag::all(), 'jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
+        $tags = Tag::all();
 
-        return $newarray;
+        return new JObObject($jobs, null, $data['sorts'], $data['searched'], $tags);
     }
 
     public function getJobs($job_tags, $data)
@@ -152,14 +153,15 @@ class JobService
         return $job->tags()->sync($tags);
     }
 
-    public function JobUpdate($data, Job $job)
+    public function JobUpdate($data, Job $admin_job)
     {
         $tags = $data['job_tags'];
         unset($data['job_tags']);
-        $job->fill($data);
-        $job->update();
-        return $job->tags()->sync($tags);
+        $admin_job->fill($data);
+        $admin_job->update();
+        return $admin_job->tags()->sync($tags);
     }
+
 
     public function jobFrontFill($data)
     {
@@ -190,7 +192,7 @@ class JobService
         $where = [];
         $withPath = '';
         $tag = '';
-        if(isset($data['city'])){
+        if (isset($data['city'])) {
             $searched['city'] = $data['city'];
         }
         foreach ($searched as $key => $value) {
@@ -200,12 +202,12 @@ class JobService
                 $searched[$key] = $data[$key];
             }
         }
-        if (isset($data['job_tag'])){
+        if (isset($data['job_tag'])) {
 //            die('ka');
             $tag = $data['job_tag'];
             $searched['job_tag'] = $data['job_tag'];
-            $jobs = $this->getCandidateJobsWithTags($data,$tag, $where, $withPath);
-        }else {
+            $jobs = $this->getCandidateJobsWithTags($data, $tag, $where, $withPath);
+        } else {
 //            die('chka');
             $searched['job_tag'] = $tag;
             $jobs = $this->getCandidateJobsWithOutTags($data, $where, $withPath);
@@ -214,33 +216,34 @@ class JobService
         $applyed = false;
         $tags = Tag::all();
 
-        return compact('jobs','searched','tags','applyed','cities');
+        return new JObObject($jobs, null, null, $searched, $tags, $applyed, $cities);
     }
 
     public function getCandidateJobsWithTags($data, $job_tag, $where, $withPath)
     {
-            if (isset($data['city'])) {
-                $jobs = Job::whereHas('user', function ($u) use ($data) {
-                    $u->whereHas('company', function ($c) use ($data) {
-                        $c->where('city_id', '=', $data['city']);
-                    });
-                })->whereHas('tags',function($tag) use ($job_tag){
-                    $tag->whereIn('tags.id', [$job_tag]);
-                })->where($where)->paginate('3');
-                $withPath .= "&city={$data['city']}";
-                $withPath .= "&job_tag={$job_tag}";
-                $jobs->withPath('browse-jobs?' . $withPath);
-                $searched['city'] = $data['city'];
-            } else {
-                $jobs = Job::whereHas('tags',function($tag) use ($job_tag){
-                    $tag->whereIn('tags.id', [$job_tag]);
-                })->where($where)->paginate(3);
-                $withPath .= "&job_tag={$job_tag}";
-                $jobs->withPath('browse-jobs?' . $withPath);
-            }
+        if (isset($data['city'])) {
+            $jobs = Job::whereHas('user', function ($u) use ($data) {
+                $u->whereHas('company', function ($c) use ($data) {
+                    $c->where('city_id', '=', $data['city']);
+                });
+            })->whereHas('tags', function ($tag) use ($job_tag) {
+                $tag->whereIn('tags.id', [$job_tag]);
+            })->where($where)->paginate('3');
+            $withPath .= "&city={$data['city']}";
+            $withPath .= "&job_tag={$job_tag}";
+            $jobs->withPath('browse-jobs?' . $withPath);
+            $searched['city'] = $data['city'];
+        } else {
+            $jobs = Job::whereHas('tags', function ($tag) use ($job_tag) {
+                $tag->whereIn('tags.id', [$job_tag]);
+            })->where($where)->paginate(3);
+            $withPath .= "&job_tag={$job_tag}";
+            $jobs->withPath('browse-jobs?' . $withPath);
+        }
 
         return $jobs;
     }
+
     public function getCandidateJobsWithOutTags($data, $where, $withPath)
     {
         if (isset($data['city'])) {
@@ -269,6 +272,7 @@ class JobService
         $application->fill([
             'company_id' => $job->user->company->id,
             'text' => "User " . auth()->user()->name . " appliyed to {$job->title} Job",
+            'candidate_id' => auth()->user()->id
         ]);
         $application->save();
         return $job;
@@ -278,12 +282,12 @@ class JobService
     {
         $job = Job::find($id);
         $applyed = false;
-        foreach($job->candidates as $candidate){
-            if($candidate->id == auth()->user()->candidate->id){
+        foreach ($job->candidates as $candidate) {
+            if ($candidate->id == auth()->user()->candidate->id) {
                 $applyed = true;
             }
         }
         $tags = Tag::all();
-        return compact('tags', 'job','applyed');
+        return new JObObject(null, null, null, null, $tags, $applyed, null, $job);
     }
 }

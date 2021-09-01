@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\DataObjects\CategoryObject;
 use App\Http\Requests\CategoryValidator;
 use App\Models\Category;
 use App\Models\City;
@@ -58,11 +59,12 @@ class CategoryService
         } else {
             $data['how'] = 'asc';
         }
+
         $data['sorts'] = ['id' => $data['how'], 'title' => $data['how'], 'jobs_cont' => $data['how'],
             'sort' => $data['how']];
         $newarray = ['categories' => $category, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
-        return $newarray;
+        return new CategoryObject($category, $data['sorts'], $data['searched']);
     }
 
     public function categoryCreate($data)
@@ -96,7 +98,7 @@ class CategoryService
             $data['image']->storeAs('public/categories_images', $imageName);
         }
         $category->fill($categoryInformation);
-        $category->update();
+        return $category->update();
     }
 
     public function deleteCategory(Category $category)

@@ -15,7 +15,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($pagination->sorts as $key => $val)
                 <td>
                     <a style="margin:10px" href="{{ route('job.index',['order_by' => $key, 'how' => $val]) }}">
                         @if($key == 'company_id')
@@ -37,10 +37,10 @@
                 action="{{ route('tag.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td style="width:80px">
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $pagination->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+                    <input class="form-control" value="{{ $pagination->searched['title'] }}" type="text" name="title">
                 </td>
 
                 <td>
@@ -50,7 +50,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($tags as $tag)
+        @foreach($pagination->tags as $tag)
             <tr>
                 <td>
                     {{ $tag->id }}
@@ -77,7 +77,7 @@
         @endforeach
         </tbody>
     </table>
-    {{ $tags->links() }}
+    {{ $pagination->tags->links() }}
 
     <a href="{{ route('tag.create') }}">
         <button class="btn btn-success">

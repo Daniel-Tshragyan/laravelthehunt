@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Plan;
 use App\Models\User;
 use App\Models\City;
-use App\Facades\UserServiceFacade;
+use App\Service\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -26,10 +28,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, UserService $userService)
     {
-        $paginationArguments = UserServiceFacade::paginationArguments($request->all());
-        return view('admin.user.index', $paginationArguments);
+        $paginationArguments = $userService->paginationArguments($request->all());
+        return view('admin.user.index', ['paginationArguments' => $paginationArguments]);
     }
 
     /**
@@ -68,8 +70,13 @@ class UserController extends Controller
         }
         if ($user->role == User::ROLE_COMPANY) {
             $company = $user->company->toArray();
+            $difereance = '-';
+            if($user->company->payment){
+                $difereance = $user->company->payment->created_at->diffInDays(Carbon::now());
+                $difereance = (int)$user->company->payment->plan->expired_days - $difereance;
+            }
             $city = City::find($company['city_id']);
-            return view('admin.user.show', ['user' => $user, 'company' => $company, 'city' => $city]);
+            return view('admin.user.show', compact('difereance','user' , 'company', 'city'));
         }
         if ($user->role == User::ROLE_ADMIN) {
             return view('admin.user.show', ['user' => $user]);
@@ -90,8 +97,9 @@ class UserController extends Controller
             return view('admin.user.update', compact('user', 'candidate', 'cities'));
         }
         if ($user->role == User::ROLE_COMPANY) {
+            $plans = Plan::all();
             $company = $user->company->toArray();
-            return view('admin.user.update', compact('user', 'company', 'cities'));
+            return view('admin.user.update', compact('user', 'company', 'cities','plans'));
         }
     }
 
@@ -102,18 +110,18 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UserValidator $request, User $user)
+    public function update(UserValidator $request, User $user, UserService $userService)
     {
 
 
         if ($user->role == User::ROLE_CANDIDATE) {
-            UserServiceFacade::updateCandidate($request->validated(), $user);
+            $userService->updateCandidate($request->validated(), $user);
         }
         if ($user->role == User::ROLE_COMPANY) {
             Session::flash('message', 'User Updated');
-            UserServiceFacade::updateCompany($request->validated(), $user);
+            $userService->updateCompany($request->validated(), $user);
         }
-        UserServiceFacade::updateUser($request->validated(), $user);
+        $userService->updateUser($request->validated(), $user);
         Session::flash('message', 'User Updated');
         return redirect()->route('user.index');
     }
@@ -124,15 +132,15 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user, UserService $userService)
     {
         if ($user->role == User::ROLE_CANDIDATE) {
-            UserServiceFacade::deleteCandidate($user);
+            $userService->deleteCandidate($user);
         }
         if ($user->role == User::ROLE_COMPANY) {
-            UserServiceFacade::deleteCompany($user);
+            $userService->deleteCompany($user);
         }
-        UserServiceFacade::deleteUser($user);
+        $userService->deleteUser($user);
         Session::flash('message', 'User Deleted');
         return redirect()->route('user.index');
     }

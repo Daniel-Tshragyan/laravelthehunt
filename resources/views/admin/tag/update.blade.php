@@ -3,7 +3,7 @@
     Update Tag
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('tagUpdate') }}
+    {{ Breadcrumbs::render('tagUpdate',$tag) }}
     <h1>Update Tag</h1>
     <form action="{{route('tag.update',['tag' => $tag])}}" class="w-50" method="post">
         @csrf

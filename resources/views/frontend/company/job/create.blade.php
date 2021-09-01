@@ -1,5 +1,25 @@
 @extends('layouts.app')
+@section('title')
+    Create Job
+@endsection
 @section('content')
+    @if(Session::has('message'))
+        <div class="modal" tabindex="-1" role="dialog" style="display:block">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Plan</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger">{{ Session::get('message') }}</p>
+                        <a href="{{ route('pricing') }}">
+                            Update Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="page-header">
         <div class="container">
             <div class="row">
@@ -17,12 +37,13 @@
                 <div class="col-lg-9 col-md-12 col-xs-12">
                     <div class="post-job box">
                         <h3 class="job-title">Post a new Job</h3>
-                        <form class="form-ad" action="{{route('front-job.store')}}" method="post">
+                        <form class="form-ad" action="{{route('job.store')}}" method="post">
                             @csrf
                             <input type="hidden" name="company_id" value="{{ auth()->id() }}">
                             <div class="form-group">
-                                <label class="control-label" >Job Title</label>
-                                <input type="text" value="{{ old('title') }}" class="form-control" name="title" placeholder="Write job title" >
+                                <label class="control-label">Job Title</label>
+                                <input type="text" value="{{ old('title') }}" class="form-control" name="title"
+                                       placeholder="Write job title">
                             </div>
                             @if ($errors->has('title'))
                                 <div class="alert alert-danger" role="alert">
@@ -32,7 +53,8 @@
 
                             <div class="form-group">
                                 <label class="control-label">Location </label>
-                                <input type="text" class="form-control" value="{{ old('location') }}" name="location" placeholder="e.g.London">
+                                <input type="text" class="form-control" value="{{ old('location') }}" name="location"
+                                       placeholder="e.g.London">
                             </div>
                             @if ($errors->has('location'))
                                 <div class="alert alert-danger" role="alert">
@@ -72,7 +94,8 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Description</label>
-                                <textarea name="description" id="" cols="30" rows="10" class="form-control"> {{ old('description') }}</textarea>
+                                <textarea name="description" id="" cols="30" rows="10"
+                                          class="form-control"> {{ old('description') }}</textarea>
                             </div>
                             @if ($errors->has('description'))
                                 <div class="alert alert-danger" role="alert">
@@ -82,7 +105,8 @@
 
                             <div class="form-group">
                                 <label class="control-label">Application email / URL</label>
-                                <input name="url" value="{{ old('url') }}" type="text" class="form-control" placeholder="Enter an email address or website URL">
+                                <input name="url" value="{{ old('url') }}" type="text" class="form-control"
+                                       placeholder="Enter an email address or website URL">
                             </div>
                             @if ($errors->has('url'))
                                 <div class="alert alert-danger" role="alert">
@@ -91,7 +115,8 @@
                             @endif
                             <div class="form-group">
                                 <label class="control-label">Closing Date</label>
-                                <input type="date" value="{{ old('closing_date') }}" class="form-control" name="closing_date">
+                                <input type="date" value="{{ old('closing_date') }}" class="form-control"
+                                       name="closing_date">
                             </div>
                             @if ($errors->has('closing_date'))
                                 <div class="alert alert-danger" role="alert">

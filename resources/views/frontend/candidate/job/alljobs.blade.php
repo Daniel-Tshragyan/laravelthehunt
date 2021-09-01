@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    All Jobs
+@endsection
 @section('content')
     <div class="page-header">
         <div class="container">
@@ -19,17 +22,17 @@
                         @csrf
                     <div class="wrap-search-filter row">
                     <div class="col-lg-3 col-md-3 col-xs-12">
-                    <input type="text" class="form-control" name="title" value="{{ $searched['title'] }}" placeholder="Keyword: Name">
+                    <input type="text" class="form-control" name="title" value="{{ $paginationArguments->searched['title'] }}" placeholder="Keyword: Name">
                 </div>
                     <div class="col-lg-3 col-md-3 col-xs-12">
-                            <input type="text" class="form-control" name="location" value="{{ $searched['location'] }}" placeholder="Location">
+                            <input type="text" class="form-control" name="location" value="{{ $paginationArguments->searched['location'] }}" placeholder="Location">
                         </div>
                         <div class="col-lg-3 col-md-3 col-xs-12">
                             <select name="city" id="" class="form-control">
                                 <option value="">Select City</option>
-                                @foreach($cities as $city)
+                                @foreach($paginationArguments->cities as $city)
                                     <option
-                                        @if($city->id == $searched['city'])
+                                        @if($city->id == $paginationArguments->searched['city'])
                                              selected="selected"
                                         @endif
                                         value="{{ $city->id }}">{{ $city->name }}</option>
@@ -42,7 +45,7 @@
                     </div>
                 </div>
                 </form>
-                @foreach($tags as $tag)
+                @foreach($paginationArguments->tags as $tag)
                     <a href="{{ route('browse-jobs',['job_tag' => $tag->id,'title' => Request::get('title'),'location' => Request::get('location'),'city' => Request::get('city')]) }}">
                         <span class="full-time" style="
                             font-size: 11px;
@@ -54,14 +57,14 @@
                             text-transform: uppercase;
                             color: #26ae61;
                             background: #d5ffe7;
-                        @if($tag->id ==$searched['job_tag'])
+                        @if($tag->id ==$paginationArguments->searched['job_tag'])
                             background: red;
                         @endif
                             ">{{ $tag->title }}</span>
                     </a>
                 @endforeach
 
-            @foreach($jobs as $job)
+            @foreach($paginationArguments->jobs as $job)
                 <div class="col-lg-12 col-md-12 col-xs-12">
                     <a class="job-listings" href="{{ route('show-job',['id' => $job->id]) }}">
                         <div class="row">
@@ -112,6 +115,6 @@
             </div>
         </div>
     </section>
-    {{ $jobs->links() }}
+    {{ $paginationArguments->jobs->links() }}
 
 @endsection

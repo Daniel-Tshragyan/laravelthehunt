@@ -3,15 +3,15 @@
     Update Job
 @endsection
 @section('content')
-    {{ Breadcrumbs::render('jobUpdate') }}
+    {{ Breadcrumbs::render('jobUpdate',$admin_job) }}
     <h1>Update Job</h1>
-    <form action="{{route('job.update',['job' => $job])}}" class="w-50" method="post">
+    <form action="{{route('admin-job.update',['admin_job' => $admin_job])}}" class="w-50" method="post">
         @csrf
         @method('put')
         <label for="">
             Title
         </label>
-        <input type="text" name="title" value="{{ $job->title }}" placeholder="Title" class="form-control">
+        <input type="text" name="title" value="{{ $admin_job->title }}" placeholder="Title" class="form-control">
         <br>
         @if ($errors->has('title'))
             <div class="alert alert-danger" role="alert">
@@ -21,7 +21,7 @@
         <label for="">
             description
         </label>
-        <input type="text" name="description" value="{{ $job->description }}" placeholder="Description" class="form-control">
+        <input type="text" name="description" value="{{ $admin_job->description }}" placeholder="Description" class="form-control">
         <br>
         @if ($errors->has('description'))
             <div class="alert alert-danger" role="alert">
@@ -31,7 +31,7 @@
         <label for="">
             Cloasing Date
         </label>
-        <input type="date" name="closing_date" value="{{ $job->closing_date }}" placeholder="Cloasing Date" class="form-control">
+        <input type="date" name="closing_date" value="{{ $admin_job->closing_date }}" placeholder="Cloasing Date" class="form-control">
         <br>
         @if ($errors->has('closing_date'))
             <div class="alert alert-danger" role="alert">
@@ -44,7 +44,7 @@
         <select class="tags1 form-control" name="job_tags[]" multiple="multiple">
             @foreach($tags as $tag)
                 <option value="{{ $tag->id }}"
-                @if(in_array($tag->id, $job->tags->pluck('id')->toArray()))
+                @if(in_array($tag->id, $admin_job->tags->pluck('id')->toArray()))
                     selected="selected"
                 @endif
                 >{{ $tag->title }}</option>
@@ -60,7 +60,7 @@
         <label for="">
             Location
         </label>
-        <input type="text" name="location" value="{{ $job->location }}" placeholder="Location" class="form-control">
+        <input type="text" name="location" value="{{ $admin_job->location }}" placeholder="Location" class="form-control">
         <br>
 
         @if ($errors->has('location'))
@@ -82,7 +82,7 @@
         <label for="">
             Aplication Url
         </label>
-        <input type="text" name="url" value="{{ $job->url }}" placeholder="Aplication Url" class="form-control">
+        <input type="text" name="url" value="{{ $admin_job->url }}" placeholder="Aplication Url" class="form-control">
         <br>
         @if ($errors->has('url'))
             <div class="alert alert-danger" role="alert">
@@ -95,7 +95,7 @@
         <select name="company_id" id="" class="form-control">
             @foreach( $companies as $company)
                 <option value="{{ $company->id }}"
-                        @if($company->id == $job->company_id)
+                        @if($company->id == $admin_job->company_id)
                         selected="selected"
                     @endif
                 >{{ $company->name }}</option>
@@ -112,7 +112,7 @@
         <select name="category_id" id="" class="form-control">
             @foreach( $categories as $category)
                 <option value="{{ $category->id }}"
-                        @if($category->id == $job->category_id)
+                        @if($category->id == $admin_job->category_id)
                         selected="selected"
                     @endif
                 >{{ $category->title }}</option>

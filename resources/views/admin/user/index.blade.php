@@ -15,7 +15,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 <td>
                     <a style="margin:10px" href="{{ route('user.index',['order_by' => $key, 'how' => $val]) }}">{{$key}}
                     </a>
@@ -30,20 +30,20 @@
                 action="{{ route('user.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td>
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['name'] }}" type="text" name="name">
+                    <input class="form-control" value="{{ $paginationArguments->searched['name'] }}" type="text" name="name">
                 </td>
                 <td>
                     <select name="role" id="" class="form-control">
                         <option value="">
                             Select Role
                         </option>
-                        @foreach($filters as $key => $value)
+                        @foreach($paginationArguments->filters as $key => $value)
 
                             <option value="{{ $key }}"
-                                @if($key == $searched['role'])
+                                @if($key == $paginationArguments->searched['role'])
                                       selected="selected"
                                 @endif
                             >{{ $value }}</option>
@@ -51,7 +51,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" class="form-control"  value="{{$searched['email'] }}" name="email">
+                    <input type="text" class="form-control"  value="{{$paginationArguments->searched['email'] }}" name="email">
                 </td>
                 <td>
                     <button class="btn btn-success" type="submit">Search</button>
@@ -61,7 +61,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($users as $user)
+        @foreach($paginationArguments->users as $user)
             <tr>
                 <td>
                     {{ $user->id }}
@@ -71,7 +71,7 @@
                 </td>
 
                 <td>
-                    {{ $user->role }}
+                    {{ $paginationArguments->roles[$user->role] }}
                 </td>
 
                 <td>
@@ -99,6 +99,6 @@
 
 
     </table>
-    {{ $users->links() }}
+    {{ $paginationArguments->users->links() }}
 
 @endsection

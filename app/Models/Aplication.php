@@ -9,7 +9,8 @@ class Aplication extends Model
 {
     protected $fillable = [
         'company_id',
-        'text'
+        'text',
+        'candidate_id'
     ];
 
     public function Company()

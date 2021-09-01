@@ -15,15 +15,15 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 <td>
-                    <a style="margin:10px" href="{{ route('job.index',['order_by' => $key, 'how' => $val]) }}">
+                    <a style="margin:10px" href="{{ route('admin-job.index',['order_by' => $key, 'how' => $val]) }}">
                         @if($key == 'company_id')
                             company
                         @elseif($key == 'category_id')
                             category
                         @else
-                            {{$key}}
+                            {{str_replace('_',' ',$key)}}
                         @endif
                     </a>
                 </td>
@@ -34,22 +34,22 @@
         </tr>
         <tr>
             <form
-                action="{{ route('job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
+                action="{{ route('admin-job.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td style="width:80px">
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+                    <input class="form-control" value="{{ $paginationArguments->searched['title'] }}" type="text" name="title">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['location'] }}" type="text" name="location">
+                    <input class="form-control" value="{{ $paginationArguments->searched['location'] }}" type="text" name="location">
                 </td>
                 <td>
                     <select name="job_tags[]" id="" multiple="multiple" class="tags1 form-control">
-                        @foreach($tags as $tag)
+                        @foreach($paginationArguments->tags as $tag)
                             <option value="{{ $tag->id }}"
-                                @if(in_array($tag->id, $searched['job_tags']))
+                                @if(in_array($tag->id, $paginationArguments->searched['job_tags']))
                                     selected="selected"
                                 @endif
                             >{{ $tag->title }}</option>
@@ -57,26 +57,26 @@
                     </select>
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['description'] }}" type="text" name="description">
+                    <input class="form-control" value="{{ $paginationArguments->searched['description'] }}" type="text" name="description">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['closing_date'] }}" type="date" name="closing_date">
+                    <input class="form-control" value="{{ $paginationArguments->searched['closing_date'] }}" type="date" name="closing_date">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['price'] }}" type="text" name="price">
+                    <input class="form-control" value="{{ $paginationArguments->searched['price'] }}" type="text" name="price">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['url'] }}" type="text" name="url">
+                    <input class="form-control" value="{{ $paginationArguments->searched['url'] }}" type="text" name="url">
                 </td>
                 <td>
                     <select name="company_id" id="" class="form-control">
                         <option value="">
                             Select Company
                         </option>
-                        @foreach($companies as $key => $value)
+                        @foreach($paginationArguments->companies as $key => $value)
 
                             <option value="{{ $value->id }}"
-                                    @if($value->id == $searched['company_id'])
+                                    @if($value->id == $paginationArguments->searched['company_id'])
                                     selected="selected"
                                 @endif
                             >{{ $value->name }}</option>
@@ -88,10 +88,10 @@
                         <option value="">
                             Select Category
                         </option>
-                        @foreach($categories as $key => $value)
+                        @foreach($paginationArguments->categories as $key => $value)
 
                             <option value="{{ $value->id }}"
-                                    @if($value->id == $searched['category_id'])
+                                    @if($value->id == $paginationArguments->searched['category_id'])
                                     selected="selected"
                                 @endif
                             >{{ $value->title }}</option>
@@ -105,7 +105,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($jobs as $job)
+        @foreach($paginationArguments->admin_jobs as $job)
             <tr>
                 <td>
                     {{ $job->id }}
@@ -153,13 +153,13 @@
                 </td>
 
                 <td>
-                    <a title="Show" style="margin:5px" href="{{ route('job.show',['job' => $job]) }}">
+                    <a title="Show" style="margin:5px" href="{{ route('admin-job.show',['admin_job' => $job]) }}">
                         <i class="far fa-eye"></i>
                     </a>
-                    <a title="Update" style="margin:5px" href="{{ route('job.edit',['job' => $job]) }}">
+                    <a title="Update" style="margin:5px" href="{{ route('admin-job.edit',['admin_job' => $job]) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
-                    <form style="display:inline-block" action="{{ route('job.destroy',['job' => $job]) }}" method="post">
+                    <form style="display:inline-block" action="{{ route('admin-job.destroy',['admin_job' => $job]) }}" method="post">
                         @csrf
                         @method('delete')
                         <button title="Remove" style="border:none;background-color:transparent" type="submit">
@@ -173,9 +173,9 @@
 
 
     </table>
-    {{ $jobs->links() }}
+    {{ $paginationArguments->admin_jobs->links() }}
 
-    <a href="{{ route('job.create') }}">
+    <a href="{{ route('admin-job.create') }}">
         <button class="btn btn-success">
             Create New
         </button>

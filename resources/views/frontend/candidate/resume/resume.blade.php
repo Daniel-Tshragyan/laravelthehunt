@@ -1,39 +1,8 @@
-@extends('layouts.app')
-@section('content')
-
-    <!-- Page Header Start -->
-    <div class="page-header">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="inner-header">
-              <h3>Resume</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Page Header End -->
-
-    <!-- Start Content -->
-    <div class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 col-md-4 col-xs-12">
-            <div class="right-sideabr">
-              <h4>Manage Account</h4>
-                <ul class="list-item">
-                    <li><a href="{{route('resume')}}">My Resume</a></li>
-                    <li><a href="{{route('bookmarked')}}">Bookmarked Jobs</a></li>
-                    <li><a href="{{route('notifications')}}">Notifications <span class="notinumber">2</span></a></li>
-                    <li><a class="active" href="{{route('manage-applications')}}">Manage Applications</a></li>
-                    <li><a href="{{route('job-alerts')}}">Job Alerts</a></li>
-                    <li><a href="{{route('change-password')}}">Change Password</a></li>
-                    <li><a href="{{route('home')}}">Sing Out</a></li>
-                </ul>
-            </div>
-          </div>
-          <div class="col-lg-8 col-md-8 col-xs-12">
+@extends('frontend.candidate.layouts.app')
+@section('title1')
+    My Resume
+@endsection
+@section('content1')
             <div class="inner-box my-resume">
               <div class="author-resume">
                 <div class="thumb">
@@ -80,11 +49,5 @@
                 <span class="date">2010-2014</span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- End Content -->
-
-   @endsection
+@endsection
 
