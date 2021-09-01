@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 use App\Http\Requests\PlanValidation;
-use App\Facades\PlanFacade;
+use App\Service\PlanService;
 use Illuminate\Support\Facades\Session;
 
 class PlanController extends Controller
@@ -16,10 +16,10 @@ class PlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, PlanService $planService)
     {
-        $paginationArguments = PlanFacade::paginationArguments($request->all());
-        return view('admin.plan.index', $paginationArguments);
+        $paginationArguments = $planService->paginationArguments($request->all());
+        return view('admin.plan.index', ['paginationArguments' => $paginationArguments]);
     }
 
     /**
@@ -38,9 +38,9 @@ class PlanController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PlanValidation $request)
+    public function store(PlanValidation $request, PlanService $planService)
     {
-        PlanFacade::fillPlan($request->validated());
+        $planService->fillPlan($request->validated());
         Session::flash('message', 'Plan Added');
         return redirect()->route('plan.index');
     }
@@ -75,9 +75,9 @@ class PlanController extends Controller
      * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
-    public function update(PlanValidation $request, Plan $plan)
+    public function update(PlanValidation $request, Plan $plan, PlanService $planService)
     {
-        PlanFacade::updatePlan($request->validated(), $plan);
+        $planService->updatePlan($request->validated(), $plan);
         Session::flash('message', 'Plan Updated');
         return redirect()->route('plan.index');
     }
@@ -88,9 +88,9 @@ class PlanController extends Controller
      * @param \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Plan $plan)
+    public function destroy(Plan $plan, PlanService $planService)
     {
-        PlanFacade::deletePlan($plan);
+        $planService->deletePlan($plan);
         Session::flash('message', 'Plan Deleted');
         return redirect()->route('plan.index');
     }

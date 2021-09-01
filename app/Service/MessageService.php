@@ -10,17 +10,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
+use App\DataObjects\ActiveDialog;
 
 class MessageService
 {
 
-    public function index()
+    public function getAllDialogs($inner = false)
     {
         $id = auth()->user()->id;
-        return Dialog::where(['user1_id' => $id])->orWhere(['user2_id' => $id])->get();
+        $dialogs = Dialog::where(['user1_id' => $id])->orWhere(['user2_id' => $id])->get();
+        if ($inner) {
+            return $dialogs;
+        }
+        return new ActiveDialog(null, $dialogs, null, null);
     }
 
-    public function openMessage($data, User $user)
+    public function getActiveDialog($data, User $user)
     {
         $limit = 5;
         if (isset($data['limit'])) {
@@ -28,18 +33,18 @@ class MessageService
         }
         $messages = [];
         $id = auth()->user()->id;
-        $dialogs = Dialog::where(['user1_id' => $id])->orWhere(['user2_id' => $id])->get();
+        $dialogs = $this->getAllDialogs(true);
         $dialog = Dialog::where(['user1_id' => $user->id, 'user2_id' => $id])
-            ->orWhere(['user2_id' => $user->id])->where([ 'user1_id' => $id])->first();
+            ->orWhere(['user2_id' => $user->id])->where(['user1_id' => $id])->first();
         if (!is_null($dialog)) {
-            $messages = DialogMessage::where(['dialog_id' => $dialog->id])->limit($limit)->get();
+            $messages = DialogMessage::where(['dialog_id' => $dialog->id])->orderBy('id', 'desc')->limit($limit)->get();
             if ($limit >= DialogMessage::where(['dialog_id' => $dialog->id])->count() || $limit == 0) {
                 $limit = 0;
             } else {
                 $limit += 5;
             }
         }
-        return compact('user', 'dialogs', 'messages', 'limit');
+        return new ActiveDialog($user, $dialogs, $messages, $limit);
     }
 
     public function send($data, $user)
@@ -47,7 +52,7 @@ class MessageService
         $id = auth()->user()->id;
         $data['sender_id'] = $id;
         $dialog = Dialog::where(['user1_id' => $user->id, 'user2_id' => $id])
-            ->orWhere(['user2_id' => $user->id])->where([ 'user1_id' => $id])->first();
+            ->orWhere(['user2_id' => $user->id])->where(['user1_id' => $id])->first();
 
         if (isset($data['file'])) {
             $fileName = Str::random(10) . '.' . $data['file']->extension();

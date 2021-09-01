@@ -14,7 +14,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 <td>
                     <a style="margin:10px" href="{{ route('city.index',['order_by' => $key, 'how' => $val]) }}">{{$key}}
                     </a>
@@ -27,10 +27,10 @@
                 action="{{ route('city.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td>
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['name'] }}" type="text" name="name">
+                    <input class="form-control" value="{{ $paginationArguments->searched['name'] }}" type="text" name="name">
                 </td>
                 <td>
                     <button class="btn btn-success" type="submit">Search</button>
@@ -39,7 +39,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($cities as $city)
+        @foreach($paginationArguments->cities as $city)
             <tr>
                 <td>
                     {{ $city->id }}
@@ -70,7 +70,7 @@
 
     </table>
 
-    {{ $cities->links() }}
+    {{ $paginationArguments->cities->links() }}
     <br>
 
     <a href="{{ route('city.create') }}">

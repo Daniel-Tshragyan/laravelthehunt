@@ -16,7 +16,7 @@
             </div>
         @endif
         <div class="row justify-content-around">
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 @if($key != 'company_id')
 
                 <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
@@ -42,19 +42,19 @@
 
         @csrf
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+            <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
         </div>
         <div  style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+            <input class="form-control" value="{{ $paginationArguments->searched['title'] }}" type="text" name="title">
         </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['location'] }}" type="text" name="location">
+            <input class="form-control" value="{{ $paginationArguments->searched['location'] }}" type="text" name="location">
         </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
             <select name="job_tags[]" id="" multiple="multiple" class="tags1 form-control">
-                @foreach($tags as $tag)
+                @foreach($paginationArguments->tags as $tag)
                     <option value="{{ $tag->id }}"
-                            @if(in_array($tag->id, $searched['job_tags']))
+                            @if(in_array($tag->id, $paginationArguments->searched['job_tags']))
                             selected="selected"
                         @endif
                     >{{ $tag->title }}</option>
@@ -62,26 +62,26 @@
             </select>
         </div>
        <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['description'] }}" type="text" name="description">
+            <input class="form-control" value="{{ $paginationArguments->searched['description'] }}" type="text" name="description">
        </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['closing_date'] }}" type="date" name="closing_date">
+            <input class="form-control" value="{{ $paginationArguments->searched['closing_date'] }}" type="date" name="closing_date">
         </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['price'] }}" type="number" name="price">
+            <input class="form-control" value="{{ $paginationArguments->searched['price'] }}" type="number" name="price">
         </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
-            <input class="form-control" value="{{ $searched['url'] }}" type="text" name="url">
+            <input class="form-control" value="{{ $paginationArguments->searched['url'] }}" type="text" name="url">
         </div>
         <div style="margin:0 0 0 10px;padding:0; text-align:right" class="col-lg-1 col-md-1 col-xs-12">
             <select name="category_id" id="" class="form-control">
                 <option value="">
                     Select Category
                 </option>
-                @foreach($categories as $key => $value)
+                @foreach($paginationArguments->categories as $key => $value)
 
                     <option value="{{ $value->id }}"
-                            @if($value->id == $searched['category_id'])
+                            @if($value->id == $paginationArguments->searched['category_id'])
                             selected="selected"
                         @endif
                     >{{ $value->title }}</option>
@@ -93,7 +93,7 @@
         </div>
     </div>
             </form>
-        @foreach($jobs as $job)
+        @foreach($paginationArguments->jobs as $job)
         <div class="alerts-content">
             <div class="row justify-content-around" style="text-align:right">
 
@@ -163,6 +163,6 @@
         </div>
     @endforeach
 
-    {{ $jobs->links() }}
+    {{ $paginationArguments->jobs->links() }}
 
 @endsection

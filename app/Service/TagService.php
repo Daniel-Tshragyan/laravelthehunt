@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\DataObjects\TagObject;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Requests\JobValidation;
@@ -59,7 +60,7 @@ class TagService
             $data['how'] = 'asc';
         }
         $data['sorts'] = ['id' => $data['how'], 'title' => $data['how']];
-        return ['tags' => $tags, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
+        return new TagObject($tags,  $data['sorts'],  $data['searched']);
     }
 
     public function createTag($data)

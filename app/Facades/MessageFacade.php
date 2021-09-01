@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static index()
- * @method static openMessage(array $data,User $user)
- * @method static send(arr $data,User $user)
+ * @method static getAllDialogs()
+ * @method static getActiveDialog(array $data, User $user)
+ * @method static send(arr $data, User $user)
  */
 class MessageFacade extends Facade
 {

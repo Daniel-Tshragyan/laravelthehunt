@@ -5,21 +5,21 @@ namespace App\Http\Controllers\FrontEnd\Company;
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use Illuminate\Http\Request;
-use App\Facades\PlanFacade;
+use App\Service\PlanService;
 use App\Http\Requests\FrontPlanValidator;
 use Illuminate\Support\Facades\Session;
 
 class PlanController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, PlanService $planService)
     {
-        $paginationArguments = PlanFacade::paginationArguments($request->all());
-        return view('frontend.company.plan.all-plans', $paginationArguments);
+        $paginationArguments = $planService->paginationArguments($request->all());
+        return view('frontend.company.plan.all-plans', ['paginationArguments' => $paginationArguments]);
     }
 
-    public function apply(FrontPlanValidator $request)
+    public function apply(FrontPlanValidator $request, PlanService $planService)
     {
-        PlanFacade::apply($request->validated()['id']);
+        $planService->apply($request->validated()['id']);
         Session::flash('message', 'Plan Updated');
         return redirect()->route('pricing');
     }

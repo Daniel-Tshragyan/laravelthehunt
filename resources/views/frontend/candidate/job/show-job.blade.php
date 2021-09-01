@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-{{ $job->title }}
+{{ $data->job->title }}
 @endsection
 @section('content')
 
@@ -11,18 +11,18 @@
                 <div class="col-lg-8 col-md-6 col-xs-12">
                     <div class="breadcrumb-wrapper">
                         <div class="img-wrapper">
-                            @if(!is_null($job->category))
-                                <img style="max-width:150%" src="{{asset('storage/categories_images/'.$job->category->image)}}" alt="">
+                            @if(!is_null($data->job->category))
+                                <img style="max-width:150%" src="{{asset('storage/categories_images/'.$data->job->category->image)}}" alt="">
                             @else
                                 <img style="width:50px" src="{{asset('img/features/img2.png')}}" alt="">
                             @endif
                         </div>
                         <div class="content">
-                            <h3 class="product-title">{{ $job->title }}</h3>
-                            <p class="brand">{{ $job->user->name }}</p>
+                            <h3 class="product-title">{{ $data->job->title }}</h3>
+                            <p class="brand">{{ $data->job->user->name }}</p>
                             <div class="tags">
-                                <span><i class="lni-map-marker"></i> {{ $job->location }}</span><br>
-                                <span><i class="lni-calendar"></i> Deadline {{ $job->closing_date }}</span>
+                                <span><i class="lni-map-marker"></i> {{ $data->job->location }}</span><br>
+                                <span><i class="lni-calendar"></i> Deadline {{ $data->job->closing_date }}</span>
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                 <div class="col-lg-4 col-md-6 col-xs-12">
                     <div class="month-price">
                         <span class="year">Yearly</span>
-                        <div class="price">${{ $job->price }}</div>
+                        <div class="price">${{ $data->job->price }}</div>
                     </div>
                 </div>
             </div>
@@ -45,13 +45,13 @@
                 <div class="col-lg-8 col-md-12 col-xs-12">
                     <div class="content-area">
                         <h4>Job Description</h4>
-                        {{ $job->description }}
+                        {{ $data->job->description }}
                     </div>
                     @if(auth()->user()->role != 2)
 
-                        <form method="post" action="{{ route('apply-job',['id' => $job->id]) }}">
+                        <form method="post" action="{{ route('apply-job',['id' => $data->job->id]) }}">
                             @csrf
-                            @if(!$applyed)
+                            @if(!$data->applyed)
                                 <button type="submit" class="btn btn-success" >Apply Job</button>
                             @else
                                 <p class="text-success">Already Applyed</p>

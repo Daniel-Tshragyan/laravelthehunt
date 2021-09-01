@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DataObjects\UserObject;
 use App\Models\Job;
 use App\Models\PlanPayment;
 use App\Models\User;
@@ -67,9 +68,8 @@ class UserService
         }
         $data['sorts'] = ['id' => $data['how'], 'name' => $data['how'], 'role' => $data['how'], 'email' => $data['how']];
         $data['roles'] = ['Admin','Candidate','Company'];
-        $newarray = ['filters' => self::filters, 'roles' =>$data['roles'], 'users' => $users, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
-        return $newarray;
+        return new UserObject(self::filters, $data['roles'], $users, $data['sorts'], $data['searched']);
     }
 
 

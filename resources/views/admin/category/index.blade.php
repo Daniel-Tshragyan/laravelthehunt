@@ -14,7 +14,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 <td>
                     <a style="margin:10px" href="{{ route('category.index',['order_by' => $key, 'how' => $val]) }}">
                         {{str_replace('_',' ',$key)}}
@@ -28,16 +28,16 @@
             <form action="{{ route('category.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td>
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+                    <input class="form-control" value="{{ $paginationArguments->searched['title'] }}" type="text" name="title">
                 </td>
                 <td>
-                    <input name="jobs_count" class="form-control" value="{{ $searched['jobs_count'] }}" name="jobs_count" type="number">
+                    <input name="jobs_count" class="form-control" value="{{ $paginationArguments->searched['jobs_count'] }}" name="jobs_count" type="number">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['sort'] }}" type="number" name="sort">
+                    <input class="form-control" value="{{ $paginationArguments->searched['sort'] }}" type="number" name="sort">
                 </td>
                 <td>
                     <button class="btn btn-success" type="submit">Search</button>
@@ -46,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($categories as $category)
+        @foreach($paginationArguments->categories as $category)
             <tr>
                 <td>
                     {{ $category->id }}
@@ -85,7 +85,7 @@
         </tbody>
     </table>
 
-    {{ $categories->links() }}
+    {{ $paginationArguments->categories->links() }}
     <br>
     <a href="{{ route('category.create') }}">
         <button class="btn btn-success">

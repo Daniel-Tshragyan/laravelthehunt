@@ -20,6 +20,11 @@ class DialogMessage extends Model
         return $this->belongsTo(Dialog::class, 'dialog_id', 'id');
     }
 
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id', 'id');
+    }
+
     public function isFileImage()
     {
        $file  =  explode('.',$this->file);

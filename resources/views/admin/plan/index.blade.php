@@ -15,7 +15,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            @foreach($sorts as $key => $val)
+            @foreach($paginationArguments->sorts as $key => $val)
                 <td>
                     <a style="margin:10px;text-align:center" href="{{ route('plan.index',['order_by' => $key, 'how' => $val]) }}">
                         {{str_replace('_',' ',$key)}}
@@ -31,29 +31,29 @@
                 action="{{ route('plan.index',['order_by' => Request::get('order_by'), 'how' => Request::get('how')]) }}">
                 @csrf
                 <td style="width:80px">
-                    <input class="form-control" value="{{ $searched['id'] }}" type="number" name="id">
+                    <input class="form-control" value="{{ $paginationArguments->searched['id'] }}" type="number" name="id">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['title'] }}" type="text" name="title">
+                    <input class="form-control" value="{{ $paginationArguments->searched['title'] }}" type="text" name="title">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['jobs_count'] }}" type="number" name="jobs_count">
+                    <input class="form-control" value="{{ $paginationArguments->searched['jobs_count'] }}" type="number" name="jobs_count">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['expired_days'] }}" type="number" name="expired_days">
+                    <input class="form-control" value="{{ $paginationArguments->searched['expired_days'] }}" type="number" name="expired_days">
                 </td>
                 <td>
-                    <input class="form-control" value="{{ $searched['price'] }}" type="number" name="price">
+                    <input class="form-control" value="{{ $paginationArguments->searched['price'] }}" type="number" name="price">
                 </td>
                 <td>
                     <select class="form-control" name="featured_job" id="">
                         <option value="">
                             Select
                         </option>
-                        <option value="1" @if($searched['featured_job'] == 1) selected="selected" @endif>
+                        <option value="1" @if($paginationArguments->searched['featured_job'] == 1) selected="selected" @endif>
                             Yes
                         </option>
-                        <option value="0" @if($searched['featured_job'] == 0) selected="selected" @endif>
+                        <option value="0" @if($paginationArguments->searched['featured_job'] == 0) selected="selected" @endif>
                             No
                         </option>
                     </select>
@@ -63,10 +63,10 @@
                         <option value="">
                             Select
                         </option>
-                        <option value="1" @if($searched['job_listing'] == 1) selected="selected" @endif>
+                        <option value="1" @if($paginationArguments->searched['job_listing'] == 1) selected="selected" @endif>
                             Yes
                         </option>
-                        <option value="0" @if($searched['job_listing'] == 0) selected="selected" @endif>
+                        <option value="0" @if($paginationArguments->searched['job_listing'] == 0) selected="selected" @endif>
                             No
                         </option>
                     </select>
@@ -76,10 +76,10 @@
                         <option value="" >
                            Select
                         </option>
-                        <option value="1" @if($searched['manage_applications'] == 1) selected="selected" @endif>
+                        <option value="1" @if($paginationArguments->searched['manage_applications'] == 1) selected="selected" @endif>
                             Yes
                         </option>
-                        <option value="0" @if($searched['manage_applications'] == 0) selected="selected" @endif>
+                        <option value="0" @if($paginationArguments->searched['manage_applications'] == 0) selected="selected" @endif>
                             No
                         </option>
                     </select>
@@ -91,7 +91,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($plans as $plan)
+        @foreach($paginationArguments->plans as $plan)
             <tr>
                 <td>
                     {{ $plan->id }}
@@ -148,7 +148,7 @@
         @endforeach
         </tbody>
     </table>
-    {{ $plans->links() }}
+    {{ $paginationArguments->plans->links() }}
 
     <a href="{{ route('plan.create') }}">
         <button class="btn btn-success">

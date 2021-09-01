@@ -13,6 +13,7 @@ use App\Http\Requests\JobValidation;
 use App\Http\Requests\AdminJobValidator;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isNull;
+use App\DataObjects\JObObject;
 
 class JobService
 {
@@ -78,8 +79,8 @@ class JobService
             'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'],
             'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['tags' => Tag::all(), 'admin_jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
-        return $newarray;
+        return new JObObject(null, $jobs, $data['sorts'], $data['searched'], Tag::all());
+
     }
 
     public function frontJobGetPagination($job_tags, $data)
@@ -96,9 +97,9 @@ class JobService
             'closing_date' => $data['how'], 'price' => $data['how'], 'url' => $data['how'],
             'company_id' => $data['how'], 'category_id' => $data['how'],
         ];
-        $newarray = ['tags' => Tag::all(), 'jobs' => $jobs, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
+        $tags = Tag::all();
 
-        return $newarray;
+        return new JObObject($jobs, null, $data['sorts'], $data['searched'], $tags);
     }
 
     public function getJobs($job_tags, $data)
@@ -215,7 +216,7 @@ class JobService
         $applyed = false;
         $tags = Tag::all();
 
-        return compact('jobs', 'searched', 'tags', 'applyed', 'cities');
+        return new JObObject($jobs, null, null, $searched, $tags, $applyed, $cities);
     }
 
     public function getCandidateJobsWithTags($data, $job_tag, $where, $withPath)
@@ -287,6 +288,6 @@ class JobService
             }
         }
         $tags = Tag::all();
-        return compact('tags', 'job', 'applyed');
+        return new JObObject(null, null, null, null, $tags, $applyed, null, $job);
     }
 }

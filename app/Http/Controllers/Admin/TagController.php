@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
-use App\Facades\TagFacade;
+use App\Service\TagService;
 use Illuminate\Http\Request;
 use App\Http\Requests\TagValidator;
 use Illuminate\Support\Facades\Session;
@@ -16,10 +16,10 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, TagService $tagService)
     {
-        $pagination = TagFacade::paginationArguments($request->all());
-        return view('admin.tag.index', $pagination);
+        $pagination = $tagService->paginationArguments($request->all());
+        return view('admin.tag.index', ['pagination' => $pagination]);
     }
 
     /**
@@ -38,9 +38,9 @@ class TagController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TagValidator $request)
+    public function store(TagValidator $request, TagService $tagService)
     {
-        TagFacade::createTag($request->validated());
+        $tagService->createTag($request->validated());
         Session::flash('message', 'Job Added');
         return redirect()->route('tag.index');
     }
@@ -71,9 +71,9 @@ class TagController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function update(TagValidator $request, Tag $tag)
+    public function update(TagValidator $request, Tag $tag, TagService $tagService)
     {
-        TagFacade::updateTag($tag, $request->validated());
+        $tagService->updateTag($tag, $request->validated());
         Session::flash('message', 'Job Updated');
         return redirect()->route('tag.index');
     }
@@ -83,9 +83,9 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag, TagService $tagService)
     {
-        TagFacade::deleteTag($tag);
+        $tagService->deleteTag($tag);
         Session::flash('message', 'Job Deleted');
         return redirect()->route('tag.index');
     }

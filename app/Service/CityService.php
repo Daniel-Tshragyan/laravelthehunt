@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DataObjects\CityObject;
 use App\Http\Requests\CityValidator;
 use App\Models\City;
 use App\Models\Job;
@@ -62,7 +63,7 @@ class CityService
         $data['sorts'] = ['id' => $data['how'], 'name' => $data['how']];
         $newarray = ['cities' => $city, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
-        return $newarray;
+        return new CityObject($city, $data['sorts'], $data['searched']);
     }
 
     public function fillCity($data, City $city)

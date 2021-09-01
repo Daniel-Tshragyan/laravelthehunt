@@ -73,6 +73,11 @@ class User extends Authenticatable
         return $this->hasMany(Job::class,'company_id','id');
     }
 
+    public function messages()
+    {
+        return $this->hasMany(DialogMessage::class, 'sender_id', 'id');
+    }
+
 
 
     public function isAdmin()

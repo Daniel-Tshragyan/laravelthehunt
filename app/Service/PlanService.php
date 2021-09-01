@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DataObjects\PlanObject;
 use App\Models\Plan;
 use App\Models\PlanPayment;
 use App\Models\User;
@@ -69,7 +70,7 @@ class PlanService
             'manage_applications' => $data['how']];
         $newarray = ['plans' => $plans, 'sorts' => $data['sorts'], 'searched' => $data['searched']];
 
-        return $newarray;
+        return new PlanObject($plans, $data['sorts'], $data['searched']);
     }
 
     public function fillPlan($data)

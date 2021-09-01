@@ -18,10 +18,14 @@ class CreateDialogMassagesTable extends Migration
             $table->bigInteger('dialog_id')->unsigned();
             $table->string('text');
             $table->string('file')->nullable(true);
-            $table->integer('sender_id');
+            $table->bigInteger('sender_id')->unsigned();
             $table->foreign('dialog_id')
                 ->references('id')
                 ->on('dialogs')
+                ->onDelete('cascade');
+            $table->foreign('sender_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
             $table->timestamps();
         });
